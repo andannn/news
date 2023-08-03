@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:news/core/model/news_resource.dart';
+import 'package:news/core/model/news_resource_type.dart';
 import 'package:news/core/model/topic.dart';
 import 'package:news/core/network/fake/fake_network_data_source.dart';
 
@@ -43,6 +44,7 @@ void main() {
           4,
           23,
         ),
+        type: NewsResourceType.codelab,
         topics: const ["2", "3", "10"],
       );
 

@@ -12,6 +12,8 @@ NewsResource _$NewsResourceFromJson(Map<String, dynamic> json) => NewsResource(
       content: json['content'] as String? ?? '',
       url: json['url'] as String? ?? '',
       headerImageUrl: json['headerImageUrl'] as String? ?? '',
+      type: $enumDecodeNullable(_$NewsResourceTypeEnumMap, json['type']) ??
+          NewsResourceType.unknown,
       publishDate: json['publishDate'] == null
           ? null
           : DateTime.parse(json['publishDate'] as String),
@@ -29,5 +31,19 @@ Map<String, dynamic> _$NewsResourceToJson(NewsResource instance) =>
       'url': instance.url,
       'headerImageUrl': instance.headerImageUrl,
       'publishDate': instance.publishDate?.toIso8601String(),
+      'type': _$NewsResourceTypeEnumMap[instance.type]!,
       'topics': instance.topics,
     };
+
+const _$NewsResourceTypeEnumMap = {
+  NewsResourceType.video: 'Video 📺',
+  NewsResourceType.apiChange: 'API change',
+  NewsResourceType.jetpackRelease: 'Jetpack release 🚀',
+  NewsResourceType.article: 'Article 📚',
+  NewsResourceType.codelab: 'Codelab',
+  NewsResourceType.podcast: 'Podcast 🎙',
+  NewsResourceType.docs: 'Docs 📑',
+  NewsResourceType.event: 'Event 📆',
+  NewsResourceType.dac: 'DAC - Android version features',
+  NewsResourceType.unknown: '',
+};
