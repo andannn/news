@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/nia_database_impl.dart';
-import 'package:news/core/model/topic.dart';
+import 'package:news/core/network/model/topic.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'dart:io';
 
 void main() {
   group('topic_dao_test', () {

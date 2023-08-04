@@ -1,5 +1,6 @@
 
-import 'package:news/core/model/topic.dart';
+
+import '../../network/model/topic.dart';
 
 const topicsDaoName = "topics";
 

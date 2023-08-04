@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:news/core/model/news_resource.dart';
-import 'package:news/core/model/news_resource_type.dart';
-import 'package:news/core/model/topic.dart';
 import 'package:news/core/network/fake/fake_network_data_source.dart';
+import 'package:news/core/network/model/news_resource.dart';
+import 'package:news/core/network/model/news_resource_type.dart';
+import 'package:news/core/network/model/topic.dart';
 
 void main() {
   group('fake_network_data_source_test', () {

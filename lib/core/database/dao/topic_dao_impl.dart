@@ -1,7 +1,8 @@
 
 import 'package:news/core/database/dao/topic_dao.dart';
-import 'package:news/core/model/topic.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../../network/model/topic.dart';
 
 class TopicDaoImpl implements TopicDao {
 
