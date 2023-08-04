@@ -1,19 +1,20 @@
 
 
+import 'package:news/core/database/model/topic_entity.dart';
+
 import '../../network/model/topic.dart';
 
-const topicsDaoName = "topics";
 
 abstract class TopicDao {
-  Future<TopicModel> getTopicEntity(String topicId);
+  Future<TopicEntity> getTopicEntity(String topicId);
 
-  Future<List<TopicModel>> getTopicEntities();
+  Future<List<TopicEntity>> getTopicEntities();
 
-  Future<List<TopicModel>> getTopicEntitiesById(Set<String> ids);
+  Future<List<TopicEntity>> getTopicEntitiesById(Set<String> ids);
 
-  Future<List> insertOrIgnoreTopics(List<TopicModel> topicEntities);
+  Future<List> insertOrIgnoreTopics(List<TopicEntity> topicEntities);
 
-  Future<void> upsertTopics(List<TopicModel> entities);
+  Future<void> upsertTopics(List<TopicEntity> entities);
 
   Future<void> deleteTopics(List<String> ids);
 }

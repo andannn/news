@@ -41,8 +41,7 @@ class NiaDatabase extends NiaDatabaseBase {
         'shortDescription TEXT, '
         'longDescription TEXT, '
         'url TEXT, '
-        'imageUrl TEXT, '
-        'followed TEXT)'
+        'imageUrl TEXT)'
     );
   }
 }

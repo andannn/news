@@ -1,11 +1,10 @@
-
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../network/model/topic.dart';
+import '../model/topic_entity.dart';
+import '../tables.dart';
 
 class TopicDaoImpl implements TopicDao {
-
   final Database _niaDatabase;
 
   TopicDaoImpl(this._niaDatabase);
@@ -17,29 +16,32 @@ class TopicDaoImpl implements TopicDao {
   }
 
   @override
-  Future<List<TopicModel>> getTopicEntities() {
+  Future<List<TopicEntity>> getTopicEntities() {
     // TODO: implement getTopicEntities
     throw UnimplementedError();
   }
 
   @override
-  Future<List<TopicModel>> getTopicEntitiesById(Set<String> ids) {
+  Future<List<TopicEntity>> getTopicEntitiesById(Set<String> ids) {
     // TODO: implement getTopicEntitiesById
     throw UnimplementedError();
   }
 
   @override
-  Future<TopicModel> getTopicEntity(String topicId) {
+  Future<TopicEntity> getTopicEntity(String topicId) {
     // TODO: implement getTopicEntity
     throw UnimplementedError();
   }
 
   @override
-  Future<List> insertOrIgnoreTopics(List<TopicModel> topicEntities) async {
+  Future<List> insertOrIgnoreTopics(List<TopicEntity> topicEntities) async {
     final batch = _niaDatabase.batch();
 
+    final sql = 'INSERT OR IGNORE INTO '
+        '${Tables.topicsDaoName}(id, name, shortDescription, longDescription, url, imageUrl)'
+        'VALUES(?, ?, ?, ?, ?, ?)';
     for (var topic in topicEntities) {
-      batch.insert(topicsDaoName, topic.toJson());
+      batch.rawInsert(sql, topic.toJson().values.toList());
     }
 
     final result = await batch.commit();
@@ -47,7 +49,7 @@ class TopicDaoImpl implements TopicDao {
   }
 
   @override
-  Future<void> upsertTopics(List<TopicModel> entities) {
+  Future<void> upsertTopics(List<TopicEntity> entities) {
     // TODO: implement upsertTopics
     throw UnimplementedError();
   }
