@@ -2,11 +2,9 @@
 
 import 'package:news/core/database/model/topic_entity.dart';
 
-import '../../network/model/topic.dart';
-
 
 abstract class TopicDao {
-  Future<TopicEntity> getTopicEntity(String topicId);
+  Future<TopicEntity?> getTopicEntity(String topicId);
 
   Future<List<TopicEntity>> getTopicEntities();
 

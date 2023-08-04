@@ -22,7 +22,7 @@ void main() {
       topicDao = database.getTopicDao();
     });
 
-    test('get_topics_insert_or_ignore', () async {
+    test('insert_or_ignore_topics', () async {
       final res = await topicDao.insertOrIgnoreTopics([
         const TopicEntity(
             id: 1,
@@ -44,6 +44,46 @@ void main() {
             url: "")
       ]);
       expect(res, equals([1, null]));
+    });
+    test('upsert_topics', () async {
+      await topicDao.insertOrIgnoreTopics([
+        const TopicEntity(
+            id: 1,
+            name: "Headlines",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+                "The latest events and announcements from the world of Android development.",
+            imageUrl:
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: "")
+      ]);
+
+      await topicDao.upsertTopics([
+        const TopicEntity(
+            id: 1,
+            name: "Headlines updated",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+                "The latest events and announcements from the world of Android development.",
+            imageUrl:
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: "")
+      ]);
+    });
+    test('get_topics_by_id', () async {
+      await topicDao.insertOrIgnoreTopics([
+        const TopicEntity(
+            id: 1,
+            name: "Headlines",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+                "The latest events and announcements from the world of Android development.",
+            imageUrl:
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: "")
+      ]);
+      final topic = await topicDao.getTopicEntity('1');
+      expect(topic!.name, equals('Headlines'));
     });
   });
 }

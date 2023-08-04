@@ -28,9 +28,14 @@ class TopicDaoImpl implements TopicDao {
   }
 
   @override
-  Future<TopicEntity> getTopicEntity(String topicId) {
-    // TODO: implement getTopicEntity
-    throw UnimplementedError();
+  Future<TopicEntity?> getTopicEntity(String topicId) async {
+    List<Map<String, dynamic>> maps = await _niaDatabase
+        .query(Tables.topicsDaoName, where: 'id = ?', whereArgs: [topicId]);
+
+    if (maps.isNotEmpty) {
+      return TopicEntity.fromJson(maps.first);
+    }
+    return null;
   }
 
   @override
@@ -49,8 +54,16 @@ class TopicDaoImpl implements TopicDao {
   }
 
   @override
-  Future<void> upsertTopics(List<TopicEntity> entities) {
-    // TODO: implement upsertTopics
-    throw UnimplementedError();
+  Future<void> upsertTopics(List<TopicEntity> entities) async {
+    final batch = _niaDatabase.batch();
+
+    final sql = 'INSERT OR REPLACE INTO '
+        '${Tables.topicsDaoName}(id, name, shortDescription, longDescription, url, imageUrl)'
+        'VALUES(?, ?, ?, ?, ?, ?)';
+    for (var topic in entities) {
+      batch.rawInsert(sql, topic.toJson().values.toList());
+    }
+
+    await batch.commit();
   }
 }
