@@ -14,5 +14,5 @@ abstract class TopicDao {
 
   Future<void> upsertTopics(List<TopicEntity> entities);
 
-  Future<void> deleteTopics(List<String> ids);
+  Future<List<int>> deleteTopics(List<String> ids);
 }

@@ -10,15 +10,21 @@ class TopicDaoImpl implements TopicDao {
   TopicDaoImpl(this._niaDatabase);
 
   @override
-  Future<void> deleteTopics(List<String> ids) {
-    // TODO: implement deleteTopics
-    throw UnimplementedError();
+  Future<List<int>> deleteTopics(List<String> ids) async {
+    final batch = _niaDatabase.batch();
+    for (final id in ids) {
+      batch.delete(Tables.topicsDaoName, where: 'id = ?', whereArgs: [id]);
+    }
+    List<Object?> result = await batch.commit();
+    return result.whereType<int>().where((res) => res != 0).toList();
   }
 
   @override
-  Future<List<TopicEntity>> getTopicEntities() {
-    // TODO: implement getTopicEntities
-    throw UnimplementedError();
+  Future<List<TopicEntity>> getTopicEntities() async {
+    List<Map<String, dynamic>> maps =
+        await _niaDatabase.query(Tables.topicsDaoName);
+
+    return maps.map((topicJson) => TopicEntity.fromJson(topicJson)).toList();
   }
 
   @override
