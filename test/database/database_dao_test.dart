@@ -90,17 +90,17 @@ void main() {
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
-            "The latest events and announcements from the world of Android development.",
+                "The latest events and announcements from the world of Android development.",
             imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
         const TopicEntity(
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
-            "The latest events and announcements from the world of Android development.",
+                "The latest events and announcements from the world of Android development.",
             imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: "")
       ]);
       final topics = await topicDao.getTopicEntities();
@@ -112,21 +112,45 @@ void main() {
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
-            "The latest events and announcements from the world of Android development.",
+                "The latest events and announcements from the world of Android development.",
             imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
         const TopicEntity(
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
-            "The latest events and announcements from the world of Android development.",
+                "The latest events and announcements from the world of Android development.",
             imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: "")
       ]);
       final res = await topicDao.deleteTopics(['1', '3', '5']);
       expect(res, [1]);
+    });
+    test('get_topics_by_ids', () async {
+      await topicDao.insertOrIgnoreTopics([
+        const TopicEntity(
+            id: 1,
+            name: "Headlines",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+                "The latest events and announcements from the world of Android development.",
+            imageUrl:
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: ""),
+        const TopicEntity(
+            id: 2,
+            name: "Headlines",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+                "The latest events and announcements from the world of Android development.",
+            imageUrl:
+                "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: "")
+      ]);
+      final res = await topicDao.getTopicEntitiesById({'1', '2', '5'});
+      expect(res[2], null);
     });
   });
 }

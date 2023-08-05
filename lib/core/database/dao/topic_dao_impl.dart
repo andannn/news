@@ -28,9 +28,25 @@ class TopicDaoImpl implements TopicDao {
   }
 
   @override
-  Future<List<TopicEntity>> getTopicEntitiesById(Set<String> ids) {
-    // TODO: implement getTopicEntitiesById
-    throw UnimplementedError();
+  Future<List<TopicEntity?>> getTopicEntitiesById(Set<String> ids) async {
+    TopicEntity? mapToTopicEntity(json) {
+      final jsonElement = (json as List).firstOrNull;
+
+      if (jsonElement != null) {
+        return TopicEntity.fromJson(jsonElement);
+      } else {
+        return null;
+      }
+    }
+
+    final batch = _niaDatabase.batch();
+    for (final id in ids) {
+      batch.query(Tables.topicsDaoName,
+          where: 'id = ?', whereArgs: [id], limit: 1);
+    }
+    List<dynamic> results = await batch.commit();
+
+    return results.map(mapToTopicEntity).toList();
   }
 
   @override

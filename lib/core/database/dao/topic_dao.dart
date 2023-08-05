@@ -8,7 +8,7 @@ abstract class TopicDao {
 
   Future<List<TopicEntity>> getTopicEntities();
 
-  Future<List<TopicEntity>> getTopicEntitiesById(Set<String> ids);
+  Future<List<TopicEntity?>> getTopicEntitiesById(Set<String> ids);
 
   Future<List> insertOrIgnoreTopics(List<TopicEntity> topicEntities);
 
