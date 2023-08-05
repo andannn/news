@@ -1,10 +1,8 @@
 
 import 'package:news/common/platform_handler.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
-import 'package:news/core/database/dao/topic_dao_impl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:io';
 
 import 'nia_database.dart';
 
