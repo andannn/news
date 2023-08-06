@@ -50,9 +50,31 @@ class NewsResourceDaoImpl implements NewsResourceDao {
       {bool useFilterTopicIds = false,
       Set<String> filterTopicIds = const {},
       bool useFilterNewsIds = false,
-      Set<String> filterNewsIds = const {}}) {
-    // TODO: implement getNewsResourceIds
-    throw UnimplementedError();
+      Set<String> filterNewsIds = const {}}) async {
+
+    String sql = """
+            SELECT id FROM news_resources
+            WHERE 
+                CASE WHEN $useFilterNewsIds
+                    THEN id IN (${filterNewsIds.join(', ')})
+                    ELSE 1
+                END
+             AND
+                CASE WHEN $useFilterTopicIds
+                    THEN id IN
+                        (
+                            SELECT news_resource_id FROM news_resources_topics
+                            WHERE topic_id IN (${filterTopicIds.join(', ')})
+                        )
+                    ELSE 1
+                END
+            ORDER BY publish_date DESC
+    """;
+    print(sql);
+    final res = await _niaDatabase.rawQuery(sql);
+    return res
+        .map((element) => element['id'].toString())
+        .toList();
   }
 
   @override

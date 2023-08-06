@@ -226,5 +226,95 @@ void main() {
         const NewsResourceTopicCrossRef(newsResourceId: '4', topicId: '3'),
       ]);
     });
+    test('get_news_resource_id_by_condition_1', () async {
+      await _initialInsert(database);
+      final res = await newsResourceDao.getNewsResourceIds(
+        useFilterNewsIds: true,
+        filterNewsIds: {'137', '145'}
+      );
+      expect(res, equals(['137', '145']));
+    });
+    test('get_news_resource_id_by_condition_2', () async {
+      await _initialInsert(database);
+      final res = await newsResourceDao.getNewsResourceIds(
+        useFilterTopicIds: true,
+        filterTopicIds: {'1'}
+      );
+      expect(res, equals(['137', '145']));
+    });
+    test('get_news_resource_id_by_condition_2', () async {
+      await _initialInsert(database);
+      final res = await newsResourceDao.getNewsResourceIds(
+          useFilterNewsIds: true,
+          filterNewsIds: {'137'},
+          useFilterTopicIds: true,
+          filterTopicIds: {'1'}
+      );
+      expect(res, equals(['137']));
+    });
   });
+}
+
+_initialInsert(NiaDatabase dataBase) async {
+  await dataBase.getTopicDao().insertOrIgnoreTopics([
+    const TopicEntity(
+        id: 1,
+        name: "Headlines",
+        shortDescription: "News you'll definitely be interested in",
+        longDescription:
+        "The latest events and announcements from the world of Android development.",
+        imageUrl:
+        "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+        url: ""),
+    const TopicEntity(
+        id: 2,
+        name: "Headlines",
+        shortDescription: "News you'll definitely be interested in",
+        longDescription:
+        "The latest events and announcements from the world of Android development.",
+        imageUrl:
+        "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+        url: "")
+  ]);
+  await dataBase.getNewsResourceDao().insertOrIgnoreNewsResources([
+    NewsResourceEntity(
+      id: "145",
+      title: "Migrating Architecture Blueprints to Jetpack Compose",
+      content:
+      "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
+      url:
+      "https://medium.com/androiddevelopers/migrating-architecture-blueprints-to-jetpack-compose-8ffa6615ede3",
+      headerImageUrl:
+      "https://miro.medium.com/max/1400/1*J2NKRQ4qedvMVWoxL_4ZLA.jpeg",
+      publishDate: DateTime.utc(
+        2022,
+        5,
+        4,
+        23,
+      ),
+      type: NewsResourceType.apiChange,
+    ),
+    NewsResourceEntity(
+      id: "137",
+      title: "Migrating Architecture Blueprints to Jetpack Compose",
+      content:
+      "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
+      url:
+      "https://medium.com/androiddevelopers/migrating-architecture-blueprints-to-jetpack-compose-8ffa6615ede3",
+      headerImageUrl:
+      "https://miro.medium.com/max/1400/1*J2NKRQ4qedvMVWoxL_4ZLA.jpeg",
+      publishDate: DateTime.utc(
+        2022,
+        5,
+        4,
+        23,
+      ),
+      type: NewsResourceType.apiChange,
+    )
+  ]);
+  await dataBase.getNewsResourceDao().insertOrIgnoreTopicCrossRefEntities([
+    const NewsResourceTopicCrossRef(newsResourceId: '137', topicId: '1'),
+    const NewsResourceTopicCrossRef(newsResourceId: '145', topicId: '1'),
+    const NewsResourceTopicCrossRef(newsResourceId: '145', topicId: '2'),
+  ]);
 }
