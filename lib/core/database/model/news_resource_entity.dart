@@ -6,16 +6,18 @@ part 'news_resource_entity.g.dart';
 
 @JsonSerializable()
 class NewsResourceEntity {
-  final String id;
+  final int id;
   final String title;
   final String content;
   final String url;
+  @JsonKey(name: 'header_image_url')
   final String? headerImageUrl;
+  @JsonKey(name: 'publish_date')
   final DateTime? publishDate;
   final NewsResourceType type;
 
   const NewsResourceEntity({
-    this.id = "",
+    required this.id,
     this.title = "",
     this.content = "",
     this.url = "",

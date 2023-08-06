@@ -177,7 +177,7 @@ void main() {
     test('insert_or_ignore_news_resource', () async {
       final res = await newsResourceDao.insertOrIgnoreNewsResources([
         NewsResourceEntity(
-          id: "145",
+          id: 145,
           title: "Migrating Architecture Blueprints to Jetpack Compose",
           content:
               "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
@@ -199,7 +199,7 @@ void main() {
     test('insert_or_ignore_news_resource', () async {
       await newsResourceDao.insertOrIgnoreNewsResources([
         NewsResourceEntity(
-          id: "145",
+          id: 145,
           title: "Migrating Architecture Blueprints to Jetpack Compose",
           content:
               "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
@@ -252,6 +252,24 @@ void main() {
       );
       expect(res, equals(['137']));
     });
+    test('get_populated_news_resource_id_condition_1', () async {
+      await _initialInsert(database);
+      final res = await newsResourceDao.getPopulatedNewsResource(
+          useFilterNewsIds: true,
+          filterNewsIds: {'137'},
+          useFilterTopicIds: true,
+          filterTopicIds: {'1'}
+      );
+      expect(res.map((e) => e.entity.id).toList(), equals([137]));
+    });
+    test('get_populated_news_resource_id_condition_2', () async {
+      await _initialInsert(database);
+      final res = await newsResourceDao.getPopulatedNewsResource(
+          useFilterNewsIds: true,
+          filterNewsIds: {'145'},
+      );
+      expect(res.map((e) => e.entity.id).toList(), equals([137]));
+    });
   });
 }
 
@@ -278,7 +296,7 @@ _initialInsert(NiaDatabase dataBase) async {
   ]);
   await dataBase.getNewsResourceDao().insertOrIgnoreNewsResources([
     NewsResourceEntity(
-      id: "145",
+      id: 145,
       title: "Migrating Architecture Blueprints to Jetpack Compose",
       content:
       "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
@@ -295,7 +313,7 @@ _initialInsert(NiaDatabase dataBase) async {
       type: NewsResourceType.apiChange,
     ),
     NewsResourceEntity(
-      id: "137",
+      id: 137,
       title: "Migrating Architecture Blueprints to Jetpack Compose",
       content:
       "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
@@ -303,12 +321,7 @@ _initialInsert(NiaDatabase dataBase) async {
       "https://medium.com/androiddevelopers/migrating-architecture-blueprints-to-jetpack-compose-8ffa6615ede3",
       headerImageUrl:
       "https://miro.medium.com/max/1400/1*J2NKRQ4qedvMVWoxL_4ZLA.jpeg",
-      publishDate: DateTime.utc(
-        2022,
-        5,
-        4,
-        23,
-      ),
+      publishDate: DateTime.utc(2022, 5, 4, 23,),
       type: NewsResourceType.apiChange,
     )
   ]);

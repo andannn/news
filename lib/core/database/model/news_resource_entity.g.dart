@@ -8,14 +8,14 @@ part of 'news_resource_entity.dart';
 
 NewsResourceEntity _$NewsResourceEntityFromJson(Map<String, dynamic> json) =>
     NewsResourceEntity(
-      id: json['id'] as String? ?? "",
+      id: json['id'] as int,
       title: json['title'] as String? ?? "",
       content: json['content'] as String? ?? "",
       url: json['url'] as String? ?? "",
-      headerImageUrl: json['headerImageUrl'] as String? ?? "",
-      publishDate: json['publishDate'] == null
+      headerImageUrl: json['header_image_url'] as String? ?? "",
+      publishDate: json['publish_date'] == null
           ? null
-          : DateTime.parse(json['publishDate'] as String),
+          : DateTime.parse(json['publish_date'] as String),
       type: $enumDecodeNullable(_$NewsResourceTypeEnumMap, json['type']) ??
           NewsResourceType.unknown,
     );
@@ -26,8 +26,8 @@ Map<String, dynamic> _$NewsResourceEntityToJson(NewsResourceEntity instance) =>
       'title': instance.title,
       'content': instance.content,
       'url': instance.url,
-      'headerImageUrl': instance.headerImageUrl,
-      'publishDate': instance.publishDate?.toIso8601String(),
+      'header_image_url': instance.headerImageUrl,
+      'publish_date': instance.publishDate?.toIso8601String(),
       'type': _$NewsResourceTypeEnumMap[instance.type]!,
     };
 

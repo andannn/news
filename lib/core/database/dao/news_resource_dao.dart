@@ -1,7 +1,9 @@
+import 'package:news/core/database/model/topic_entity.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../model/news_resource_entity.dart';
 import '../model/news_resource_topic_corss_ref.dart';
+import '../model/populated_news_resource.dart';
 import '../tables.dart';
 
 abstract class NewsResourceDao {
@@ -21,13 +23,12 @@ abstract class NewsResourceDao {
     Set<String> filterNewsIds = const {},
   });
 
-//
-// Future<List<PopulatedNewsResource>> getNewsResourceIds({
-//   bool useFilterTopicIds = false,
-//   Set<String> filterTopicIds = const {},
-//   bool useFilterNewsIds = false,
-//   Set<String> filterNewsIds = const {},
-// });
+  Future<List<PopulatedNewsResource>> getPopulatedNewsResource({
+    bool useFilterTopicIds = false,
+    Set<String> filterTopicIds = const {},
+    bool useFilterNewsIds = false,
+    Set<String> filterNewsIds = const {},
+  });
 }
 
 class NewsResourceDaoImpl implements NewsResourceDao {
@@ -46,12 +47,30 @@ class NewsResourceDaoImpl implements NewsResourceDao {
   }
 
   @override
+  Future<List<PopulatedNewsResource>> getPopulatedNewsResource(
+      {bool useFilterTopicIds = false,
+      Set<String> filterTopicIds = const {},
+      bool useFilterNewsIds = false,
+      Set<String> filterNewsIds = const {}}) async {
+    final newsIds = await getNewsResourceIds(
+        useFilterTopicIds: useFilterTopicIds,
+        filterTopicIds: filterTopicIds,
+        useFilterNewsIds: useFilterNewsIds,
+        filterNewsIds: filterNewsIds);
+
+    List<PopulatedNewsResource> ret = [];
+    for (final id in newsIds) {
+      ret.add(await _mapNewsIdToPopulatedNewsResource(id));
+    }
+    return ret;
+  }
+
+  @override
   Future<List<String>> getNewsResourceIds(
       {bool useFilterTopicIds = false,
       Set<String> filterTopicIds = const {},
       bool useFilterNewsIds = false,
       Set<String> filterNewsIds = const {}}) async {
-
     String sql = """
             SELECT id FROM news_resources
             WHERE 
@@ -70,11 +89,8 @@ class NewsResourceDaoImpl implements NewsResourceDao {
                 END
             ORDER BY publish_date DESC
     """;
-    print(sql);
     final res = await _niaDatabase.rawQuery(sql);
-    return res
-        .map((element) => element['id'].toString())
-        .toList();
+    return res.map((element) => element['id'].toString()).toList();
   }
 
   @override
@@ -106,5 +122,23 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     }
 
     await batch.commit();
+  }
+
+  Future<PopulatedNewsResource> _mapNewsIdToPopulatedNewsResource(
+      String newsId) async {
+    final newsJson = await _niaDatabase.query(Tables.newsResource, limit: 1);
+    NewsResourceEntity entity = NewsResourceEntity.fromJson(newsJson.first);
+
+    String sql = """
+            SELECT * FROM ${Tables.topics}
+            WHERE  id IN
+                (
+                  SELECT topic_id FROM news_resources_topics
+                  WHERE news_resource_id = $newsId
+                )
+    """;
+    List topicsJson = await _niaDatabase.rawQuery(sql);
+    final topics = topicsJson.map((e) => TopicEntity.fromJson(e)).toList();
+    return PopulatedNewsResource(entity: entity, topics: topics);
   }
 }
