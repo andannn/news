@@ -51,7 +51,7 @@ class NiaDatabase extends NiaDatabaseBase {
   }
 
   Future _createTables() async {
-    await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.topicsDaoName} ('
+    await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.topics} ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT, '
         'name TEXT, '
         'shortDescription TEXT, '
@@ -60,7 +60,7 @@ class NiaDatabase extends NiaDatabaseBase {
         'imageUrl TEXT)'
     );
 
-    await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.newsResourceDaoName} ('
+    await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.newsResource} ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT, '
         'title TEXT, '
         'content TEXT, '
@@ -68,6 +68,11 @@ class NiaDatabase extends NiaDatabaseBase {
         'header_image_url TEXT, '
         'publish_date TEXT, '
         'type TEXT)'
+    );
+
+    await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.newsResourceTopicCrossRef} ('
+        'news_resource_id TEXT, '
+        'topic_id TEXT)'
     );
   }
 }

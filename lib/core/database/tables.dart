@@ -1,5 +1,6 @@
 
 mixin Tables {
-  static String topicsDaoName = "topics";
-  static String newsResourceDaoName = "news_resources";
+  static String topics = "topics";
+  static String newsResource = "news_resources";
+  static String newsResourceTopicCrossRef = "news_resources_topic_cross_ref";
 }

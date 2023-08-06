@@ -27,7 +27,7 @@ class TopicDaoImpl implements TopicDao {
   Future<List<int>> deleteTopics(List<String> ids) async {
     final batch = _niaDatabase.batch();
     for (final id in ids) {
-      batch.delete(Tables.topicsDaoName, where: 'id = ?', whereArgs: [id]);
+      batch.delete(Tables.topics, where: 'id = ?', whereArgs: [id]);
     }
     List<Object?> result = await batch.commit();
     return result.whereType<int>().where((res) => res != 0).toList();
@@ -36,7 +36,7 @@ class TopicDaoImpl implements TopicDao {
   @override
   Future<List<TopicEntity>> getTopicEntities() async {
     List<Map<String, dynamic>> maps =
-    await _niaDatabase.query(Tables.topicsDaoName);
+    await _niaDatabase.query(Tables.topics);
 
     return maps.map((topicJson) => TopicEntity.fromJson(topicJson)).toList();
   }
@@ -55,7 +55,7 @@ class TopicDaoImpl implements TopicDao {
 
     final batch = _niaDatabase.batch();
     for (final id in ids) {
-      batch.query(Tables.topicsDaoName,
+      batch.query(Tables.topics,
           where: 'id = ?', whereArgs: [id], limit: 1);
     }
     List<dynamic> results = await batch.commit();
@@ -66,7 +66,7 @@ class TopicDaoImpl implements TopicDao {
   @override
   Future<TopicEntity?> getTopicEntity(String topicId) async {
     List<Map<String, dynamic>> maps = await _niaDatabase
-        .query(Tables.topicsDaoName, where: 'id = ?', whereArgs: [topicId]);
+        .query(Tables.topics, where: 'id = ?', whereArgs: [topicId]);
 
     if (maps.isNotEmpty) {
       return TopicEntity.fromJson(maps.first);
@@ -79,7 +79,7 @@ class TopicDaoImpl implements TopicDao {
     final batch = _niaDatabase.batch();
 
     final sql = 'INSERT OR IGNORE INTO '
-        '${Tables.topicsDaoName}(id, name, shortDescription, longDescription, url, imageUrl)'
+        '${Tables.topics}(id, name, shortDescription, longDescription, url, imageUrl)'
         'VALUES(?, ?, ?, ?, ?, ?)';
     for (var topic in topicEntities) {
       batch.rawInsert(sql, topic.toJson().values.toList());
@@ -94,7 +94,7 @@ class TopicDaoImpl implements TopicDao {
     final batch = _niaDatabase.batch();
 
     final sql = 'INSERT OR REPLACE INTO '
-        '${Tables.topicsDaoName}(id, name, shortDescription, longDescription, url, imageUrl)'
+        '${Tables.topics}(id, name, shortDescription, longDescription, url, imageUrl)'
         'VALUES(?, ?, ?, ?, ?, ?)';
     for (var topic in entities) {
       batch.rawInsert(sql, topic.toJson().values.toList());

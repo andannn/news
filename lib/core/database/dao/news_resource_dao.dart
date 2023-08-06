@@ -1,15 +1,18 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../model/news_resource_entity.dart';
+import '../model/news_resource_topic_corss_ref.dart';
 import '../tables.dart';
 
 abstract class NewsResourceDao {
+  /// Delete rows in news_resource table by ids.
+  /// Returns the deleted count.
   Future deleteNewsResources(List<String> ids);
 
-  // Future insertOrIgnoreTopicCrossRefEntities(List<NewsResourceTopicCrossRef> newsResourceTopicCrossReferences)
+  Future insertOrIgnoreTopicCrossRefEntities(
+      List<NewsResourceTopicCrossRef> newsResourceTopicCrossReferences);
 
-  Future<List> insertOrIgnoreNewsResources(
-      List<NewsResourceEntity> entities);
+  Future<List> insertOrIgnoreNewsResources(List<NewsResourceEntity> entities);
 
   Future<List<String>> getNewsResourceIds({
     bool useFilterTopicIds = false,
@@ -33,9 +36,13 @@ class NewsResourceDaoImpl implements NewsResourceDao {
   NewsResourceDaoImpl(this._niaDatabase);
 
   @override
-  Future deleteNewsResources(List<String> ids) {
-    // TODO: implement deleteNewsResources
-    throw UnimplementedError();
+  Future deleteNewsResources(List<String> ids) async {
+    final batch = _niaDatabase.batch();
+    for (final id in ids) {
+      batch.delete(Tables.newsResource, where: 'id = ?', whereArgs: [id]);
+    }
+    List<Object?> result = await batch.commit();
+    return result.whereType<int>().where((res) => res != 0).toList();
   }
 
   @override
@@ -54,7 +61,7 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     final batch = _niaDatabase.batch();
 
     final sql = 'INSERT OR IGNORE INTO '
-        '${Tables.newsResourceDaoName}(id, title, content, url, header_image_url, publish_date, type)'
+        '${Tables.newsResource}(id, title, content, url, header_image_url, publish_date, type)'
         'VALUES(?, ?, ?, ?, ?, ?, ?)';
     for (final news in entities) {
       batch.rawInsert(sql, news.toJson().values.toList());
@@ -62,5 +69,20 @@ class NewsResourceDaoImpl implements NewsResourceDao {
 
     final result = await batch.commit();
     return result;
+  }
+
+  @override
+  Future insertOrIgnoreTopicCrossRefEntities(
+      List<NewsResourceTopicCrossRef> newsResourceTopicCrossRefList) async {
+    final batch = _niaDatabase.batch();
+
+    final sql = 'INSERT OR IGNORE INTO '
+        '${Tables.newsResourceTopicCrossRef}(news_resource_id, topic_id)'
+        'VALUES(?, ?)';
+    for (final crossRef in newsResourceTopicCrossRefList) {
+      batch.rawInsert(sql, crossRef.toJson().values.toList());
+    }
+
+    await batch.commit();
   }
 }

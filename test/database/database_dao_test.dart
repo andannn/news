@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:news/core/database/dao/news_resource_dao.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/model/news_resource_entity.dart';
+import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
 import 'package:news/core/database/model/topic_entity.dart';
 import 'package:news/core/database/nia_database.dart';
 import 'package:news/core/network/model/news_resource_type.dart';
@@ -178,14 +179,52 @@ void main() {
         NewsResourceEntity(
           id: "145",
           title: "Migrating Architecture Blueprints to Jetpack Compose",
-          content: "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
-          url: "https://medium.com/androiddevelopers/migrating-architecture-blueprints-to-jetpack-compose-8ffa6615ede3",
-          headerImageUrl: "https://miro.medium.com/max/1400/1*J2NKRQ4qedvMVWoxL_4ZLA.jpeg",
-          publishDate: DateTime.utc(2022, 5, 4, 23,),
+          content:
+              "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
+          url:
+              "https://medium.com/androiddevelopers/migrating-architecture-blueprints-to-jetpack-compose-8ffa6615ede3",
+          headerImageUrl:
+              "https://miro.medium.com/max/1400/1*J2NKRQ4qedvMVWoxL_4ZLA.jpeg",
+          publishDate: DateTime.utc(
+            2022,
+            5,
+            4,
+            23,
+          ),
           type: NewsResourceType.apiChange,
         )
       ]);
       expect(res, equals([145]));
+    });
+    test('insert_or_ignore_news_resource', () async {
+      await newsResourceDao.insertOrIgnoreNewsResources([
+        NewsResourceEntity(
+          id: "145",
+          title: "Migrating Architecture Blueprints to Jetpack Compose",
+          content:
+              "Manuel wrote about how and why we’ve Migrated our Architecture Blueprints to Jetpack Compose, and some issues we faced in doing so.",
+          url:
+              "https://medium.com/androiddevelopers/migrating-architecture-blueprints-to-jetpack-compose-8ffa6615ede3",
+          headerImageUrl:
+              "https://miro.medium.com/max/1400/1*J2NKRQ4qedvMVWoxL_4ZLA.jpeg",
+          publishDate: DateTime.utc(
+            2022,
+            5,
+            4,
+            23,
+          ),
+          type: NewsResourceType.apiChange,
+        )
+      ]);
+      final res = await newsResourceDao.deleteNewsResources(['145']);
+      expect(res, equals([1]));
+    });
+    test('insert_or_ignore_cross_ref', () async {
+      await newsResourceDao.insertOrIgnoreTopicCrossRefEntities([
+        const NewsResourceTopicCrossRef(newsResourceId: '1', topicId: '3'),
+        const NewsResourceTopicCrossRef(newsResourceId: '2', topicId: '3'),
+        const NewsResourceTopicCrossRef(newsResourceId: '4', topicId: '3'),
+      ]);
     });
   });
 }
