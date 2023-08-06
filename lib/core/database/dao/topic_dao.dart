@@ -1,10 +1,8 @@
 
-
 import 'package:news/core/database/model/topic_entity.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../tables.dart';
-
 
 abstract class TopicDao {
   Future<TopicEntity?> getTopicEntity(String topicId);
