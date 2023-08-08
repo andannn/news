@@ -7,7 +7,7 @@ part 'news_resource.g.dart';
 
 @immutable
 @JsonSerializable()
-class NewsResource {
+class NewsResourceDto {
   final String id;
   final String title;
   final String content;
@@ -17,7 +17,7 @@ class NewsResource {
   final NewsResourceType type;
   final List<String> topics;
 
-  const NewsResource(
+  const NewsResourceDto(
       {this.id = '',
       this.title = '',
       this.content = '',
@@ -27,7 +27,7 @@ class NewsResource {
       this.publishDate,
       this.topics = const []});
 
-  factory NewsResource.fromJson(Map<String, dynamic> json) =>
+  factory NewsResourceDto.fromJson(Map<String, dynamic> json) =>
       _$NewsResourceFromJson(json);
 
   Map<String, dynamic> toJson() => _$NewsResourceToJson(this);

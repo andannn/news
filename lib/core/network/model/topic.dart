@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'topic.g.dart';
 
 @JsonSerializable()
-class TopicModel {
+class TopicDto {
   final String id;
   final String name;
   final String shortDescription;
@@ -12,7 +12,7 @@ class TopicModel {
   final String imageUrl;
   final bool followed;
 
-  const TopicModel(
+  const TopicDto(
       {this.id = "",
       this.name = "",
       this.shortDescription = "",
@@ -21,7 +21,7 @@ class TopicModel {
       this.imageUrl = "",
       this.followed = false});
 
-  factory TopicModel.fromJson(Map<String, dynamic> json) =>
+  factory TopicDto.fromJson(Map<String, dynamic> json) =>
       _$TopicModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TopicModelToJson(this);

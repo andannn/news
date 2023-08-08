@@ -15,7 +15,7 @@ void main() {
 
     test('get_topics', () async {
       final result = await dataSource.getTopics();
-      const expectRes = TopicModel(
+      const expectRes = TopicDto(
           id: "1",
           name: "Headlines",
           shortDescription: "News you'll definitely be interested in",
@@ -30,7 +30,7 @@ void main() {
 
     test('get_news', () async {
       final result = await dataSource.getNewsResources();
-      final expectRes = NewsResource(
+      final expectRes = NewsResourceDto(
         id: "125",
         title: "Android Basics with Compose",
         content:
