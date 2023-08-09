@@ -22,7 +22,7 @@ class TopicDto {
       this.followed = false});
 
   factory TopicDto.fromJson(Map<String, dynamic> json) =>
-      _$TopicModelFromJson(json);
+      _$TopicDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TopicModelToJson(this);
+  Map<String, dynamic> toJson() => _$TopicDtoToJson(this);
 }

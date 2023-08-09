@@ -6,7 +6,7 @@ This project rewrites the [nowinandroid](https://github.com/android/nowinandroid
 ## data model
 
 ## database model
-Implement by **sqflite**.
+Implement by **sqflite**.:wq
 
 ## network model
 Remote data source.

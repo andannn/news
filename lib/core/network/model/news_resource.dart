@@ -28,7 +28,7 @@ class NewsResourceDto {
       this.topics = const []});
 
   factory NewsResourceDto.fromJson(Map<String, dynamic> json) =>
-      _$NewsResourceFromJson(json);
+      _$NewsResourceDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NewsResourceToJson(this);
+  Map<String, dynamic> toJson() => _$NewsResourceDtoToJson(this);
 }
