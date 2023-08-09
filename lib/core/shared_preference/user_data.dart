@@ -33,10 +33,12 @@ mixin DarkThemeConfig {
 class NiaPreferencesDataSource extends GetxService {
   Future setFollowedTopicIds(Set<String> topicIds) async {
     final preference = await SharedPreferences.getInstance();
-    return preference.setStringList(UserDataKey.followedTopics, topicIds.toList());
+    return preference.setStringList(
+        UserDataKey.followedTopics, topicIds.toList());
   }
 
-  Future toggleFollowedTopicId(String topicId, bool followed) async {
+  Future toggleFollowedTopicId(
+      {required String topicId, required bool followed}) async {
     final preference = await SharedPreferences.getInstance();
     final List<String> topicIds =
         preference.getStringList(UserDataKey.followedTopics) ?? [];
@@ -69,8 +71,8 @@ class NiaPreferencesDataSource extends GetxService {
     preference.setString(UserDataKey.darkThemeConfig, darkThemeConfig);
   }
 
-  Future toggleNewsResourceBookmark(String newsResourceId,
-      bool bookmarked) async {
+  Future toggleNewsResourceBookmark(
+      String newsResourceId, bool bookmarked) async {
     final preference = await SharedPreferences.getInstance();
     final List<String> bookmarkedNewsIds =
         preference.getStringList(UserDataKey.followedTopics) ?? [];
@@ -88,24 +90,21 @@ class NiaPreferencesDataSource extends GetxService {
     final preference = await SharedPreferences.getInstance();
     return ChangeListVersions(
         topicVersion:
-        preference.getInt(UserDataKey.topicChangeListVersion) ?? -1,
+            preference.getInt(UserDataKey.topicChangeListVersion) ?? -1,
         newsResourceVersion:
-        preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1);
+            preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1);
   }
 
   Future updateChangeListVersion(
-      ChangeListVersions Function(ChangeListVersions) update) async {
+      {required ChangeListVersions Function(ChangeListVersions) update}) async {
     final preference = await SharedPreferences.getInstance();
-    final currentTopicChangeListVersion = preference.getInt(
-        UserDataKey.topicChangeListVersion) ?? -1;
-    final currentNewsChangeListVersion = preference.getInt(
-        UserDataKey.newsResourceChangeListVersion) ?? -1;
-    final updatedChangeListVersions = update(
-        ChangeListVersions(
-            newsResourceVersion: currentTopicChangeListVersion,
-            topicVersion: currentNewsChangeListVersion
-        )
-    );
+    final currentTopicChangeListVersion =
+        preference.getInt(UserDataKey.topicChangeListVersion) ?? -1;
+    final currentNewsChangeListVersion =
+        preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1;
+    final updatedChangeListVersions = update(ChangeListVersions(
+        newsResourceVersion: currentTopicChangeListVersion,
+        topicVersion: currentNewsChangeListVersion));
     await preference.setInt(UserDataKey.topicChangeListVersion,
         updatedChangeListVersions.topicVersion);
     preference.setInt(UserDataKey.newsResourceChangeListVersion,
