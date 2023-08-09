@@ -33,7 +33,7 @@ mixin DarkThemeConfig {
 class NiaPreferencesDataSource extends GetxService {
   Future setFollowedTopicIds(Set<String> topicIds) async {
     final preference = await SharedPreferences.getInstance();
-    preference.setStringList(UserDataKey.followedTopics, topicIds.toList());
+    return preference.setStringList(UserDataKey.followedTopics, topicIds.toList());
   }
 
   Future toggleFollowedTopicId(String topicId, bool followed) async {
@@ -47,6 +47,11 @@ class NiaPreferencesDataSource extends GetxService {
       newTopicIds.remove(topicId);
     }
     preference.setStringList(UserDataKey.followedTopics, newTopicIds.toList());
+  }
+
+  Future<List<String>> getFollowedTopicIds() async {
+    final preference = await SharedPreferences.getInstance();
+    return preference.getStringList(UserDataKey.followedTopics) ?? [];
   }
 
   Future setThemeBrand(String themeBrand) async {
@@ -103,7 +108,7 @@ class NiaPreferencesDataSource extends GetxService {
     );
     await preference.setInt(UserDataKey.topicChangeListVersion,
         updatedChangeListVersions.topicVersion);
-    await preference.setInt(UserDataKey.newsResourceChangeListVersion,
+    preference.setInt(UserDataKey.newsResourceChangeListVersion,
         updatedChangeListVersions.newsResourceVersion);
   }
 }
