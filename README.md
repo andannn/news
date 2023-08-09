@@ -1,16 +1,14 @@
 # news
+**Only for study**
 
-only for study
+This project rewrites the [nowinandroid](https://github.com/android/nowinandroid) project in flutter.
 
-## Getting Started
+## data model
 
-This project is a starting point for a Flutter application.
+## database model
+Implement by **sqflite**.
 
-A few resources to get you started if this is your first Flutter project:
+## network model
+Remote data source.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Use the dummy data source:  [FakeNetworkDataSource](lib/core/network/fake/fake_network_data_source.dart).

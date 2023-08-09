@@ -46,8 +46,6 @@ class OfflineFirstNewsRepository extends NewsRepository {
         modelDeleter: (List<String> ids) async {
           await newsResourceDao.deleteNewsResources(ids);
         },
-        modelUpdater: (List<String> ids) async {
-
-        });
+        modelUpdater: (List<String> ids) async {});
   }
 }
