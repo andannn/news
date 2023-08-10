@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:get/get.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/sync_utils.dart';
@@ -102,12 +101,14 @@ class NiaPreferencesDataSource extends GetxService {
         preference.getInt(UserDataKey.topicChangeListVersion) ?? -1;
     final currentNewsChangeListVersion =
         preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1;
+
     final updatedChangeListVersions = update(ChangeListVersions(
         newsResourceVersion: currentTopicChangeListVersion,
         topicVersion: currentNewsChangeListVersion));
+
     await preference.setInt(UserDataKey.topicChangeListVersion,
         updatedChangeListVersions.topicVersion);
-    preference.setInt(UserDataKey.newsResourceChangeListVersion,
+    await preference.setInt(UserDataKey.newsResourceChangeListVersion,
         updatedChangeListVersions.newsResourceVersion);
   }
 }

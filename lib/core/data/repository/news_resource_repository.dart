@@ -1,6 +1,7 @@
 import 'package:news/core/data/model/news_recsource.dart';
 import 'package:news/core/database/dao/news_resource_dao.dart';
 import 'package:news/core/network/network_data_source.dart';
+import 'package:news/core/shared_preference/user_data.dart';
 
 import '../sync_utils.dart';
 
@@ -13,8 +14,10 @@ abstract class NewsRepository implements Syncable {
 class OfflineFirstNewsRepository extends NewsRepository {
   final NewsResourceDao newsResourceDao;
   final NetworkDataSource networkDataSource;
+  final NiaPreferencesDataSource niaPreferencesDataSource;
 
-  OfflineFirstNewsRepository(this.newsResourceDao, this.networkDataSource);
+  OfflineFirstNewsRepository(this.newsResourceDao, this.networkDataSource,
+      this.niaPreferencesDataSource);
 
   @override
   Future<List<NewsResource>> getNewsResources(
