@@ -47,6 +47,7 @@ class NiaPreferencesDataSource extends GetxService {
     } else {
       newTopicIds.remove(topicId);
     }
+
     preference.setStringList(UserDataKey.followedTopics, newTopicIds.toList());
   }
 
