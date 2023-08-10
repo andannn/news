@@ -53,6 +53,7 @@ class NiaPreferencesDataSource extends GetxService {
 
   Future<List<String>> getFollowedTopicIds() async {
     final preference = await SharedPreferences.getInstance();
+
     return preference.getStringList(UserDataKey.followedTopics) ?? [];
   }
 
