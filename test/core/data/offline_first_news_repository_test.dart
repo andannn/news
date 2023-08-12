@@ -40,23 +40,19 @@ void main() {
     });
 
     test('sync_pull_from_network', () async {
-      subject.syncWith(synchronizer);
+      await subject.syncWith(synchronizer);
 
       final newsFromDao =
           (await newsResourceDao.getPopulatedNewsResourceStream().first)
               .map((e) => NewsResource.fromEntity(e))
               .toList();
 
-      (await newsResourceDao.getPopulatedNewsResourceStream().first)
-          .map((e) => NewsResource.fromEntity(e))
-          .toList();
-
-      print(newsFromDao);
-
       final newsFromNetwork = (await network.getNewsResources())
           .map((e) => NewsResourceEntity.fromDto(e))
           .map((e) => NewsResource.fromEntityTest(e))
           .toList();
+      expect(newsFromDao.map((e) => e.id),
+          equals(newsFromNetwork.map((e) => e.id)));
     });
   });
 }

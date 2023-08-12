@@ -27,7 +27,7 @@ class FakeNetworkDataSource implements NetworkDataSource {
   @override
   Future<List<NetworkChangeList>> getNewsResourceChangeList(
       {int? after}) async {
-    final topics = await getTopics();
+    final topics = await getNewsResources();
     return topics
         .map((e) => NetworkChangeList(
             id: e.id, changeListVersion: topics.indexOf(e), isDelete: false))
@@ -36,7 +36,7 @@ class FakeNetworkDataSource implements NetworkDataSource {
 
   @override
   Future<List<NetworkChangeList>> getTopicChangeList(int? after) async {
-    final news = await getNewsResources();
+    final news = await getTopics();
     return news
         .map((e) => NetworkChangeList(
             id: e.id, changeListVersion: news.indexOf(e), isDelete: false))

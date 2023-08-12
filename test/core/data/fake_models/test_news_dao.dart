@@ -7,8 +7,7 @@ import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
 import 'package:news/core/database/model/populated_news_resource.dart';
 
 class TestNewsDao implements NewsResourceDao {
-  StreamController<List<NewsResourceEntity>> controller =
-      StreamController();
+  StreamController<List<NewsResourceEntity>> controller = StreamController(sync: true);
 
   Stream<List<NewsResourceEntity>> get newsStream => controller.stream;
   List<NewsResourceEntity> currentList = [];
@@ -20,9 +19,9 @@ class TestNewsDao implements NewsResourceDao {
 
   @override
   Future deleteNewsResources(List<String> ids) async {
-    final current = currentList;
-    controller.add(
-        current.where((item) => !ids.contains(item.id.toString())).toList());
+    currentList =
+        currentList.where((item) => !ids.contains(item.id.toString())).toList();
+    controller.add(currentList);
   }
 
   @override
@@ -58,7 +57,7 @@ class TestNewsDao implements NewsResourceDao {
       Set<String> filterTopicIds = const {},
       bool useFilterNewsIds = false,
       Set<String> filterNewsIds = const {}}) {
-    return newsStream
+    return Stream.value(currentList)
         .map((newsList) => newsList
             .map((news) => getPopulatedNewsResource(news, crossRef))
             .toList())
