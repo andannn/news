@@ -1,4 +1,6 @@
+import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:news/core/database/dao/news_resource_dao.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/tables.dart';
@@ -9,13 +11,13 @@ import '../../common/platform_handler.dart';
 
 const databaseFileName = "nia_data_base.db";
 
-abstract class NiaDatabaseBase {
+abstract class NiaDatabaseBase with ChangeNotifier {
   TopicDao getTopicDao();
+
   NewsResourceDao getNewsResourceDao();
 }
 
 class NiaDatabase extends NiaDatabaseBase {
-
   Database? niaDB;
 
   TopicDao? _topicDao;
@@ -38,7 +40,7 @@ class NiaDatabase extends NiaDatabaseBase {
       throw "";
     }
 
-    return _topicDao ??= TopicDaoImpl(niaDB!);
+    return _topicDao ??= TopicDaoImpl(this, _onTableUpdated);
   }
 
   @override
@@ -47,7 +49,7 @@ class NiaDatabase extends NiaDatabaseBase {
       throw "";
     }
 
-    return _newsResourceDap ??= NewsResourceDaoImpl(niaDB!);
+    return _newsResourceDap ??= NewsResourceDaoImpl(this, _onTableUpdated);
   }
 
   Future _createTables() async {
@@ -57,8 +59,7 @@ class NiaDatabase extends NiaDatabaseBase {
         'shortDescription TEXT, '
         'longDescription TEXT, '
         'url TEXT, '
-        'imageUrl TEXT)'
-    );
+        'imageUrl TEXT)');
 
     await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.newsResource} ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT, '
@@ -67,12 +68,33 @@ class NiaDatabase extends NiaDatabaseBase {
         'url TEXT, '
         'header_image_url TEXT, '
         'publish_date TEXT, '
-        'type TEXT)'
-    );
+        'type TEXT)');
 
-    await niaDB!.execute('CREATE TABLE IF NOT EXISTS ${Tables.newsResourceTopicCrossRef} ('
+    await niaDB!.execute(
+        'CREATE TABLE IF NOT EXISTS ${Tables.newsResourceTopicCrossRef} ('
         'news_resource_id TEXT, '
-        'topic_id TEXT)'
-    );
+        'topic_id TEXT)');
+  }
+
+  _onTableUpdated(String table) {
+    notifyListeners();
+  }
+}
+
+extension NiaDatabaseEx on NiaDatabase {
+  Stream<T> createStream<T>(Future<T> Function() getEventData) {
+    late StreamController<T> controller;
+
+    _listener() async {
+      controller.add(await getEventData());
+    }
+
+    controller = StreamController(onListen: () {
+      _listener();
+      addListener(_listener);
+    }, onCancel: () {
+      removeListener(_listener);
+    });
+    return controller.stream;
   }
 }

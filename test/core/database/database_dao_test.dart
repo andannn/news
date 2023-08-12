@@ -156,6 +156,36 @@ void main() {
       final res = await topicDao.getTopicEntitiesById({'1', '2', '5'});
       expect(res[2], null);
     });
+    test('get_topics_stream', () async {
+      final stream = topicDao.getTopicEntityStream('1');
+      final sub = stream.listen((event) {
+        print(event?.name);
+      });
+      await Future.delayed(Duration(seconds: 1));
+      sub.cancel();
+      await topicDao.insertOrIgnoreTopics([
+        const TopicEntity(
+            id: 1,
+            name: "Headlines",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+            "The latest events and announcements from the world of Android development.",
+            imageUrl:
+            "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: ""),
+        const TopicEntity(
+            id: 2,
+            name: "Headlines",
+            shortDescription: "News you'll definitely be interested in",
+            longDescription:
+            "The latest events and announcements from the world of Android development.",
+            imageUrl:
+            "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
+            url: "")
+      ]);
+      final res = await topicDao.getTopicEntitiesById({'1', '2', '5'});
+      expect(res[2], null);
+    });
   });
 
   group('news_resource_dao_test', () {

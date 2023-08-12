@@ -1,4 +1,5 @@
 import 'package:news/core/database/model/topic_entity.dart';
+import 'package:news/core/database/nia_database.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../model/news_resource_entity.dart';
@@ -23,7 +24,21 @@ abstract class NewsResourceDao {
     Set<String> filterNewsIds = const {},
   });
 
+  Stream<List<String>> getNewsResourceIdsStream({
+    bool useFilterTopicIds = false,
+    Set<String> filterTopicIds = const {},
+    bool useFilterNewsIds = false,
+    Set<String> filterNewsIds = const {},
+  });
+
   Future<List<PopulatedNewsResource>> getPopulatedNewsResource({
+    bool useFilterTopicIds = false,
+    Set<String> filterTopicIds = const {},
+    bool useFilterNewsIds = false,
+    Set<String> filterNewsIds = const {},
+  });
+
+  Stream<List<PopulatedNewsResource>> getPopulatedNewsResourceStream({
     bool useFilterTopicIds = false,
     Set<String> filterTopicIds = const {},
     bool useFilterNewsIds = false,
@@ -32,17 +47,21 @@ abstract class NewsResourceDao {
 }
 
 class NewsResourceDaoImpl implements NewsResourceDao {
-  final Database _niaDatabase;
+  NewsResourceDaoImpl(this._niaDatabase, this.onTableUpdated);
 
-  NewsResourceDaoImpl(this._niaDatabase);
+  final NiaDatabase _niaDatabase;
+
+  Database get _database => _niaDatabase.niaDB!;
+  final Function(String table) onTableUpdated;
 
   @override
   Future deleteNewsResources(List<String> ids) async {
-    final batch = _niaDatabase.batch();
+    final batch = _database.batch();
     for (final id in ids) {
       batch.delete(Tables.newsResource, where: 'id = ?', whereArgs: [id]);
     }
     List<Object?> result = await batch.commit();
+    onTableUpdated(Tables.newsResource);
     return result.whereType<int>().where((res) => res != 0).toList();
   }
 
@@ -89,14 +108,14 @@ class NewsResourceDaoImpl implements NewsResourceDao {
                 END
             ORDER BY publish_date DESC
     """;
-    final res = await _niaDatabase.rawQuery(sql);
+    final res = await _database.rawQuery(sql);
     return res.map((element) => element['id'].toString()).toList();
   }
 
   @override
   Future<List> insertOrIgnoreNewsResources(
       List<NewsResourceEntity> entities) async {
-    final batch = _niaDatabase.batch();
+    final batch = _database.batch();
 
     final sql = 'INSERT OR IGNORE INTO '
         '${Tables.newsResource}(id, title, content, url, header_image_url, publish_date, type)'
@@ -106,13 +125,14 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     }
 
     final result = await batch.commit();
+    onTableUpdated(Tables.newsResource);
     return result;
   }
 
   @override
   Future insertOrIgnoreTopicCrossRefEntities(
       List<NewsResourceTopicCrossRef> newsResourceTopicCrossRefList) async {
-    final batch = _niaDatabase.batch();
+    final batch = _database.batch();
 
     final sql = 'INSERT OR IGNORE INTO '
         '${Tables.newsResourceTopicCrossRef}(news_resource_id, topic_id)'
@@ -120,13 +140,14 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     for (final crossRef in newsResourceTopicCrossRefList) {
       batch.rawInsert(sql, crossRef.toJson().values.toList());
     }
-
     await batch.commit();
+
+    onTableUpdated(Tables.newsResourceTopicCrossRef);
   }
 
   Future<PopulatedNewsResource> _mapNewsIdToPopulatedNewsResource(
       String newsId) async {
-    final newsJson = await _niaDatabase.query(Tables.newsResource, limit: 1);
+    final newsJson = await _database.query(Tables.newsResource, limit: 1);
     NewsResourceEntity entity = NewsResourceEntity.fromJson(newsJson.first);
 
     String sql = """
@@ -137,8 +158,34 @@ class NewsResourceDaoImpl implements NewsResourceDao {
                   WHERE news_resource_id = $newsId
                 )
     """;
-    List topicsJson = await _niaDatabase.rawQuery(sql);
+    List topicsJson = await _database.rawQuery(sql);
     final topics = topicsJson.map((e) => TopicEntity.fromJson(e)).toList();
     return PopulatedNewsResource(entity: entity, topics: topics);
+  }
+
+  @override
+  Stream<List<String>> getNewsResourceIdsStream(
+      {bool useFilterTopicIds = false,
+      Set<String> filterTopicIds = const {},
+      bool useFilterNewsIds = false,
+      Set<String> filterNewsIds = const {}}) {
+    return _niaDatabase.createStream(() => getNewsResourceIds(
+        useFilterTopicIds: useFilterNewsIds,
+        filterTopicIds: filterTopicIds,
+        useFilterNewsIds: useFilterNewsIds,
+        filterNewsIds: filterNewsIds));
+  }
+
+  @override
+  Stream<List<PopulatedNewsResource>> getPopulatedNewsResourceStream(
+      {bool useFilterTopicIds = false,
+      Set<String> filterTopicIds = const {},
+      bool useFilterNewsIds = false,
+      Set<String> filterNewsIds = const {}}) {
+    return _niaDatabase.createStream(() => getPopulatedNewsResource(
+        useFilterTopicIds: useFilterNewsIds,
+        filterTopicIds: filterTopicIds,
+        useFilterNewsIds: useFilterNewsIds,
+        filterNewsIds: filterNewsIds));
   }
 }

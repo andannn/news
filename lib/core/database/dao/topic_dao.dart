@@ -1,13 +1,21 @@
 
+
+import 'dart:async';
+
 import 'package:news/core/database/model/topic_entity.dart';
+import 'package:news/core/database/nia_database.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../tables.dart';
 
 abstract class TopicDao {
+  Stream<TopicEntity?> getTopicEntityStream(String topicId);
+
   Future<TopicEntity?> getTopicEntity(String topicId);
 
   Future<List<TopicEntity>> getTopicEntities();
+
+  Stream<List<TopicEntity>> getTopicEntitiesStream();
 
   Future<List<TopicEntity?>> getTopicEntitiesById(Set<String> ids);
 
@@ -19,24 +27,33 @@ abstract class TopicDao {
 }
 
 class TopicDaoImpl implements TopicDao {
-  final Database _niaDatabase;
+  TopicDaoImpl(this._niaDataBase, this.onTableUpdated);
 
-  TopicDaoImpl(this._niaDatabase);
+  final NiaDatabase _niaDataBase;
+  Database get _dataBase => _niaDataBase.niaDB!;
+
+  final Function(String table) onTableUpdated;
 
   @override
   Future<List<int>> deleteTopics(List<String> ids) async {
-    final batch = _niaDatabase.batch();
+    final batch = _dataBase.batch();
     for (final id in ids) {
       batch.delete(Tables.topics, where: 'id = ?', whereArgs: [id]);
     }
     List<Object?> result = await batch.commit();
+    onTableUpdated.call(Tables.topics);
     return result.whereType<int>().where((res) => res != 0).toList();
+  }
+
+  @override
+  Stream<List<TopicEntity>> getTopicEntitiesStream() {
+    return _niaDataBase.createStream(getTopicEntities);
   }
 
   @override
   Future<List<TopicEntity>> getTopicEntities() async {
     List<Map<String, dynamic>> maps =
-    await _niaDatabase.query(Tables.topics);
+    await _dataBase.query(Tables.topics);
 
     return maps.map((topicJson) => TopicEntity.fromJson(topicJson)).toList();
   }
@@ -53,7 +70,7 @@ class TopicDaoImpl implements TopicDao {
       }
     }
 
-    final batch = _niaDatabase.batch();
+    final batch = _dataBase.batch();
     for (final id in ids) {
       batch.query(Tables.topics,
           where: 'id = ?', whereArgs: [id], limit: 1);
@@ -64,8 +81,13 @@ class TopicDaoImpl implements TopicDao {
   }
 
   @override
+  Stream<TopicEntity?> getTopicEntityStream(String topicId) {
+    return _niaDataBase.createStream(() => getTopicEntity(topicId));
+  }
+
+  @override
   Future<TopicEntity?> getTopicEntity(String topicId) async {
-    List<Map<String, dynamic>> maps = await _niaDatabase
+    List<Map<String, dynamic>> maps = await _dataBase
         .query(Tables.topics, where: 'id = ?', whereArgs: [topicId]);
 
     if (maps.isNotEmpty) {
@@ -76,7 +98,7 @@ class TopicDaoImpl implements TopicDao {
 
   @override
   Future<List> insertOrIgnoreTopics(List<TopicEntity> topicEntities) async {
-    final batch = _niaDatabase.batch();
+    final batch = _dataBase.batch();
 
     final sql = 'INSERT OR IGNORE INTO '
         '${Tables.topics}(id, name, shortDescription, longDescription, url, imageUrl)'
@@ -86,12 +108,13 @@ class TopicDaoImpl implements TopicDao {
     }
 
     final result = await batch.commit();
+    onTableUpdated.call(Tables.topics);
     return result;
   }
 
   @override
   Future<void> upsertTopics(List<TopicEntity> entities) async {
-    final batch = _niaDatabase.batch();
+    final batch = _dataBase.batch();
 
     final sql = 'INSERT OR REPLACE INTO '
         '${Tables.topics}(id, name, shortDescription, longDescription, url, imageUrl)'
@@ -100,6 +123,7 @@ class TopicDaoImpl implements TopicDao {
       batch.rawInsert(sql, topic.toJson().values.toList());
     }
 
+    onTableUpdated.call(Tables.topics);
     await batch.commit();
   }
 }
