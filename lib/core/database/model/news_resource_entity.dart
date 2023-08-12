@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:news/core/network/model/news_resource.dart';
 
 import '../../network/model/news_resource_type.dart';
 
@@ -25,6 +26,15 @@ class NewsResourceEntity {
     this.publishDate,
     this.type = NewsResourceType.unknown,
   });
+
+  NewsResourceEntity.fromDto(NewsResourceDto dto)
+      : id = int.parse(dto.id),
+        title = dto.title,
+        content = dto.content,
+        headerImageUrl = dto.headerImageUrl,
+        publishDate = dto.publishDate,
+        url = dto.url,
+        type = dto.type;
 
   factory NewsResourceEntity.fromJson(Map<String, dynamic> json) =>
       _$NewsResourceEntityFromJson(json);

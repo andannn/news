@@ -4,9 +4,9 @@ import 'package:news/core/database/dao/topic_dao.dart';
 import '../model/topic.dart';
 
 abstract class TopicsRepository {
-  Future<List<Topic>> getAllTopics();
+  Stream<List<Topic>> getAllTopics();
 
-  Future<Topic?> getTopic(String id);
+  Stream<Topic> getTopic(String id);
 }
 
 class OfflineFirstTopicsRepository implements TopicsRepository {
@@ -15,19 +15,16 @@ class OfflineFirstTopicsRepository implements TopicsRepository {
   OfflineFirstTopicsRepository({required this.topicDao});
 
   @override
-  Future<List<Topic>> getAllTopics() async {
-    final topicEntities = await topicDao.getTopicEntities();
-    return topicEntities.map((e) => Topic.fromEntity(e)).toList();
+  Stream<List<Topic>> getAllTopics() {
+    final topicEntitiesStream = topicDao.getTopicEntitiesStream();
+    return topicEntitiesStream.map((topicEntities) {
+      return topicEntities.map((e) => Topic.fromEntity(e)).toList();
+    });
   }
 
   @override
-  Future<Topic?> getTopic(String id) async {
-    final topicEntityList = await topicDao.getTopicEntitiesById({id});
-    final topicEntityNullable = topicEntityList.firstOrNull;
-    if (topicEntityNullable == null) {
-      return null;
-    } else {
-      return Topic.fromEntity(topicEntityNullable);
-    }
+  Stream<Topic> getTopic(String id) {
+    final topicEntityStream = topicDao.getTopicEntitiesByIdStream({id});
+    return topicEntityStream.map((topicEntity) => Topic.fromEntity(topicEntity.first!));
   }
 }

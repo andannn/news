@@ -11,13 +11,9 @@ import '../tables.dart';
 abstract class TopicDao {
   Stream<TopicEntity?> getTopicEntityStream(String topicId);
 
-  Future<TopicEntity?> getTopicEntity(String topicId);
-
-  Future<List<TopicEntity>> getTopicEntities();
-
   Stream<List<TopicEntity>> getTopicEntitiesStream();
 
-  Future<List<TopicEntity?>> getTopicEntitiesById(Set<String> ids);
+  Stream<List<TopicEntity?>> getTopicEntitiesByIdStream(Set<String> ids);
 
   Future<List> insertOrIgnoreTopics(List<TopicEntity> topicEntities);
 
@@ -125,5 +121,10 @@ class TopicDaoImpl implements TopicDao {
 
     onTableUpdated.call(Tables.topics);
     await batch.commit();
+  }
+
+  @override
+  Stream<List<TopicEntity?>> getTopicEntitiesByIdStream(Set<String> ids) {
+    return _niaDataBase.createStream(() => getTopicEntitiesById(ids));
   }
 }

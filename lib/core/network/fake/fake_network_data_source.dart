@@ -8,15 +8,20 @@ import '../model/topic.dart';
 
 class FakeNetworkDataSource implements NetworkDataSource {
   @override
-  Future<List<NewsResourceDto>> getNewsResources({List<String>? ids}) {
-    return Future.delayed(Duration.zero).then((value) =>
-        newsFakeData.map((e) => NewsResourceDto.fromJson(e)).toList());
+  Future<List<NewsResourceDto>> getNewsResources({List<String>? ids}) async {
+    if (ids == null) {
+      return newsFakeData.map((e) => NewsResourceDto.fromJson(e)).toList();
+    }
+
+    return newsFakeData
+        .map((e) => NewsResourceDto.fromJson(e))
+        .where((newsDto) => ids.contains(newsDto.id) == true)
+        .toList();
   }
 
   @override
-  Future<List<TopicDto>> getTopics({List<String>? ids}) {
-    return Future.delayed(Duration.zero).then(
-        (value) => topicsFakeData.map((e) => TopicDto.fromJson(e)).toList());
+  Future<List<TopicDto>> getTopics({List<String>? ids}) async {
+    return topicsFakeData.map((e) => TopicDto.fromJson(e)).toList();
   }
 
   @override

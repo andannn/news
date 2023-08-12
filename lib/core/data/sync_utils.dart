@@ -30,23 +30,23 @@ extension SynchronizerEx on Synchronizer {
     required Function(List<String> ids) modelDeleter,
     required Function(List<String> ids) modelUpdater,
   }) async {
-    return Future.delayed(Duration.zero).then((_) async {
+    try {
       final currentVersion = versionReader(await getChangeListVersions());
       final changeList = await changeListFetcher(currentVersion);
 
       final deleted = changeList.where((element) => element.isDelete);
       final updated = changeList.where((element) => !element.isDelete);
 
-      await modelDeleter(deleted.map((e) => e.id).toList());
-      await modelUpdater(updated.map((e) => e.id).toList());
+      modelDeleter(deleted.map((e) => e.id).toList());
+      modelUpdater(updated.map((e) => e.id).toList());
 
       final latestVersion = changeList.last.changeListVersion;
       await updateChangeListVersions(
-          (version) => versionUpdater(version, latestVersion));
+              (version) => versionUpdater(version, latestVersion));
       return true;
-    }).catchError((error) {
-      debugPrint(error);
+    } catch (error) {
+      debugPrint(error.toString());
       return false;
-    });
+    }
   }
 }

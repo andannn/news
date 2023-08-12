@@ -85,7 +85,8 @@ void main() {
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: "")
       ]);
-      final topic = await topicDao.getTopicEntity('1');
+      final topicStream = topicDao.getTopicEntityStream('1');
+      final topic = await topicStream.first;
       expect(topic!.name, equals('Headlines'));
     });
     test('get_all_topics_by_id', () async {
@@ -107,7 +108,8 @@ void main() {
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: "")
       ]);
-      final topics = await topicDao.getTopicEntities();
+      final topicsStream = topicDao.getTopicEntitiesStream();
+      final topics = await topicsStream.first;
       expect(topics.length, equals(2));
     });
     test('delete_topics_by_ids', () async {
@@ -153,7 +155,8 @@ void main() {
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: "")
       ]);
-      final res = await topicDao.getTopicEntitiesById({'1', '2', '5'});
+      final resStream = topicDao.getTopicEntitiesByIdStream({'1', '2', '5'});
+      final res = await resStream.first;
       expect(res[2], null);
     });
     test('get_topics_stream', () async {
@@ -183,7 +186,8 @@ void main() {
             "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: "")
       ]);
-      final res = await topicDao.getTopicEntitiesById({'1', '2', '5'});
+      final resStream = topicDao.getTopicEntitiesByIdStream({'1', '2', '5'});
+      final res = await resStream.first;
       expect(res[2], null);
     });
   });
@@ -258,46 +262,52 @@ void main() {
     });
     test('get_news_resource_id_by_condition_1', () async {
       await _initialInsert(database);
-      final res = await newsResourceDao.getNewsResourceIds(
+      final resStream = newsResourceDao.getNewsResourceIdsStream(
         useFilterNewsIds: true,
         filterNewsIds: {'137', '145'}
       );
+      final res = await resStream.first;
       expect(res, equals(['137', '145']));
     });
     test('get_news_resource_id_by_condition_2', () async {
       await _initialInsert(database);
-      final res = await newsResourceDao.getNewsResourceIds(
+      final resStream = newsResourceDao.getNewsResourceIdsStream(
         useFilterTopicIds: true,
         filterTopicIds: {'1'}
       );
+
+      final res = await resStream.first;
       expect(res, equals(['137', '145']));
     });
     test('get_news_resource_id_by_condition_2', () async {
       await _initialInsert(database);
-      final res = await newsResourceDao.getNewsResourceIds(
+      final resStream = await newsResourceDao.getNewsResourceIdsStream(
           useFilterNewsIds: true,
           filterNewsIds: {'137'},
           useFilterTopicIds: true,
           filterTopicIds: {'1'}
       );
+      final res = await resStream.first;
       expect(res, equals(['137']));
     });
     test('get_populated_news_resource_id_condition_1', () async {
       await _initialInsert(database);
-      final res = await newsResourceDao.getPopulatedNewsResource(
+      final resStream = newsResourceDao.getPopulatedNewsResourceStream(
           useFilterNewsIds: true,
           filterNewsIds: {'137'},
           useFilterTopicIds: true,
           filterTopicIds: {'1'}
       );
+      final res = await resStream.first;
       expect(res.map((e) => e.entity.id).toList(), equals([137]));
     });
     test('get_populated_news_resource_id_condition_2', () async {
       await _initialInsert(database);
-      final res = await newsResourceDao.getPopulatedNewsResource(
+      final resStream = newsResourceDao.getPopulatedNewsResourceStream(
           useFilterNewsIds: true,
           filterNewsIds: {'145'},
       );
+      final res = await resStream.first;
       expect(res.map((e) => e.entity.id).toList(), equals([137]));
     });
   });

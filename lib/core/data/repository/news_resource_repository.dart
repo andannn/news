@@ -1,34 +1,44 @@
 import 'package:news/core/data/model/news_recsource.dart';
 import 'package:news/core/database/dao/news_resource_dao.dart';
+import 'package:news/core/database/dao/topic_dao.dart';
+import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
+import 'package:news/core/database/model/topic_entity.dart';
 import 'package:news/core/network/network_data_source.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 
+import '../../database/model/news_resource_entity.dart';
 import '../sync_utils.dart';
 
 abstract class NewsRepository implements Syncable {
-  Future<List<NewsResource>> getNewsResources(
+  Stream<List<NewsResource>> getNewsResources(
       {Set<String> filterTopicIds = const {},
       Set<String> filterNewsIds = const {}});
 }
 
 class OfflineFirstNewsRepository extends NewsRepository {
   final NewsResourceDao newsResourceDao;
+  final TopicDao topicDao;
   final NetworkDataSource networkDataSource;
   final NiaPreferencesDataSource niaPreferencesDataSource;
 
-  OfflineFirstNewsRepository(this.newsResourceDao, this.networkDataSource,
-      this.niaPreferencesDataSource);
+  OfflineFirstNewsRepository(
+      {required this.newsResourceDao,
+      required this.topicDao,
+      required this.networkDataSource,
+      required this.niaPreferencesDataSource});
 
   @override
-  Future<List<NewsResource>> getNewsResources(
+  Stream<List<NewsResource>> getNewsResources(
       {Set<String> filterTopicIds = const {},
-      Set<String> filterNewsIds = const {}}) async {
-    final newsEntities = await newsResourceDao.getPopulatedNewsResource(
+      Set<String> filterNewsIds = const {}}) {
+    final newsEntitiesStream = newsResourceDao.getPopulatedNewsResourceStream(
         useFilterNewsIds: filterNewsIds.isNotEmpty,
         filterNewsIds: filterNewsIds,
         useFilterTopicIds: filterTopicIds.isNotEmpty,
         filterTopicIds: filterTopicIds);
-    return newsEntities.map((e) => NewsResource.fromEntity(e)).toList();
+    return newsEntitiesStream.map((list) {
+      return list.map((e) => NewsResource.fromEntity(e)).toList();
+    });
   }
 
   @override
@@ -49,6 +59,43 @@ class OfflineFirstNewsRepository extends NewsRepository {
         modelDeleter: (List<String> ids) async {
           await newsResourceDao.deleteNewsResources(ids);
         },
-        modelUpdater: (List<String> ids) async {});
+        modelUpdater: (List<String> ids) async {
+          // bool hasOnboarded = niaPreferencesDataSource.shouldHideOnboarding;
+          // Set<String> followedTopicIds =
+          //     niaPreferencesDataSource.followedTopics;
+
+          // if (isFirstSync) {
+          //   // When we first retrieve news, mark everything viewed, so that we aren't
+          //   // overwhelmed with all historical news.
+          //   niaPreferencesDataSource.setNewsResourcesViewed(changedIds, true)
+          // }
+
+          final networkNewsResources =
+              await networkDataSource.getNewsResources(ids: ids);
+
+          await topicDao.insertOrIgnoreTopics(networkNewsResources
+              .map((e) => TopicEntity.fromNewsDto(e))
+              .expand((list) => list)
+              .toSet()
+              .toList());
+
+          await newsResourceDao.upsertNewsResources(
+            networkNewsResources
+                .map((res) => NewsResourceEntity.fromDto(res))
+                .toSet()
+                .toList(),
+          );
+
+          await newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
+            networkNewsResources
+                .map((res) => NewsResourceTopicCrossRef.fromDto(res))
+                .expand((list) => list)
+                .toSet()
+                .toList(),
+          );
+        }
+
+        // if (hasOnboarded) {}
+        );
   }
 }

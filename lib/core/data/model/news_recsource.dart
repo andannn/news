@@ -1,4 +1,5 @@
 import 'package:news/core/data/model/topic.dart';
+import 'package:news/core/database/model/news_resource_entity.dart';
 import 'package:news/core/database/model/populated_news_resource.dart';
 
 import '../../network/model/news_resource_type.dart';
@@ -35,4 +36,14 @@ final class NewsResource {
         type = populatedNewsEntity.entity.type,
         topics =
             populatedNewsEntity.topics.map((e) => Topic.fromEntity(e)).toList();
+
+  NewsResource.fromEntityTest(NewsResourceEntity entity)
+      : id = entity.id.toString(),
+        title = entity.title,
+        content = entity.content,
+        url = entity.url,
+        headerImageUrl = entity.headerImageUrl,
+        publishDate = entity.publishDate,
+        type = entity.type,
+        topics = [];
 }

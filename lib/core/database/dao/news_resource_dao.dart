@@ -17,21 +17,9 @@ abstract class NewsResourceDao {
 
   Future<List> insertOrIgnoreNewsResources(List<NewsResourceEntity> entities);
 
-  Future<List<String>> getNewsResourceIds({
-    bool useFilterTopicIds = false,
-    Set<String> filterTopicIds = const {},
-    bool useFilterNewsIds = false,
-    Set<String> filterNewsIds = const {},
-  });
+  Future<List> upsertNewsResources(List<NewsResourceEntity> entities);
 
   Stream<List<String>> getNewsResourceIdsStream({
-    bool useFilterTopicIds = false,
-    Set<String> filterTopicIds = const {},
-    bool useFilterNewsIds = false,
-    Set<String> filterNewsIds = const {},
-  });
-
-  Future<List<PopulatedNewsResource>> getPopulatedNewsResource({
     bool useFilterTopicIds = false,
     Set<String> filterTopicIds = const {},
     bool useFilterNewsIds = false,
@@ -65,7 +53,6 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     return result.whereType<int>().where((res) => res != 0).toList();
   }
 
-  @override
   Future<List<PopulatedNewsResource>> getPopulatedNewsResource(
       {bool useFilterTopicIds = false,
       Set<String> filterTopicIds = const {},
@@ -84,7 +71,6 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     return ret;
   }
 
-  @override
   Future<List<String>> getNewsResourceIds(
       {bool useFilterTopicIds = false,
       Set<String> filterTopicIds = const {},
@@ -118,6 +104,22 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     final batch = _database.batch();
 
     final sql = 'INSERT OR IGNORE INTO '
+        '${Tables.newsResource}(id, title, content, url, header_image_url, publish_date, type)'
+        'VALUES(?, ?, ?, ?, ?, ?, ?)';
+    for (final news in entities) {
+      batch.rawInsert(sql, news.toJson().values.toList());
+    }
+
+    final result = await batch.commit();
+    onTableUpdated(Tables.newsResource);
+    return result;
+  }
+
+  @override
+  Future<List> upsertNewsResources(List<NewsResourceEntity> entities) async {
+    final batch = _database.batch();
+
+    final sql = 'INSERT INTO '
         '${Tables.newsResource}(id, title, content, url, header_image_url, publish_date, type)'
         'VALUES(?, ?, ?, ?, ?, ?, ?)';
     for (final news in entities) {
@@ -183,7 +185,7 @@ class NewsResourceDaoImpl implements NewsResourceDao {
       bool useFilterNewsIds = false,
       Set<String> filterNewsIds = const {}}) {
     return _niaDatabase.createStream(() => getPopulatedNewsResource(
-        useFilterTopicIds: useFilterNewsIds,
+        useFilterTopicIds: useFilterTopicIds,
         filterTopicIds: filterTopicIds,
         useFilterNewsIds: useFilterNewsIds,
         filterNewsIds: filterNewsIds));
