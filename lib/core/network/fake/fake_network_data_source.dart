@@ -7,6 +7,7 @@ import '../model/news_resource.dart';
 import '../model/topic.dart';
 
 class FakeNetworkDataSource implements NetworkDataSource {
+
   @override
   Future<List<NewsResourceDto>> getNewsResources({List<String>? ids}) async {
     if (ids == null) {
@@ -21,7 +22,13 @@ class FakeNetworkDataSource implements NetworkDataSource {
 
   @override
   Future<List<TopicDto>> getTopics({List<String>? ids}) async {
-    return topicsFakeData.map((e) => TopicDto.fromJson(e)).toList();
+    if (ids == null) {
+      return newsFakeData.map((e) => TopicDto.fromJson(e)).toList();
+    }
+
+    return topicsFakeData.map((e) => TopicDto.fromJson(e))
+        .where((dto) => ids.contains(dto.id) == true)
+        .toList();
   }
 
   @override

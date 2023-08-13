@@ -7,21 +7,13 @@ import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
 import 'package:news/core/database/model/populated_news_resource.dart';
 
 class TestNewsDao implements NewsResourceDao {
-  StreamController<List<NewsResourceEntity>> controller = StreamController(sync: true);
-
-  Stream<List<NewsResourceEntity>> get newsStream => controller.stream;
   List<NewsResourceEntity> currentList = [];
   List<NewsResourceTopicCrossRef> crossRef = [];
-
-  TestNewsDao() {
-    controller.add([]);
-  }
 
   @override
   Future deleteNewsResources(List<String> ids) async {
     currentList =
         currentList.where((item) => !ids.contains(item.id.toString())).toList();
-    controller.add(currentList);
   }
 
   @override
@@ -30,7 +22,7 @@ class TestNewsDao implements NewsResourceDao {
       Set<String> filterTopicIds = const {},
       bool useFilterNewsIds = false,
       Set<String> filterNewsIds = const {}}) {
-    return newsStream
+    return Stream.value(currentList)
         .map((newsList) => newsList
             .map((news) => getPopulatedNewsResource(news, crossRef))
             .toList())
@@ -82,7 +74,6 @@ class TestNewsDao implements NewsResourceDao {
   Future<List> insertOrIgnoreNewsResources(
       List<NewsResourceEntity> entities) async {
     currentList = (currentList + entities).toSet().toList();
-    controller.add(currentList);
     return entities.map((e) => e.id).toList();
   }
 
@@ -95,7 +86,6 @@ class TestNewsDao implements NewsResourceDao {
   @override
   Future<List> upsertNewsResources(List<NewsResourceEntity> entities) async {
     currentList = (currentList + entities).toSet().toList();
-    controller.add(currentList);
     return entities.map((e) => e.id).toList();
   }
 
