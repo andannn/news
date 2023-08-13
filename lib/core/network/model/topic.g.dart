@@ -6,7 +6,7 @@ part of 'topic.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TopicDto _$TopicDtoFromJson(Map<String, dynamic> json) => TopicDto(
+_$_TopicDto _$$_TopicDtoFromJson(Map<String, dynamic> json) => _$_TopicDto(
       id: json['id'] as String? ?? "",
       name: json['name'] as String? ?? "",
       shortDescription: json['shortDescription'] as String? ?? "",
@@ -16,7 +16,8 @@ TopicDto _$TopicDtoFromJson(Map<String, dynamic> json) => TopicDto(
       followed: json['followed'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$TopicDtoToJson(TopicDto instance) => <String, dynamic>{
+Map<String, dynamic> _$$_TopicDtoToJson(_$_TopicDto instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'shortDescription': instance.shortDescription,

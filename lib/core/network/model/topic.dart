@@ -1,28 +1,21 @@
-import 'package:json_annotation/json_annotation.dart';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'topic.freezed.dart';
 part 'topic.g.dart';
 
-@JsonSerializable()
-class TopicDto {
-  final String id;
-  final String name;
-  final String shortDescription;
-  final String longDescription;
-  final String url;
-  final String imageUrl;
-  final bool followed;
+@freezed
+class TopicDto with _$TopicDto {
 
-  const TopicDto(
-      {this.id = "",
-      this.name = "",
-      this.shortDescription = "",
-      this.longDescription = "",
-      this.url = "",
-      this.imageUrl = "",
-      this.followed = false});
+  factory TopicDto(
+      {@Default("") String id,
+        @Default("") String name,
+        @Default("") String shortDescription ,
+        @Default("") String longDescription ,
+        @Default("") String url ,
+        @Default("") String imageUrl ,
+        @Default(false) bool followed }) = _TopicDto;
 
   factory TopicDto.fromJson(Map<String, dynamic> json) =>
       _$TopicDtoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TopicDtoToJson(this);
 }

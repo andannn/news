@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
 import 'package:news/core/network/fake/fake_network_data_source.dart';
 import 'package:news/core/network/model/news_resource.dart';
 import 'package:news/core/network/model/news_resource_type.dart';
@@ -15,7 +14,7 @@ void main() {
 
     test('get_topics', () async {
       final result = await dataSource.getTopics();
-      const expectRes = TopicDto(
+      final expectRes = TopicDto(
           id: "1",
           name: "Headlines",
           shortDescription: "News you'll definitely be interested in",

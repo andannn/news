@@ -1,34 +1,24 @@
-import 'package:flutter/cupertino.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'news_resource_type.dart';
 
 part 'news_resource.g.dart';
 
-@immutable
-@JsonSerializable()
-class NewsResourceDto {
-  final String id;
-  final String title;
-  final String content;
-  final String url;
-  final String headerImageUrl;
-  final DateTime? publishDate;
-  final NewsResourceType type;
-  final List<String> topics;
+part 'news_resource.freezed.dart';
 
-  const NewsResourceDto(
-      {this.id = '',
-      this.title = '',
-      this.content = '',
-      this.url = '',
-      this.headerImageUrl = '',
-      this.type = NewsResourceType.unknown,
-      this.publishDate,
-      this.topics = const []});
+@freezed
+class NewsResourceDto with _$NewsResourceDto {
+
+  factory NewsResourceDto(
+      {@Default("") String id,
+        @Default("") String title,
+        @Default("") String content,
+        @Default("") String url,
+        @Default("") String headerImageUrl,
+        @Default(NewsResourceType.unknown) NewsResourceType type,
+        DateTime? publishDate,
+        @Default([]) List<String> topics}) = _NewsResourceDto;
 
   factory NewsResourceDto.fromJson(Map<String, dynamic> json) =>
       _$NewsResourceDtoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$NewsResourceDtoToJson(this);
 }

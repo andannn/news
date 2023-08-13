@@ -6,13 +6,13 @@ part of 'news_resource.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NewsResourceDto _$NewsResourceDtoFromJson(Map<String, dynamic> json) =>
-    NewsResourceDto(
-      id: json['id'] as String? ?? '',
-      title: json['title'] as String? ?? '',
-      content: json['content'] as String? ?? '',
-      url: json['url'] as String? ?? '',
-      headerImageUrl: json['headerImageUrl'] as String? ?? '',
+_$_NewsResourceDto _$$_NewsResourceDtoFromJson(Map<String, dynamic> json) =>
+    _$_NewsResourceDto(
+      id: json['id'] as String? ?? "",
+      title: json['title'] as String? ?? "",
+      content: json['content'] as String? ?? "",
+      url: json['url'] as String? ?? "",
+      headerImageUrl: json['headerImageUrl'] as String? ?? "",
       type: $enumDecodeNullable(_$NewsResourceTypeEnumMap, json['type']) ??
           NewsResourceType.unknown,
       publishDate: json['publishDate'] == null
@@ -24,15 +24,15 @@ NewsResourceDto _$NewsResourceDtoFromJson(Map<String, dynamic> json) =>
           const [],
     );
 
-Map<String, dynamic> _$NewsResourceDtoToJson(NewsResourceDto instance) =>
+Map<String, dynamic> _$$_NewsResourceDtoToJson(_$_NewsResourceDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'content': instance.content,
       'url': instance.url,
       'headerImageUrl': instance.headerImageUrl,
-      'publishDate': instance.publishDate?.toIso8601String(),
       'type': _$NewsResourceTypeEnumMap[instance.type]!,
+      'publishDate': instance.publishDate?.toIso8601String(),
       'topics': instance.topics,
     };
 
