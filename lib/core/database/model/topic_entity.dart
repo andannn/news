@@ -1,25 +1,20 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news/core/network/model/news_resource.dart';
 
 part 'topic_entity.g.dart';
+part 'topic_entity.freezed.dart';
 
-@JsonSerializable()
-class TopicEntity {
-  final int? id;
-  final String name;
-  final String shortDescription;
-  final String longDescription;
-  final String url;
-  final String imageUrl;
+@freezed
+class TopicEntity with _$TopicEntity {
 
-  const TopicEntity({
-    this.id,
-    this.name = "",
-    this.shortDescription = "",
-    this.longDescription = "",
-    this.url = "",
-    this.imageUrl = "",
-  });
+  factory TopicEntity({
+    int? id,
+    @Default("") String name,
+    @Default("") String shortDescription,
+    @Default("") String longDescription,
+    @Default("") String url,
+    @Default("") String imageUrl,
+  }) = _TopicEntity;
 
   static List<TopicEntity> fromNewsDto(NewsResourceDto newsDto) =>
       newsDto.topics
@@ -28,6 +23,4 @@ class TopicEntity {
 
   factory TopicEntity.fromJson(Map<String, dynamic> json) =>
       _$TopicEntityFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TopicEntityToJson(this);
 }

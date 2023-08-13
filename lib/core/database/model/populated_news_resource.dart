@@ -1,10 +1,13 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news/core/database/model/topic_entity.dart';
 
 import 'news_resource_entity.dart';
 
-class PopulatedNewsResource {
-  final NewsResourceEntity entity;
-  final List<TopicEntity> topics;
+part 'populated_news_resource.freezed.dart';
 
-  const PopulatedNewsResource({required this.entity, required this.topics});
+@freezed
+class PopulatedNewsResource with _$PopulatedNewsResource {
+  factory PopulatedNewsResource(
+      {required NewsResourceEntity entity,
+      required List<TopicEntity> topics}) = _PopulatedNewsResource;
 }

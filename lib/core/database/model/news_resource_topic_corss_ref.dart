@@ -1,18 +1,16 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news/core/network/model/news_resource.dart';
+
+part 'news_resource_topic_corss_ref.freezed.dart';
 
 part 'news_resource_topic_corss_ref.g.dart';
 
-@JsonSerializable()
-class NewsResourceTopicCrossRef {
-  @JsonKey(name: "news_resource_id") // Foreign key of news_resource table.
-  final String newsResourceId;
-
-  @JsonKey(name: "topic_id")
-  final String topicId; // Foreign key of topic table.
-
-  const NewsResourceTopicCrossRef(
-      {required this.newsResourceId, required this.topicId});
+@freezed
+class NewsResourceTopicCrossRef with _$NewsResourceTopicCrossRef {
+  factory NewsResourceTopicCrossRef(
+          {@JsonKey(name: "news_resource_id") required String newsResourceId,
+          @JsonKey(name: "topic_id") required String topicId}) =
+      _NewsResourceTopicCrossRef;
 
   static List<NewsResourceTopicCrossRef> fromDto(NewsResourceDto dto) => dto
       .topics
@@ -22,6 +20,4 @@ class NewsResourceTopicCrossRef {
 
   factory NewsResourceTopicCrossRef.fromJson(Map<String, dynamic> json) =>
       _$NewsResourceTopicCrossRefFromJson(json);
-
-  Map<String, dynamic> toJson() => _$NewsResourceTopicCrossRefToJson(this);
 }

@@ -6,7 +6,8 @@ part of 'topic_entity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TopicEntity _$TopicEntityFromJson(Map<String, dynamic> json) => TopicEntity(
+_$_TopicEntity _$$_TopicEntityFromJson(Map<String, dynamic> json) =>
+    _$_TopicEntity(
       id: json['id'] as int?,
       name: json['name'] as String? ?? "",
       shortDescription: json['shortDescription'] as String? ?? "",
@@ -15,7 +16,7 @@ TopicEntity _$TopicEntityFromJson(Map<String, dynamic> json) => TopicEntity(
       imageUrl: json['imageUrl'] as String? ?? "",
     );
 
-Map<String, dynamic> _$TopicEntityToJson(TopicEntity instance) =>
+Map<String, dynamic> _$$_TopicEntityToJson(_$_TopicEntity instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

@@ -6,9 +6,10 @@ part of 'news_resource_entity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NewsResourceEntity _$NewsResourceEntityFromJson(Map<String, dynamic> json) =>
-    NewsResourceEntity(
-      id: json['id'] as int,
+_$_NewsResourceEntity _$$_NewsResourceEntityFromJson(
+        Map<String, dynamic> json) =>
+    _$_NewsResourceEntity(
+      id: json['id'] as int? ?? -1,
       title: json['title'] as String? ?? "",
       content: json['content'] as String? ?? "",
       url: json['url'] as String? ?? "",
@@ -20,7 +21,8 @@ NewsResourceEntity _$NewsResourceEntityFromJson(Map<String, dynamic> json) =>
           NewsResourceType.unknown,
     );
 
-Map<String, dynamic> _$NewsResourceEntityToJson(NewsResourceEntity instance) =>
+Map<String, dynamic> _$$_NewsResourceEntityToJson(
+        _$_NewsResourceEntity instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,

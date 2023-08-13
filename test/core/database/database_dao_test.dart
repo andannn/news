@@ -27,7 +27,7 @@ void main() {
 
     test('insert_or_ignore_topics', () async {
       final res = await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -36,7 +36,7 @@ void main() {
             imageUrl:
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -50,7 +50,7 @@ void main() {
     });
     test('upsert_topics', () async {
       await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -62,7 +62,7 @@ void main() {
       ]);
 
       await topicDao.upsertTopics([
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines updated",
             shortDescription: "News you'll definitely be interested in",
@@ -75,7 +75,7 @@ void main() {
     });
     test('get_topics_by_id', () async {
       await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -91,7 +91,7 @@ void main() {
     });
     test('get_all_topics_by_id', () async {
       await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
@@ -99,7 +99,7 @@ void main() {
             imageUrl:
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
-        const TopicEntity(
+        TopicEntity(
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
@@ -114,7 +114,7 @@ void main() {
     });
     test('delete_topics_by_ids', () async {
       await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
@@ -122,7 +122,7 @@ void main() {
             imageUrl:
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
-        const TopicEntity(
+        TopicEntity(
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
             longDescription:
@@ -136,7 +136,7 @@ void main() {
     });
     test('get_topics_by_ids', () async {
       await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -145,7 +145,7 @@ void main() {
             imageUrl:
                 "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
-        const TopicEntity(
+        TopicEntity(
             id: 2,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -167,7 +167,7 @@ void main() {
       await Future.delayed(Duration(seconds: 1));
       sub.cancel();
       await topicDao.insertOrIgnoreTopics([
-        const TopicEntity(
+        TopicEntity(
             id: 1,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -176,7 +176,7 @@ void main() {
             imageUrl:
             "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url: ""),
-        const TopicEntity(
+        TopicEntity(
             id: 2,
             name: "Headlines",
             shortDescription: "News you'll definitely be interested in",
@@ -255,9 +255,9 @@ void main() {
     });
     test('insert_or_ignore_cross_ref', () async {
       await newsResourceDao.insertOrIgnoreTopicCrossRefEntities([
-        const NewsResourceTopicCrossRef(newsResourceId: '1', topicId: '3'),
-        const NewsResourceTopicCrossRef(newsResourceId: '2', topicId: '3'),
-        const NewsResourceTopicCrossRef(newsResourceId: '4', topicId: '3'),
+        NewsResourceTopicCrossRef(newsResourceId: '1', topicId: '3'),
+        NewsResourceTopicCrossRef(newsResourceId: '2', topicId: '3'),
+        NewsResourceTopicCrossRef(newsResourceId: '4', topicId: '3'),
       ]);
     });
     test('get_news_resource_id_by_condition_1', () async {
@@ -315,7 +315,7 @@ void main() {
 
 _initialInsert(NiaDatabase dataBase) async {
   await dataBase.getTopicDao().insertOrIgnoreTopics([
-    const TopicEntity(
+    TopicEntity(
         id: 1,
         name: "Headlines",
         shortDescription: "News you'll definitely be interested in",
@@ -324,7 +324,7 @@ _initialInsert(NiaDatabase dataBase) async {
         imageUrl:
         "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
         url: ""),
-    const TopicEntity(
+    TopicEntity(
         id: 2,
         name: "Headlines",
         shortDescription: "News you'll definitely be interested in",
@@ -366,8 +366,8 @@ _initialInsert(NiaDatabase dataBase) async {
     )
   ]);
   await dataBase.getNewsResourceDao().insertOrIgnoreTopicCrossRefEntities([
-    const NewsResourceTopicCrossRef(newsResourceId: '137', topicId: '1'),
-    const NewsResourceTopicCrossRef(newsResourceId: '145', topicId: '1'),
-    const NewsResourceTopicCrossRef(newsResourceId: '145', topicId: '2'),
+    NewsResourceTopicCrossRef(newsResourceId: '137', topicId: '1'),
+    NewsResourceTopicCrossRef(newsResourceId: '145', topicId: '1'),
+    NewsResourceTopicCrossRef(newsResourceId: '145', topicId: '2'),
   ]);
 }
