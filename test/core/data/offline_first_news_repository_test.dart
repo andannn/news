@@ -1,10 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:news/core/data/model/news_recsource.dart';
 import 'package:news/core/data/repository/news_resource_repository.dart';
-import 'package:news/core/data/repository/topics_repository.dart';
 import 'package:news/core/data/sync_utils.dart';
-import 'package:news/core/database/dao/news_resource_dao.dart';
-import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/model/news_resource_entity.dart';
 import 'package:news/core/network/fake/fake_network_data_source.dart';
 import 'package:news/core/shared_preference/user_data.dart';
