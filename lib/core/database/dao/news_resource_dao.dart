@@ -172,7 +172,7 @@ class NewsResourceDaoImpl implements NewsResourceDao {
       bool useFilterNewsIds = false,
       Set<String> filterNewsIds = const {}}) {
     return _niaDatabase.createStream(() => getNewsResourceIds(
-        useFilterTopicIds: useFilterNewsIds,
+        useFilterTopicIds: useFilterTopicIds,
         filterTopicIds: filterTopicIds,
         useFilterNewsIds: useFilterNewsIds,
         filterNewsIds: filterNewsIds));
