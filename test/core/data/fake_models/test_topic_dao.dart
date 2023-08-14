@@ -8,9 +8,9 @@ class TestTopicDao implements TopicDao {
   List<TopicEntity> _current = [];
 
   @override
-  Future<List<int>> deleteTopics(List<String> ids) {
-    // TODO: implement deleteTopics
-    throw UnimplementedError();
+  Future<List<int>> deleteTopics(List<String> ids) async {
+    _current = _current.where((e) => !ids.contains(e.id.toString())).toList();
+    return ids.map((e) => int.parse(e)).toList();
   }
 
   @override

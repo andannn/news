@@ -5,7 +5,6 @@ import 'package:news/core/data/sync_utils.dart';
 import 'package:news/core/database/model/news_resource_entity.dart';
 import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
 import 'package:news/core/database/model/topic_entity.dart';
-import 'package:news/core/network/model/topic.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

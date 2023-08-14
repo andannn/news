@@ -23,7 +23,7 @@ class FakeNetworkDataSource implements NetworkDataSource {
   @override
   Future<List<TopicDto>> getTopics({List<String>? ids}) async {
     if (ids == null) {
-      return newsFakeData.map((e) => TopicDto.fromJson(e)).toList();
+      return topicsFakeData.map((e) => TopicDto.fromJson(e)).toList();
     }
 
     return topicsFakeData.map((e) => TopicDto.fromJson(e))
