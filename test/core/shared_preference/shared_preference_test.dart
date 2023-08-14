@@ -11,6 +11,7 @@ void main() {
       TestWidgetsFlutterBinding.ensureInitialized();
       SharedPreferences.setMockInitialValues({});
       dataSource = NiaPreferencesDataSource();
+      await dataSource.init();
     });
 
     test('set_followed_topics', () async {

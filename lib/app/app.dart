@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:news/core/shared_preference/user_data.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// init shared preference used in app.
+  await NiaPreferencesDataSource.niaUserData.init();
+
+  runApp(const NiaApp());
+}
 
 class NiaApp extends StatelessWidget {
   const NiaApp({super.key});

@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/sync_utils.dart';
+
 
 mixin UserDataKey {
   static const bookmarkedNewsResources = "bookmarked_news_resources";
@@ -29,18 +29,24 @@ mixin DarkThemeConfig {
   static const dark = "dark";
 }
 
-class NiaPreferencesDataSource extends GetxService {
+class NiaPreferencesDataSource {
+  late SharedPreferences _preference;
+
+  static NiaPreferencesDataSource niaUserData = NiaPreferencesDataSource();
+
+  init() async {
+    _preference = await SharedPreferences.getInstance();
+  }
+
   Future setFollowedTopicIds(Set<String> topicIds) async {
-    final preference = await SharedPreferences.getInstance();
-    return preference.setStringList(
+    return _preference.setStringList(
         UserDataKey.followedTopics, topicIds.toList());
   }
 
   Future toggleFollowedTopicId(
       {required String topicId, required bool followed}) async {
-    final preference = await SharedPreferences.getInstance();
     final List<String> topicIds =
-        preference.getStringList(UserDataKey.followedTopics) ?? [];
+        _preference.getStringList(UserDataKey.followedTopics) ?? [];
     Set<String> newTopicIds = HashSet.of(topicIds);
     if (followed) {
       newTopicIds.add(topicId);
@@ -48,69 +54,62 @@ class NiaPreferencesDataSource extends GetxService {
       newTopicIds.remove(topicId);
     }
 
-    preference.setStringList(UserDataKey.followedTopics, newTopicIds.toList());
+    _preference.setStringList(UserDataKey.followedTopics, newTopicIds.toList());
   }
 
   Future<List<String>> getFollowedTopicIds() async {
-    final preference = await SharedPreferences.getInstance();
-
-    return preference.getStringList(UserDataKey.followedTopics) ?? [];
+    return _preference.getStringList(UserDataKey.followedTopics) ?? [];
   }
 
   Future setThemeBrand(String themeBrand) async {
-    final preference = await SharedPreferences.getInstance();
-    preference.setString(UserDataKey.themeBrand, themeBrand);
+    _preference.setString(UserDataKey.themeBrand, themeBrand);
   }
 
   Future setDynamicColorPreference(bool useDynamicColor) async {
-    final preference = await SharedPreferences.getInstance();
-    preference.setBool(UserDataKey.useDynamicColor, useDynamicColor);
+    _preference.setBool(UserDataKey.useDynamicColor, useDynamicColor);
   }
 
   Future setDarkThemeConfig(String darkThemeConfig) async {
-    final preference = await SharedPreferences.getInstance();
-    preference.setString(UserDataKey.darkThemeConfig, darkThemeConfig);
+    _preference.setString(UserDataKey.darkThemeConfig, darkThemeConfig);
   }
 
   Future toggleNewsResourceBookmark(
       String newsResourceId, bool bookmarked) async {
-    final preference = await SharedPreferences.getInstance();
     final List<String> bookmarkedNewsIds =
-        preference.getStringList(UserDataKey.followedTopics) ?? [];
+        _preference.getStringList(UserDataKey.followedTopics) ?? [];
     Set<String> newBookmarkedNewsIds = HashSet.of(bookmarkedNewsIds);
     if (bookmarked) {
       newBookmarkedNewsIds.add(newsResourceId);
     } else {
       newBookmarkedNewsIds.remove(newsResourceId);
     }
-    preference.setStringList(
+    _preference.setStringList(
         UserDataKey.bookmarkedNewsResources, newBookmarkedNewsIds.toList());
   }
 
   Future<ChangeListVersions> getChangeListVersions() async {
-    final preference = await SharedPreferences.getInstance();
     return ChangeListVersions(
         topicVersion:
-            preference.getInt(UserDataKey.topicChangeListVersion) ?? -1,
+            _preference.getInt(UserDataKey.topicChangeListVersion) ?? -1,
         newsResourceVersion:
-            preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1);
+            _preference.getInt(UserDataKey.newsResourceChangeListVersion) ??
+                -1);
   }
 
   Future updateChangeListVersion(
       {required ChangeListVersions Function(ChangeListVersions) update}) async {
-    final preference = await SharedPreferences.getInstance();
     final currentTopicChangeListVersion =
-        preference.getInt(UserDataKey.topicChangeListVersion) ?? -1;
+        _preference.getInt(UserDataKey.topicChangeListVersion) ?? -1;
     final currentNewsChangeListVersion =
-        preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1;
+        _preference.getInt(UserDataKey.newsResourceChangeListVersion) ?? -1;
 
     final updatedChangeListVersions = update(ChangeListVersions(
         newsResourceVersion: currentTopicChangeListVersion,
         topicVersion: currentNewsChangeListVersion));
 
-    await preference.setInt(UserDataKey.topicChangeListVersion,
+    await _preference.setInt(UserDataKey.topicChangeListVersion,
         updatedChangeListVersions.topicVersion);
-    await preference.setInt(UserDataKey.newsResourceChangeListVersion,
+    await _preference.setInt(UserDataKey.newsResourceChangeListVersion,
         updatedChangeListVersions.newsResourceVersion);
   }
 }
