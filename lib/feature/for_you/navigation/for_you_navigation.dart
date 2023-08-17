@@ -1,13 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:news/app/navigation/nia_route_path.dart';
+import 'package:news/feature/for_you/for_you_page.dart';
 
-import '../for_you_page.dart';
-
-const String forYouRouteName = '/';
-
-Future navigateToForYouPage(NavigatorState navigator) => navigator
-    .pushNamedAndRemoveUntil(forYouRouteName, (route) => true);
-
-Route createForYouPageRoute() => MaterialPageRoute(
-    settings: const RouteSettings(name: forYouRouteName, arguments: null),
-    builder: (_) => const ForYouPage());
+Page createForYouPageRoute() =>
+    const MaterialPage(key: ValueKey(ForYouRoutePath), child: ForYouPage());

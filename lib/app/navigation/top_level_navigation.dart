@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news/app/navigation/nia_route_path.dart';
 
 enum TopLevelNavigation {
   forYou(
@@ -12,8 +13,8 @@ enum TopLevelNavigation {
       iconTextId: 'Saved',
       titleTextId: 'Saved'),
   interests(
-      selectedIcon: Icons.interests_outlined,
-      unSelectedIcon: Icons.interests,
+      selectedIcon: Icons.interests,
+      unSelectedIcon: Icons.interests_outlined,
       iconTextId: 'interests',
       titleTextId: 'interests');
 
@@ -37,5 +38,16 @@ extension TopLevelNavigationEx on TopLevelNavigation {
         label: iconTextId,
         icon: Icon(icon),
     );
+  }
+
+  NiaRoutePath toRoutePath() {
+    switch (this) {
+      case TopLevelNavigation.forYou:
+        return ForYouRoutePath();
+      case TopLevelNavigation.bookMark:
+        return BookMarkedRoutePath();
+      case TopLevelNavigation.interests:
+        return InterestsRoutePath();
+    }
   }
 }

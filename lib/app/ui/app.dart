@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news/app/navigation/nia_navigator.dart';
+import 'package:news/app/navigation/nia_router.dart';
 import 'package:news/app/navigation/top_level_navigation.dart';
-import 'package:news/feature/book_marked/navigation/book_marked_navigation.dart';
-
-import '../../feature/for_you/navigation/for_you_navigation.dart';
 
 class NiaApp extends StatefulWidget {
   const NiaApp({super.key});
@@ -21,31 +18,59 @@ class NiaAppState extends State<NiaApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black26),
         useMaterial3: true,
       ),
-      home: NiaAppScaffold(),
+      home: const NiaAppScaffold(),
     );
   }
 }
 
-class NiaAppScaffold extends StatelessWidget {
-  NiaAppScaffold({super.key});
+class NiaAppScaffold extends StatefulWidget {
+  const NiaAppScaffold({super.key});
 
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  @override
+  State<NiaAppScaffold> createState() => _NiaAppScaffoldState();
+}
+
+class _NiaAppScaffoldState extends State<NiaAppScaffold> {
+  final niaRouterDelegate = NiaRouterDelegate();
+
+  late VoidCallback _navigationListener;
+
+  var currentNavigation = TopLevelNavigation.forYou;
+
+  @override
+  void initState() {
+    super.initState();
+    _navigationListener = () {
+      setState(() {
+        currentNavigation = niaRouterDelegate.currentTopLevelNavigation;
+      });
+    };
+    niaRouterDelegate.addListener(_navigationListener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    niaRouterDelegate.removeListener(_navigationListener);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _niaAppBar(),
-      body: NiaRouter(navigatorKey: _navigatorKey),
+      appBar: _niaAppBar(navigation: currentNavigation),
+      body: Router(
+          routerDelegate: niaRouterDelegate,
+          backButtonDispatcher: RootBackButtonDispatcher()),
       bottomNavigationBar: _niaNavigationBar(
-          selected: TopLevelNavigation.forYou,
+          selected: currentNavigation,
           onNavigateToDestination: (navigation) async {
-            final navigator = _navigatorKey.currentState!;
-            await _navigateToDestination(navigator, navigation);
+            niaRouterDelegate.navigateToTopLevelPage(navigation);
           }),
     );
   }
 
-  PreferredSizeWidget _niaAppBar() => AppBar();
+  PreferredSizeWidget _niaAppBar({required TopLevelNavigation navigation}) =>
+      AppBar(title: Text(navigation.titleTextId),);
 
   Widget? _niaNavigationBar(
       {required TopLevelNavigation selected,
@@ -62,17 +87,5 @@ class NiaAppScaffold extends StatelessWidget {
             .map((navigation) => navigation.toBottomNavigationBarItem(
                 isSelected: navigation == selected))
             .toList());
-  }
-
-  Future _navigateToDestination(
-      NavigatorState navigator, TopLevelNavigation navigation) async {
-    switch (navigation) {
-      case TopLevelNavigation.forYou:
-        navigateToForYouPage(navigator);
-      case TopLevelNavigation.bookMark:
-        navigateToBookMarkedPage(navigator);
-      default:
-        Future.value();
-    }
   }
 }
