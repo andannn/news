@@ -69,8 +69,21 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
     );
   }
 
-  PreferredSizeWidget _niaAppBar({required TopLevelNavigation navigation}) =>
-      AppBar(title: Text(navigation.titleTextId),);
+  PreferredSizeWidget _niaAppBar({
+    required TopLevelNavigation navigation,
+    VoidCallback? onSettingClick,
+    VoidCallback? onSearchClick,
+  }) =>
+      AppBar(
+        leading: IconButton(
+            onPressed: onSearchClick, icon: const Icon(Icons.search)),
+        title: Align(
+            alignment: Alignment.center, child: Text(navigation.titleTextId)),
+        actions: [
+          IconButton(
+              onPressed: onSettingClick, icon: const Icon(Icons.settings))
+        ],
+      );
 
   Widget? _niaNavigationBar(
       {required TopLevelNavigation selected,
