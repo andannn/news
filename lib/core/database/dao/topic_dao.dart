@@ -46,7 +46,6 @@ class TopicDaoImpl implements TopicDao {
     return _niaDataBase.createStream(getTopicEntities);
   }
 
-  @override
   Future<List<TopicEntity>> getTopicEntities() async {
     List<Map<String, dynamic>> maps =
     await _dataBase.query(Tables.topics);
@@ -54,7 +53,6 @@ class TopicDaoImpl implements TopicDao {
     return maps.map((topicJson) => TopicEntity.fromJson(topicJson)).toList();
   }
 
-  @override
   Future<List<TopicEntity?>> getTopicEntitiesById(Set<String> ids) async {
     TopicEntity? mapToTopicEntity(json) {
       final jsonElement = (json as List).firstOrNull;

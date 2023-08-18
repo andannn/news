@@ -11,6 +11,8 @@ import '../../common/platform_handler.dart';
 
 const databaseFileName = "nia_data_base.db";
 
+NiaDatabase niaDatabase = NiaDatabase();
+
 abstract class NiaDatabaseBase with ChangeNotifier {
   TopicDao getTopicDao();
 

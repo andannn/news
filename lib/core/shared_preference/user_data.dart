@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/sync_utils.dart';
-
 
 mixin UserDataKey {
   static const bookmarkedNewsResources = "bookmarked_news_resources";
@@ -29,7 +30,9 @@ mixin DarkThemeConfig {
   static const dark = "dark";
 }
 
-class NiaPreferencesDataSource {
+NiaPreferencesDataSource niaUserDataSource = NiaPreferencesDataSource();
+
+class NiaPreferencesDataSource extends ChangeNotifier {
   late SharedPreferences _preference;
 
   static NiaPreferencesDataSource niaUserData = NiaPreferencesDataSource();
@@ -39,8 +42,13 @@ class NiaPreferencesDataSource {
   }
 
   Future setFollowedTopicIds(Set<String> topicIds) async {
-    return _preference.setStringList(
-        UserDataKey.followedTopics, topicIds.toList());
+    return _preference
+        .setStringList(UserDataKey.followedTopics, topicIds.toList())
+        .then((_) => notifyListeners());
+  }
+
+  Stream<List<String>> getFollowedTopicIdsStream() {
+    return createStream(() => getFollowedTopicIds());
   }
 
   Future toggleFollowedTopicId(
@@ -55,6 +63,7 @@ class NiaPreferencesDataSource {
     }
 
     _preference.setStringList(UserDataKey.followedTopics, newTopicIds.toList());
+    notifyListeners();
   }
 
   Future<List<String>> getFollowedTopicIds() async {
@@ -62,15 +71,21 @@ class NiaPreferencesDataSource {
   }
 
   Future setThemeBrand(String themeBrand) async {
-    _preference.setString(UserDataKey.themeBrand, themeBrand);
+    _preference
+        .setString(UserDataKey.themeBrand, themeBrand)
+        .then((_) => notifyListeners());
   }
 
   Future setDynamicColorPreference(bool useDynamicColor) async {
-    _preference.setBool(UserDataKey.useDynamicColor, useDynamicColor);
+    _preference
+        .setBool(UserDataKey.useDynamicColor, useDynamicColor)
+        .then((_) => notifyListeners());
   }
 
   Future setDarkThemeConfig(String darkThemeConfig) async {
-    _preference.setString(UserDataKey.darkThemeConfig, darkThemeConfig);
+    _preference
+        .setString(UserDataKey.darkThemeConfig, darkThemeConfig)
+        .then((_) => notifyListeners());
   }
 
   Future toggleNewsResourceBookmark(
@@ -83,8 +98,10 @@ class NiaPreferencesDataSource {
     } else {
       newBookmarkedNewsIds.remove(newsResourceId);
     }
-    _preference.setStringList(
-        UserDataKey.bookmarkedNewsResources, newBookmarkedNewsIds.toList());
+    _preference
+        .setStringList(
+            UserDataKey.bookmarkedNewsResources, newBookmarkedNewsIds.toList())
+        .then((_) => notifyListeners());
   }
 
   Future<ChangeListVersions> getChangeListVersions() async {
@@ -111,5 +128,24 @@ class NiaPreferencesDataSource {
         updatedChangeListVersions.topicVersion);
     await _preference.setInt(UserDataKey.newsResourceChangeListVersion,
         updatedChangeListVersions.newsResourceVersion);
+    notifyListeners();
+  }
+}
+
+extension NiaPreferencesDataSourceEx on NiaPreferencesDataSource {
+  Stream<T> createStream<T>(Future<T> Function() getEventData) {
+    late StreamController<T> controller;
+
+    _listener() async {
+      controller.add(await getEventData());
+    }
+
+    controller = StreamController(onListen: () {
+      _listener();
+      addListener(_listener);
+    }, onCancel: () {
+      removeListener(_listener);
+    });
+    return controller.stream;
   }
 }

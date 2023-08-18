@@ -8,9 +8,9 @@ import 'package:news/core/database/model/topic_entity.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'fake_models/test_news_dao.dart';
-import 'fake_models/test_nia_network_data_source.dart';
-import 'fake_models/test_topic_dao.dart';
+import '../../fake_models/test_news_dao.dart';
+import '../../fake_models/test_nia_network_data_source.dart';
+import '../../fake_models/test_topic_dao.dart';
 import 'test_synchronizer.dart';
 
 void main() {
