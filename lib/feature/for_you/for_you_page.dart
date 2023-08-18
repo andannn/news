@@ -1,13 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ForYouPage extends StatelessWidget {
+class ForYouPage extends StatefulWidget {
   const ForYouPage({super.key});
 
   @override
+  State<ForYouPage> createState() => _ForYouPageState();
+}
+
+class _ForYouPageState extends State<ForYouPage> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red
-    );
+    return Container(color: Colors.red);
   }
 }

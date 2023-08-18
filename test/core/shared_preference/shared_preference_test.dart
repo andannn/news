@@ -18,6 +18,11 @@ void main() {
       await dataSource.setFollowedTopicIds({'1', '3'});
       expect(await dataSource.getFollowedTopicIds(), equals({'1', '3'}));
     });
+    test('get_followed_topics_stream', () async {
+      await dataSource.setFollowedTopicIds({'1', '3'});
+      final res = await dataSource.getFollowedTopicIdsStream().first;
+      expect(res, equals({'1', '3'}));
+    });
     test('set_toggle_topics', () async {
       await dataSource.setFollowedTopicIds({'1', '3'});
       await dataSource.toggleFollowedTopicId(topicId: '1', followed: false);

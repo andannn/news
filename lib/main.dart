@@ -7,7 +7,7 @@ import 'package:news/core/shared_preference/user_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = true;
 
   /// init shared preference used in app.
   await NiaPreferencesDataSource.niaUserData.init();

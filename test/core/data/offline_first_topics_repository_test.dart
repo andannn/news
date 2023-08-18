@@ -3,12 +3,11 @@ import 'package:news/core/data/repository/topics_repository.dart';
 import 'package:news/core/data/sync_utils.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/model/topic_entity.dart';
-import 'package:news/core/network/fake/fake_network_data_source.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'fake_models/test_nia_network_data_source.dart';
-import 'fake_models/test_topic_dao.dart';
+import '../../fake_models/test_nia_network_data_source.dart';
+import '../../fake_models/test_topic_dao.dart';
 import 'test_synchronizer.dart';
 
 void main() {

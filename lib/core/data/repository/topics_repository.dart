@@ -1,9 +1,13 @@
 import 'package:news/core/data/sync_utils.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/model/topic_entity.dart';
+import 'package:news/core/database/nia_database.dart';
 import 'package:news/core/network/network_data_source.dart';
 
 import '../model/topic.dart';
+
+TopicsRepository createTopicsRepository() => OfflineFirstTopicsRepository(
+    topicDao: niaDatabase.getTopicDao(), networkDataSource: networkDataSource);
 
 abstract class TopicsRepository extends Syncable {
   Stream<List<Topic>> getAllTopics();
