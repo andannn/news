@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news/feature/for_you/presentation/0n_boarding.dart';
+import 'package:news/feature/for_you/presentation/on_boarding.dart';
 
 class ForYouScreen extends StatelessWidget {
   const ForYouScreen({super.key});
