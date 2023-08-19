@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:news/common/log_util.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
@@ -13,7 +14,8 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
   ForYouBloc(
       {required UserDataRepository userDataRepository,
       required GetFollowableTopicsUseCase getFollowableTopicsUseCase})
-      : super(ForYouUiState(Loading())) {
+      : _userDataRepository = userDataRepository,
+        super(ForYouUiState(Loading())) {
     on<OnUpdateTopicSelection>(_onUpdateTopicSelection);
     on<OnBoardingUiStateChanged>(_onBoardingUiStateChanged);
 
@@ -32,7 +34,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     });
   }
 
-  OnboardingUiState? _currentOnboardingUiState;
+  final UserDataRepository _userDataRepository;
 
   StreamSubscription<OnboardingUiState>? _onboardingUiStateSub;
 
@@ -42,8 +44,18 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     _onboardingUiStateSub?.cancel();
   }
 
+  @override
+  void onChange(Change<ForYouUiState> change) {
+    super.onChange(change);
+
+    logUtil('ForYouBloc data change to :$change');
+  }
+
   Future<void> _onUpdateTopicSelection(
-      OnUpdateTopicSelection event, Emitter<ForYouUiState> emit) async {}
+      OnUpdateTopicSelection event, Emitter<ForYouUiState> emit) async {
+    await _userDataRepository.toggleFollowedTopicId(
+        topicId: event.topicId, followed: event.isChecked);
+  }
 
   OnboardingUiState _getOnboardingUiState(
       bool shouldHideOnBoarding, List<FollowableTopic> followableTopics) {
@@ -56,7 +68,6 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
 
   Future<void> _onBoardingUiStateChanged(
       OnBoardingUiStateChanged event, Emitter<ForYouUiState> emit) async {
-    _currentOnboardingUiState = event.state;
     emit(state.copyWith(onboardingUiState: event.state));
   }
 }

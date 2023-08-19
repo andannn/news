@@ -5,6 +5,7 @@ import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
+import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,6 +54,22 @@ void main() {
           forYouBloc.state,
           equals(ForYouUiState(Shown([
             FollowableTopic(sampleTopics[0], false),
+            FollowableTopic(sampleTopics[1], true),
+            FollowableTopic(sampleTopics[2], false),
+          ]))));
+    });
+    test('for_you_bloc_toggle_followed_id_test', () async {
+      topicsRepository.sendTopics(sampleTopics);
+      await userDataRepository.setFollowedTopicIds({'1'});
+
+      forYouBloc.add(const OnUpdateTopicSelection('0', true));
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      expect(
+          forYouBloc.state,
+          equals(ForYouUiState(Shown([
+            FollowableTopic(sampleTopics[0], true),
             FollowableTopic(sampleTopics[1], true),
             FollowableTopic(sampleTopics[2], false),
           ]))));

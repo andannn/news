@@ -30,6 +30,7 @@ mixin DarkThemeConfig {
   static const dark = "dark";
 }
 
+/// Single instance of user data pref.
 NiaPreferencesDataSource niaUserDataSource = NiaPreferencesDataSource();
 
 class NiaPreferencesDataSource extends ChangeNotifier {

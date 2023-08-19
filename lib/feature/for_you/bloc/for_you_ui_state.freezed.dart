@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ForYouUiState {
+  @JsonKey(name: 'onboarding_ui_state')
   OnboardingUiState get onboardingUiState => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,9 @@ abstract class $ForYouUiStateCopyWith<$Res> {
           ForYouUiState value, $Res Function(ForYouUiState) then) =
       _$ForYouUiStateCopyWithImpl<$Res, ForYouUiState>;
   @useResult
-  $Res call({OnboardingUiState onboardingUiState});
+  $Res call(
+      {@JsonKey(name: 'onboarding_ui_state')
+      OnboardingUiState onboardingUiState});
 }
 
 /// @nodoc
@@ -64,7 +67,9 @@ abstract class _$$_ForYouUiStateCopyWith<$Res>
       __$$_ForYouUiStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({OnboardingUiState onboardingUiState});
+  $Res call(
+      {@JsonKey(name: 'onboarding_ui_state')
+      OnboardingUiState onboardingUiState});
 }
 
 /// @nodoc
@@ -92,9 +97,11 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ForYouUiState implements _ForYouUiState {
-  _$_ForYouUiState(this.onboardingUiState);
+  _$_ForYouUiState(
+      @JsonKey(name: 'onboarding_ui_state') this.onboardingUiState);
 
   @override
+  @JsonKey(name: 'onboarding_ui_state')
   final OnboardingUiState onboardingUiState;
 
   @override
@@ -122,10 +129,12 @@ class _$_ForYouUiState implements _ForYouUiState {
 }
 
 abstract class _ForYouUiState implements ForYouUiState {
-  factory _ForYouUiState(final OnboardingUiState onboardingUiState) =
-      _$_ForYouUiState;
+  factory _ForYouUiState(
+      @JsonKey(name: 'onboarding_ui_state')
+      final OnboardingUiState onboardingUiState) = _$_ForYouUiState;
 
   @override
+  @JsonKey(name: 'onboarding_ui_state')
   OnboardingUiState get onboardingUiState;
   @override
   @JsonKey(ignore: true)
