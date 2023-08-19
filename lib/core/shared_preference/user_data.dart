@@ -36,8 +36,6 @@ NiaPreferencesDataSource niaUserDataSource = NiaPreferencesDataSource();
 class NiaPreferencesDataSource extends ChangeNotifier {
   late SharedPreferences _preference;
 
-  static NiaPreferencesDataSource niaUserData = NiaPreferencesDataSource();
-
   init() async {
     _preference = await SharedPreferences.getInstance();
   }

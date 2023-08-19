@@ -119,7 +119,7 @@ class NewsResourceDaoImpl implements NewsResourceDao {
   Future<List> upsertNewsResources(List<NewsResourceEntity> entities) async {
     final batch = _database.batch();
 
-    final sql = 'INSERT INTO '
+    final sql = 'INSERT OR REPLACE INTO '
         '${Tables.newsResource}(id, title, content, url, header_image_url, publish_date, type)'
         'VALUES(?, ?, ?, ?, ?, ?, ?)';
     for (final news in entities) {

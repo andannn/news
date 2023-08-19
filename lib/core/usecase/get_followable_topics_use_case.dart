@@ -7,7 +7,7 @@ import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:rxdart/streams.dart';
 
 GetFollowableTopicsUseCase createGetFollowableTopicsUseCase() =>
-    GetFollowableTopicsUseCase(createTopicsRepository(), createUserDataRepository());
+    GetFollowableTopicsUseCase(topicsRepository, createUserDataRepository());
 
 class GetFollowableTopicsUseCase {
   GetFollowableTopicsUseCase(this.topicsRepository, this.userDataRepository);

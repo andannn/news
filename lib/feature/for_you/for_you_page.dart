@@ -7,6 +7,7 @@ import 'package:news/core/network/network_data_source.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
+import 'package:news/feature/for_you/presentation/for_you_screen.dart';
 
 class ForYouPage extends StatefulWidget {
   const ForYouPage({super.key});
@@ -40,6 +41,6 @@ class _ForYouPageState extends State<ForYouPage> {
               userDataRepository: _userDataRepository,
               getFollowableTopicsUseCase: _getFollowableTopicsUseCase);
         },
-        child: Container(color: Colors.red));
+        child: const ForYouScreen());
   }
 }
