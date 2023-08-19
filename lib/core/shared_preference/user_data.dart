@@ -130,6 +130,20 @@ class NiaPreferencesDataSource extends ChangeNotifier {
         updatedChangeListVersions.newsResourceVersion);
     notifyListeners();
   }
+
+  Future setShouldHideOnboarding(bool shouldHideOnboarding) async {
+    await _preference.setBool(
+        UserDataKey.shouldHideOnboarding, shouldHideOnboarding);
+    notifyListeners();
+  }
+
+  Stream<bool> getShouldHideOnBoardingStream() {
+    return createStream(() => getShouldHideOnBoarding());
+  }
+
+  Future<bool> getShouldHideOnBoarding() async {
+    return _preference.getBool(UserDataKey.shouldHideOnboarding) ?? false;
+  }
 }
 
 extension NiaPreferencesDataSourceEx on NiaPreferencesDataSource {

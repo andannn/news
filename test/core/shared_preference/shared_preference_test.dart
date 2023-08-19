@@ -23,6 +23,11 @@ void main() {
       final res = await dataSource.getFollowedTopicIdsStream().first;
       expect(res, equals({'1', '3'}));
     });
+    test('get_should_hide_onboarding_stream', () async {
+      await dataSource.setShouldHideOnboarding(true);
+      final res = await dataSource.getShouldHideOnBoardingStream().first;
+      expect(res, equals(true));
+    });
     test('set_toggle_topics', () async {
       await dataSource.setFollowedTopicIds({'1', '3'});
       await dataSource.toggleFollowedTopicId(topicId: '1', followed: false);

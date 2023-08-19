@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
 
-sealed class ForYouPageEvent extends Equatable {
+sealed class ForYouPageEvent {
   const ForYouPageEvent();
 }
 
@@ -9,7 +10,10 @@ class OnUpdateTopicSelection extends ForYouPageEvent {
   final bool isChecked;
 
   const OnUpdateTopicSelection(this.topicId, this.isChecked);
+}
 
-  @override
-  List<Object?> get props => [topicId, isChecked];
+class OnBoardingUiStateChanged extends ForYouPageEvent {
+  final OnboardingUiState state;
+
+  const OnBoardingUiStateChanged(this.state);
 }

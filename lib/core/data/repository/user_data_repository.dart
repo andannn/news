@@ -17,6 +17,10 @@ abstract class UserDataRepository {
 
   Future setThemeBrand(String themeBrand);
 
+  Future setShouldHideOnboarding(bool shouldHideOnboarding);
+
+  Stream<bool> getShouldHideOnboardingStream();
+
   Future setDynamicColorPreference(bool useDynamicColor);
 
   Future setDarkThemeConfig(String darkThemeConfig);
@@ -73,4 +77,12 @@ class OfflineFirstUserDataRepository implements UserDataRepository {
   Future updateChangeListVersion(
           {required ChangeListVersions Function(ChangeListVersions) update}) =>
       _niaUserDataSource.updateChangeListVersion(update: update);
+
+  @override
+  Future setShouldHideOnboarding(bool shouldHideOnboarding) =>
+      _niaUserDataSource.setShouldHideOnboarding(shouldHideOnboarding);
+
+  @override
+  Stream<bool> getShouldHideOnboardingStream() =>
+      _niaUserDataSource.getShouldHideOnBoardingStream();
 }

@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
+import 'package:rxdart/streams.dart';
 
 class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
   ForYouBloc(
@@ -13,10 +15,48 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
       required GetFollowableTopicsUseCase getFollowableTopicsUseCase})
       : super(ForYouUiState(Loading())) {
     on<OnUpdateTopicSelection>(_onUpdateTopicSelection);
+    on<OnBoardingUiStateChanged>(_onBoardingUiStateChanged);
+
+    Stream<bool> shouldHideOnBoardingStream =
+        userDataRepository.getShouldHideOnboardingStream();
+    Stream<List<FollowableTopic>> followableTopicsStream =
+        getFollowableTopicsUseCase.invoke();
+
+    Stream<OnboardingUiState> onboardingUiStateStream =
+        CombineLatestStream.combine2(shouldHideOnBoardingStream,
+                followableTopicsStream, _getOnboardingUiState)
+            .distinct();
+
+    _onboardingUiStateSub = onboardingUiStateStream.listen((event) {
+      add(OnBoardingUiStateChanged(event));
+    });
+  }
+
+  OnboardingUiState? _currentOnboardingUiState;
+
+  StreamSubscription<OnboardingUiState>? _onboardingUiStateSub;
+
+  @override
+  Future<void> close() async {
+    super.close();
+    _onboardingUiStateSub?.cancel();
   }
 
   Future<void> _onUpdateTopicSelection(
-      OnUpdateTopicSelection event, Emitter<ForYouUiState> emit) async {
+      OnUpdateTopicSelection event, Emitter<ForYouUiState> emit) async {}
 
+  OnboardingUiState _getOnboardingUiState(
+      bool shouldHideOnBoarding, List<FollowableTopic> followableTopics) {
+    if (shouldHideOnBoarding) {
+      return NotShown();
+    } else {
+      return Shown(followableTopics);
+    }
+  }
+
+  Future<void> _onBoardingUiStateChanged(
+      OnBoardingUiStateChanged event, Emitter<ForYouUiState> emit) async {
+    _currentOnboardingUiState = event.state;
+    emit(state.copyWith(onboardingUiState: event.state));
   }
 }
