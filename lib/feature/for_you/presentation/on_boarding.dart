@@ -1,10 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/app/local/nia_localizations.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
+import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
+import 'package:news/feature/for_you/for_you_page.dart';
 
+import '../../../core/design_system/common_widget/nia_toggle_button.dart';
 import '../bloc/onboarding_ui_state.dart';
 
 class OnBoarding extends StatelessWidget {
@@ -54,14 +58,26 @@ class _OnBoardingWidget extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         // Topic selection.
-        SizedBox(height: 200, child: _TopicSelection(topics: topics)),
+        SizedBox(
+            height: 200,
+            child: _TopicSelection(
+              topics: topics,
+              onTopicCheckedStateChanged: (String topicId, bool isChecked) {
+                // notify event to ForYouBloc.
+                context
+                    .read<ForYouBloc>()
+                    .add(OnUpdateTopicSelection(topicId, isChecked));
+              },
+            )),
         const SizedBox(height: 18),
         // Done button.
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           width: double.infinity,
           child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<ForYouBloc>().add(const OnDismissOnboarding());
+              },
               style: TextButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 backgroundColor: Theme.of(context).colorScheme.onBackground,
@@ -74,9 +90,13 @@ class _OnBoardingWidget extends StatelessWidget {
 }
 
 class _TopicSelection extends StatelessWidget {
-  const _TopicSelection({super.key, required this.topics});
+  const _TopicSelection(
+      {super.key,
+      required this.topics,
+      required this.onTopicCheckedStateChanged});
 
   final List<FollowableTopic> topics;
+  final Function(String topicId, bool isChecked) onTopicCheckedStateChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +109,7 @@ class _TopicSelection extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(_createTopicItemWidget,
                     childCount: topics.length),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisExtent: 250,
+                    mainAxisExtent: 280,
                     mainAxisSpacing: 12,
                     crossAxisSpacing: 12,
                     crossAxisCount: 3))),
@@ -108,14 +128,25 @@ class _TopicSelection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Row(
           children: [
-            Icon(Icons.confirmation_num_sharp),
-            SizedBox(width: 8),
+// TODO： Flutter CachedNetworkImage can't read svg image, thinking about another way.....
+            // CachedNetworkImage(
+            //     width: 64,
+            //     height: 64,
+            //     imageUrl: followableTopic.topic.imageUrl),
+            const SizedBox(width: 8),
             Expanded(
                 child: Text(
               followableTopic.topic.name,
               style: Theme.of(context).textTheme.titleSmall,
             )),
-            IconButton(onPressed: null, icon: Icon(Icons.confirmation_num_sharp))
+            NiaToggleButton(
+              isChecked: followableTopic.isFollowed,
+              uncheckedIconData: Icons.add,
+              checkedIconData: Icons.check_circle,
+              onCheckChanged: (bool isChecked) {
+                onTopicCheckedStateChanged(followableTopic.topic.id, isChecked);
+              },
+            )
           ],
         ),
       ),

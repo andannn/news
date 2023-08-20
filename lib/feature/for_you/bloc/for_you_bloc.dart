@@ -18,6 +18,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
         super(ForYouUiState(Loading())) {
     on<OnUpdateTopicSelection>(_onUpdateTopicSelection);
     on<OnBoardingUiStateChanged>(_onBoardingUiStateChanged);
+    on<OnDismissOnboarding>(_onDismissOnboarding);
 
     Stream<bool> shouldHideOnBoardingStream =
         userDataRepository.getShouldHideOnboardingStream();
@@ -69,5 +70,10 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
   Future<void> _onBoardingUiStateChanged(
       OnBoardingUiStateChanged event, Emitter<ForYouUiState> emit) async {
     emit(state.copyWith(onboardingUiState: event.state));
+  }
+
+  Future<void> _onDismissOnboarding(
+      OnDismissOnboarding event, Emitter<ForYouUiState> emit) async {
+    await _userDataRepository.setShouldHideOnboarding(true);
   }
 }

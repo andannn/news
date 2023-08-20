@@ -17,3 +17,7 @@ class OnBoardingUiStateChanged extends ForYouPageEvent {
 
   const OnBoardingUiStateChanged(this.state);
 }
+
+class OnDismissOnboarding extends ForYouPageEvent {
+  const OnDismissOnboarding();
+}
