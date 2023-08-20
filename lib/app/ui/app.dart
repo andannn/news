@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news/app/local/nia_localizations_delegate.dart';
 import 'package:news/app/navigation/nia_router.dart';
 import 'package:news/app/navigation/top_level_navigation.dart';
 
@@ -18,6 +19,7 @@ class NiaAppState extends State<NiaApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black26),
         useMaterial3: true,
       ),
+      localizationsDelegates: [NiaLocalizationsDelegate()],
       home: const NiaAppScaffold(),
     );
   }

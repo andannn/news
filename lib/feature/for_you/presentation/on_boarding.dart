@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/app/local/nia_localizations.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 
@@ -34,8 +36,8 @@ class _OnBoardingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('What are you interested in?'),
-        Text('Updates from topics you follow will appear here. Follow some things to get started.'),
+        Text(NiaLocalizations.of(context).onboardingGuidanceTitle),
+        Text(NiaLocalizations.of(context).onboardingGuidanceSubtitle),
         const Placeholder(),
       ],
     );
