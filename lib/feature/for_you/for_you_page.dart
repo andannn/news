@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/core/data/repository/news_resource_repository.dart';
 import 'package:news/core/data/repository/topics_repository.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/database/nia_database.dart';
@@ -17,20 +18,13 @@ class ForYouPage extends StatefulWidget {
 }
 
 class _ForYouPageState extends State<ForYouPage> {
-  late UserDataRepository _userDataRepository;
-  late TopicsRepository _topicsRepository;
   late GetFollowableTopicsUseCase _getFollowableTopicsUseCase;
 
   @override
   void initState() {
     super.initState();
 
-    _userDataRepository = OfflineFirstUserDataRepository(niaUserDataSource);
-    _topicsRepository = OfflineFirstTopicsRepository(
-        topicDao: niaDatabase.getTopicDao(),
-        networkDataSource: networkDataSource);
-    _getFollowableTopicsUseCase =
-        GetFollowableTopicsUseCase(_topicsRepository, _userDataRepository);
+    _getFollowableTopicsUseCase = createGetFollowableTopicsUseCase();
   }
 
   @override
@@ -38,8 +32,9 @@ class _ForYouPageState extends State<ForYouPage> {
     return BlocProvider(
         create: (BuildContext context) {
           return ForYouBloc(
-              userDataRepository: _userDataRepository,
-              getFollowableTopicsUseCase: _getFollowableTopicsUseCase);
+              userDataRepository: userDataRepository,
+              getFollowableTopicsUseCase: _getFollowableTopicsUseCase,
+              newsRepository: newsRepository);
         },
         child: const ForYouScreen());
   }

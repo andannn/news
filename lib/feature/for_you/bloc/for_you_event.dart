@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:news/feature/for_you/bloc/news_feed_state.dart';
 import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
 
 sealed class ForYouPageEvent {
@@ -12,12 +13,19 @@ class OnUpdateTopicSelection extends ForYouPageEvent {
   const OnUpdateTopicSelection(this.topicId, this.isChecked);
 }
 
+class OnDismissOnboarding extends ForYouPageEvent {
+  const OnDismissOnboarding();
+}
+
+
 class OnBoardingUiStateChanged extends ForYouPageEvent {
   final OnboardingUiState state;
 
   const OnBoardingUiStateChanged(this.state);
 }
 
-class OnDismissOnboarding extends ForYouPageEvent {
-  const OnDismissOnboarding();
+class OnFeedNewsStateChanged extends ForYouPageEvent {
+  final NewsFeedState state;
+
+  const OnFeedNewsStateChanged(this.state);
 }

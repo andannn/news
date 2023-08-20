@@ -4,7 +4,7 @@ import 'package:news/core/shared_preference/user_data.dart';
 
 import '../sync_utils.dart';
 
-UserDataRepository createUserDataRepository() =>
+UserDataRepository userDataRepository =
     OfflineFirstUserDataRepository(niaUserDataSource);
 
 abstract class UserDataRepository {
