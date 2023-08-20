@@ -42,6 +42,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     _onboardingUiStateSub = onboardingUiStateStream.listen((event) {
       add(OnBoardingUiStateChanged(event));
     });
+
     _followedTopicIdsSub = followedTopicIdsStream.listen((followedTopicIds) {
       if (_currentFollowedTopicIds != followedTopicIds) {
         _currentFollowedTopicIds = followedTopicIds;
@@ -65,6 +66,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     super.close();
     _onboardingUiStateSub?.cancel();
     _followedTopicIdsSub?.cancel();
+    _feedNewsResourceSub?.cancel();
   }
 
   @override
@@ -74,9 +76,9 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     logUtil('ForYouBloc data change to :$change');
   }
 
-  void _cancelLastAndObserveFeedNews() {
+  Future _cancelLastAndObserveFeedNews() async {
     // cancel last subscription.
-    _feedNewsResourceSub?.cancel();
+    await _feedNewsResourceSub?.cancel();
 
     if (_currentFollowedTopicIds.isEmpty) {
       // no need to observe stream when no followed topics.
@@ -84,9 +86,9 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
       return;
     }
 
+    // get new stream add start observe.
     final stream = _newsRepository.getNewsResources(
-        filterTopicIds: _currentFollowedTopicIds.toSet());
-
+        filterTopicIds: _currentFollowedTopicIds.toSet()).distinct();
     _feedNewsResourceSub = stream.listen((feedNews) {
       add(OnFeedNewsStateChanged(NewsFeedLoadSuccess(feedNews)));
     });

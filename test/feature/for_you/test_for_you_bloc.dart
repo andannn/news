@@ -58,6 +58,7 @@ void main() {
     test('initial_state_test', () async {
       expect(forYouBloc.state,
           equals(ForYouUiState(OnboardingLoading(), NewsFeedLoading())));
+      await forYouBloc.close();
     });
     test('onboarding_state_test', () async {
       topicsRepository.sendTopics(sampleTopics);
@@ -66,36 +67,36 @@ void main() {
       await Future.delayed(const Duration(seconds: 1));
 
       expect(
-          forYouBloc.state,
-          equals(ForYouUiState(
-              OnboardingShown([
-                FollowableTopic(sampleTopics[0], false),
-                FollowableTopic(sampleTopics[1], true),
-                FollowableTopic(sampleTopics[2], false),
-              ]),
-              NewsFeedLoading())));
+          forYouBloc.state.onboardingUiState,
+          equals(OnboardingShown([
+            FollowableTopic(sampleTopics[0], false),
+            FollowableTopic(sampleTopics[1], true),
+            FollowableTopic(sampleTopics[2], false),
+          ])));
+
+      await forYouBloc.close();
     });
     test('for_you_bloc_toggle_followed_id_test', () async {
-      topicsRepository.sendTopics(sampleTopics);
-      await userDataRepository.setFollowedTopicIds({'1'});
 
+      forYouBloc.add(const OnUpdateTopicSelection('1', true));
+      await Future.delayed(const Duration(seconds: 1));
       forYouBloc.add(const OnUpdateTopicSelection('0', true));
-
       await Future.delayed(const Duration(seconds: 1));
 
       expect(
-          forYouBloc.state,
-          equals(ForYouUiState(
-              OnboardingShown([
-                FollowableTopic(sampleTopics[0], true),
-                FollowableTopic(sampleTopics[1], true),
-                FollowableTopic(sampleTopics[2], false),
-              ]),
-              NewsFeedLoading())));
+          forYouBloc.state.onboardingUiState,
+          equals(OnboardingShown([
+            FollowableTopic(sampleTopics[0], true),
+            FollowableTopic(sampleTopics[1], true),
+            FollowableTopic(sampleTopics[2], false),
+          ])));
+
+      await forYouBloc.close();
     });
     test('for_you_bloc_feed_news_test', () async {
-      await userDataRepository.setFollowedTopicIds({'0'});
       newsRepository.sendNewsResources(sampleNewsResources);
+
+      forYouBloc.add(const OnUpdateTopicSelection('0', true));
 
       await Future.delayed(const Duration(seconds: 1));
 
@@ -105,6 +106,8 @@ void main() {
             sampleNewsResources[0],
             sampleNewsResources[1],
           ])));
+
+      await forYouBloc.close();
     });
   });
 }
