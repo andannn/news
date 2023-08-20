@@ -7,6 +7,7 @@ import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
 import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
+import 'package:news/feature/for_you/bloc/news_feed_state.dart';
 import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,7 +43,7 @@ void main() {
     });
 
     test('initial_state_test', () async {
-      expect(forYouBloc.state, equals(ForYouUiState(Loading())));
+      expect(forYouBloc.state, equals(ForYouUiState(OnboardingLoading(), NewsFeedLoading())));
     });
     test('onboarding_state_test', () async {
       topicsRepository.sendTopics(sampleTopics);
@@ -52,11 +53,11 @@ void main() {
 
       expect(
           forYouBloc.state,
-          equals(ForYouUiState(Shown([
+          equals(ForYouUiState(OnboardingShown([
             FollowableTopic(sampleTopics[0], false),
             FollowableTopic(sampleTopics[1], true),
             FollowableTopic(sampleTopics[2], false),
-          ]))));
+          ]), NewsFeedLoading())));
     });
     test('for_you_bloc_toggle_followed_id_test', () async {
       topicsRepository.sendTopics(sampleTopics);
@@ -68,11 +69,11 @@ void main() {
 
       expect(
           forYouBloc.state,
-          equals(ForYouUiState(Shown([
+          equals(ForYouUiState(OnboardingShown([
             FollowableTopic(sampleTopics[0], true),
             FollowableTopic(sampleTopics[1], true),
             FollowableTopic(sampleTopics[2], false),
-          ]))));
+          ]), NewsFeedLoading())));
     });
   });
 }

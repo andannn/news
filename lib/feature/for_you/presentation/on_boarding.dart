@@ -18,9 +18,9 @@ class OnBoarding extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<ForYouBloc, ForYouUiState>(
         builder: (context, state) {
           switch (state.onboardingUiState.runtimeType) {
-            case Shown:
+            case OnboardingShown:
               return _OnBoardingWidget(
-                  topics: (state.onboardingUiState as Shown).topics);
+                  topics: (state.onboardingUiState as OnboardingShown).topics);
             default:
               return const SizedBox();
           }

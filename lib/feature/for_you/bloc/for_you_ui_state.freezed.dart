@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ForYouUiState {
-  @JsonKey(name: 'onboarding_ui_state')
   OnboardingUiState get onboardingUiState => throw _privateConstructorUsedError;
+  NewsFeedState get newsFeedState => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ForYouUiStateCopyWith<ForYouUiState> get copyWith =>
@@ -30,9 +30,7 @@ abstract class $ForYouUiStateCopyWith<$Res> {
           ForYouUiState value, $Res Function(ForYouUiState) then) =
       _$ForYouUiStateCopyWithImpl<$Res, ForYouUiState>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'onboarding_ui_state')
-      OnboardingUiState onboardingUiState});
+  $Res call({OnboardingUiState onboardingUiState, NewsFeedState newsFeedState});
 }
 
 /// @nodoc
@@ -49,12 +47,17 @@ class _$ForYouUiStateCopyWithImpl<$Res, $Val extends ForYouUiState>
   @override
   $Res call({
     Object? onboardingUiState = null,
+    Object? newsFeedState = null,
   }) {
     return _then(_value.copyWith(
       onboardingUiState: null == onboardingUiState
           ? _value.onboardingUiState
           : onboardingUiState // ignore: cast_nullable_to_non_nullable
               as OnboardingUiState,
+      newsFeedState: null == newsFeedState
+          ? _value.newsFeedState
+          : newsFeedState // ignore: cast_nullable_to_non_nullable
+              as NewsFeedState,
     ) as $Val);
   }
 }
@@ -67,9 +70,7 @@ abstract class _$$_ForYouUiStateCopyWith<$Res>
       __$$_ForYouUiStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'onboarding_ui_state')
-      OnboardingUiState onboardingUiState});
+  $Res call({OnboardingUiState onboardingUiState, NewsFeedState newsFeedState});
 }
 
 /// @nodoc
@@ -84,12 +85,17 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? onboardingUiState = null,
+    Object? newsFeedState = null,
   }) {
     return _then(_$_ForYouUiState(
       null == onboardingUiState
           ? _value.onboardingUiState
           : onboardingUiState // ignore: cast_nullable_to_non_nullable
               as OnboardingUiState,
+      null == newsFeedState
+          ? _value.newsFeedState
+          : newsFeedState // ignore: cast_nullable_to_non_nullable
+              as NewsFeedState,
     ));
   }
 }
@@ -97,16 +103,16 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ForYouUiState implements _ForYouUiState {
-  _$_ForYouUiState(
-      @JsonKey(name: 'onboarding_ui_state') this.onboardingUiState);
+  _$_ForYouUiState(this.onboardingUiState, this.newsFeedState);
 
   @override
-  @JsonKey(name: 'onboarding_ui_state')
   final OnboardingUiState onboardingUiState;
+  @override
+  final NewsFeedState newsFeedState;
 
   @override
   String toString() {
-    return 'ForYouUiState(onboardingUiState: $onboardingUiState)';
+    return 'ForYouUiState(onboardingUiState: $onboardingUiState, newsFeedState: $newsFeedState)';
   }
 
   @override
@@ -115,11 +121,14 @@ class _$_ForYouUiState implements _ForYouUiState {
         (other.runtimeType == runtimeType &&
             other is _$_ForYouUiState &&
             (identical(other.onboardingUiState, onboardingUiState) ||
-                other.onboardingUiState == onboardingUiState));
+                other.onboardingUiState == onboardingUiState) &&
+            (identical(other.newsFeedState, newsFeedState) ||
+                other.newsFeedState == newsFeedState));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, onboardingUiState);
+  int get hashCode =>
+      Object.hash(runtimeType, onboardingUiState, newsFeedState);
 
   @JsonKey(ignore: true)
   @override
@@ -129,13 +138,13 @@ class _$_ForYouUiState implements _ForYouUiState {
 }
 
 abstract class _ForYouUiState implements ForYouUiState {
-  factory _ForYouUiState(
-      @JsonKey(name: 'onboarding_ui_state')
-      final OnboardingUiState onboardingUiState) = _$_ForYouUiState;
+  factory _ForYouUiState(final OnboardingUiState onboardingUiState,
+      final NewsFeedState newsFeedState) = _$_ForYouUiState;
 
   @override
-  @JsonKey(name: 'onboarding_ui_state')
   OnboardingUiState get onboardingUiState;
+  @override
+  NewsFeedState get newsFeedState;
   @override
   @JsonKey(ignore: true)
   _$$_ForYouUiStateCopyWith<_$_ForYouUiState> get copyWith =>

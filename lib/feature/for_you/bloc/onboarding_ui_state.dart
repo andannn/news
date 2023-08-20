@@ -5,25 +5,25 @@ sealed class OnboardingUiState extends Equatable {
   const OnboardingUiState();
 }
 
-class Loading extends OnboardingUiState {
+class OnboardingLoading extends OnboardingUiState {
   @override
   List<Object?> get props => [];
 }
 
-class LoadFailed extends OnboardingUiState {
+class OnboardingLoadFailed extends OnboardingUiState {
   @override
   List<Object?> get props => [];
 }
 
-class NotShown extends OnboardingUiState {
+class OnboardingNotShown extends OnboardingUiState {
   @override
   List<Object?> get props => [];
 }
 
-class Shown extends OnboardingUiState {
+class OnboardingShown extends OnboardingUiState {
   final List<FollowableTopic> topics;
 
-  const Shown(this.topics);
+  const OnboardingShown(this.topics);
 
   @override
   List<Object?> get props => [topics];
