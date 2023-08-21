@@ -43,10 +43,10 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
       add(OnBoardingUiStateChanged(event));
     });
 
-    _followedTopicIdsSub = followedTopicIdsStream.listen((followedTopicIds) {
+    _followedTopicIdsSub = followedTopicIdsStream.listen((followedTopicIds) async {
       if (_currentFollowedTopicIds != followedTopicIds) {
         _currentFollowedTopicIds = followedTopicIds;
-        _cancelLastAndObserveFeedNews();
+        await _cancelLastAndObserveFeedNews();
       }
     });
   }
@@ -90,6 +90,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     final stream = _newsRepository.getNewsResources(
         filterTopicIds: _currentFollowedTopicIds.toSet()).distinct();
     _feedNewsResourceSub = stream.listen((feedNews) {
+      print('ondata feedNews $feedNews');
       add(OnFeedNewsStateChanged(NewsFeedLoadSuccess(feedNews)));
     });
   }

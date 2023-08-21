@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:news/core/data/model/news_recsource.dart';
 import 'package:news/core/data/model/topic.dart';
 import 'package:news/core/data/repository/news_resource_repository.dart';
-import 'package:news/core/data/repository/topics_repository.dart';
 import 'package:news/core/data/sync_utils.dart';
 
 class TestNewsRepository extends NewsRepository {
   StreamController<List<NewsResource>> controller =
-      StreamController(sync: true);
+      StreamController.broadcast();
 
   @override
   Future<bool> syncWith(Synchronizer synchronizer) {

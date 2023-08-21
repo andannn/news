@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/core/data/model/news_recsource.dart';
@@ -77,10 +79,11 @@ void main() {
       await forYouBloc.close();
     });
     test('for_you_bloc_toggle_followed_id_test', () async {
+      topicsRepository.sendTopics(sampleTopics);
 
       forYouBloc.add(const OnUpdateTopicSelection('1', true));
-      await Future.delayed(const Duration(seconds: 1));
       forYouBloc.add(const OnUpdateTopicSelection('0', true));
+
       await Future.delayed(const Duration(seconds: 1));
 
       expect(
@@ -94,10 +97,11 @@ void main() {
       await forYouBloc.close();
     });
     test('for_you_bloc_feed_news_test', () async {
-      newsRepository.sendNewsResources(sampleNewsResources);
 
       forYouBloc.add(const OnUpdateTopicSelection('0', true));
 
+      await Future.delayed(const Duration(seconds: 1));
+      newsRepository.sendNewsResources(sampleNewsResources);
       await Future.delayed(const Duration(seconds: 1));
 
       expect(

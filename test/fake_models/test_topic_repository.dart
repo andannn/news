@@ -5,7 +5,7 @@ import 'package:news/core/data/repository/topics_repository.dart';
 import 'package:news/core/data/sync_utils.dart';
 
 class TestTopicRepository extends TopicsRepository {
-  StreamController<List<Topic>> controller = StreamController(sync: true);
+  StreamController<List<Topic>> controller = StreamController.broadcast();
 
   @override
   Stream<List<Topic>> getAllTopics() {
@@ -24,6 +24,6 @@ class TestTopicRepository extends TopicsRepository {
   }
 
   void sendTopics(List<Topic> topics) {
-    controller.add(topics);
+    controller.sink.add(topics);
   }
 }
