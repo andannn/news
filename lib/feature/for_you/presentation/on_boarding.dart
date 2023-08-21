@@ -6,7 +6,6 @@ import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
 import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
-import 'package:news/feature/for_you/for_you_page.dart';
 
 import '../../../core/design_system/common_widget/nia_toggle_button.dart';
 import '../bloc/onboarding_ui_state.dart';

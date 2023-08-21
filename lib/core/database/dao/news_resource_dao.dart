@@ -149,7 +149,8 @@ class NewsResourceDaoImpl implements NewsResourceDao {
 
   Future<PopulatedNewsResource> _mapNewsIdToPopulatedNewsResource(
       String newsId) async {
-    final newsJson = await _database.query(Tables.newsResource, limit: 1);
+    final newsJson = await _database.query(Tables.newsResource,
+        where: 'id = $newsId', limit: 1);
     NewsResourceEntity entity = NewsResourceEntity.fromJson(newsJson.first);
 
     String sql = """

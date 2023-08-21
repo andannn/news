@@ -20,7 +20,7 @@ NewsRepository newsRepository = OfflineFirstNewsRepository(
 abstract class NewsRepository implements Syncable {
   Stream<List<NewsResource>> getNewsResources(
       {Set<String> filterTopicIds = const {},
-        Set<String> filterNewsIds = const {}});
+      Set<String> filterNewsIds = const {}});
 }
 
 class OfflineFirstNewsRepository extends NewsRepository {
@@ -29,15 +29,16 @@ class OfflineFirstNewsRepository extends NewsRepository {
   final NetworkDataSource networkDataSource;
   final NiaPreferencesDataSource niaPreferencesDataSource;
 
-  OfflineFirstNewsRepository({required this.newsResourceDao,
-    required this.topicDao,
-    required this.networkDataSource,
-    required this.niaPreferencesDataSource});
+  OfflineFirstNewsRepository(
+      {required this.newsResourceDao,
+      required this.topicDao,
+      required this.networkDataSource,
+      required this.niaPreferencesDataSource});
 
   @override
   Stream<List<NewsResource>> getNewsResources(
       {Set<String> filterTopicIds = const {},
-        Set<String> filterNewsIds = const {}}) {
+      Set<String> filterNewsIds = const {}}) {
     final newsEntitiesStream = newsResourceDao.getPopulatedNewsResourceStream(
         useFilterNewsIds: filterNewsIds.isNotEmpty,
         filterNewsIds: filterNewsIds,
@@ -53,7 +54,7 @@ class OfflineFirstNewsRepository extends NewsRepository {
     var isFirstSync = false;
     return synchronizer.changeListSync(
         versionReader: (ChangeListVersions currentChangeListVersion) =>
-        currentChangeListVersion.newsResourceVersion,
+            currentChangeListVersion.newsResourceVersion,
         changeListFetcher: (int version) async {
           isFirstSync = version <= 0;
           return networkDataSource.getNewsResourceChangeList(after: version);
@@ -78,7 +79,7 @@ class OfflineFirstNewsRepository extends NewsRepository {
           // }
 
           final networkNewsResources =
-          await networkDataSource.getNewsResources(ids: ids);
+              await networkDataSource.getNewsResources(ids: ids);
 
           await topicDao.insertOrIgnoreTopics(networkNewsResources
               .map((e) => TopicEntity.fromNewsDto(e))
@@ -102,7 +103,7 @@ class OfflineFirstNewsRepository extends NewsRepository {
           );
         }
 
-      // if (hasOnboarded) {}
-    );
+        // if (hasOnboarded) {}
+        );
   }
 }
