@@ -20,7 +20,7 @@ class ForYouScreen extends StatelessWidget {
         return CustomScrollView(
           slivers: [
             const SliverToBoxAdapter(child: OnBoarding()),
-            _createSliverNewsFeed(context, newsFeedState)
+            _createSliverNewsFeed(context, newsFeedState),
           ],
         );
       },
@@ -36,9 +36,8 @@ class ForYouScreen extends StatelessWidget {
     }
     return SliverList.builder(
         itemCount: resources.length,
-        itemBuilder: (context, index) =>
-            NewsFeedItemWidget(
-                newsResource: resources[index],
+        itemBuilder: (context, index) => NewsFeedItemWidget(
+              newsResource: resources[index],
             ));
   }
 }

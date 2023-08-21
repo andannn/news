@@ -8,6 +8,28 @@ class NewsFeedItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Card(
+      key: ValueKey(newsResource.id),
+      margin: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          Padding(
+              padding: EdgeInsets.all(32),
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  Row(children: [
+                    Expanded(flex: 4, child: Text(newsResource.title)),
+                    Expanded(flex: 1, child: SizedBox()),
+                    IconButton(onPressed: null, icon: Icon(Icons.bookmark_add)),
+                  ]),
+                  SizedBox(height: 16),
+                ]
+              )
+          )
+        ],
+      ),
+    );
   }
 }
