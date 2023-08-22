@@ -49,7 +49,9 @@ class NewsResourceDaoImpl implements NewsResourceDao {
       batch.delete(Tables.newsResource, where: 'id = ?', whereArgs: [id]);
     }
     List<Object?> result = await batch.commit();
-    onTableUpdated(Tables.newsResource);
+    if (result.isNotEmpty) {
+      onTableUpdated(Tables.newsResource);
+    }
     return result.whereType<int>().where((res) => res != 0).toList();
   }
 
@@ -111,7 +113,10 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     }
 
     final result = await batch.commit();
-    onTableUpdated(Tables.newsResource);
+    if (result.any((e) => e != null)) {
+      // table is updated.
+      onTableUpdated(Tables.newsResource);
+    }
     return result;
   }
 

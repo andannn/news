@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:news/common/log_util.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/core/data/model/news_recsource.dart';
 import 'package:news/core/data/repository/news_resource_repository.dart';
-import 'package:news/core/data/repository/topics_repository.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/for_you/bloc/for_you_event.dart';
@@ -39,13 +38,16 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
                 followableTopicsStream, _getOnboardingUiState)
             .distinct();
 
-    _onboardingUiStateSub = onboardingUiStateStream.listen((event) {
-      add(OnBoardingUiStateChanged(event));
+    _onboardingUiStateSub = onboardingUiStateStream.listen((newState) {
+      if (newState != state.onboardingUiState) {
+        add(OnBoardingUiStateChanged(newState));
+      }
     });
 
     _followedTopicIdsSub =
         followedTopicIdsStream.listen((followedTopicIds) async {
-      if (_currentFollowedTopicIds != followedTopicIds) {
+      if (!const DeepCollectionEquality()
+          .equals(_currentFollowedTopicIds, followedTopicIds)) {
         _currentFollowedTopicIds = followedTopicIds;
         await _cancelLastAndObserveFeedNews();
       }
@@ -85,7 +87,10 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
         .getNewsResources(filterTopicIds: _currentFollowedTopicIds.toSet())
         .distinct();
     _feedNewsResourceSub = stream.listen((feedNews) {
-      add(OnFeedNewsStateChanged(NewsFeedLoadSuccess(feedNews)));
+      final newState = NewsFeedLoadSuccess(feedNews);
+      if (newState != state.newsFeedState) {
+        add(OnFeedNewsStateChanged(newState));
+      }
     });
   }
 
