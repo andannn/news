@@ -12,7 +12,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // debugPaintSizeEnabled = true;
-
   // Workmanager().initialize();
 
   /// init shared preference used in app.
