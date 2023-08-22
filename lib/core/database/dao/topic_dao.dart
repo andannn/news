@@ -37,7 +37,9 @@ class TopicDaoImpl implements TopicDao {
       batch.delete(Tables.topics, where: 'id = ?', whereArgs: [id]);
     }
     List<Object?> result = await batch.commit();
-    onTableUpdated.call(Tables.topics);
+    if (result.isNotEmpty) {
+      onTableUpdated.call(Tables.topics);
+    }
     return result.whereType<int>().where((res) => res != 0).toList();
   }
 
@@ -102,7 +104,10 @@ class TopicDaoImpl implements TopicDao {
     }
 
     final result = await batch.commit();
-    onTableUpdated.call(Tables.topics);
+    if (result.any((e) => e != null)) {
+      // table is updated.
+      onTableUpdated.call(Tables.topics);
+    }
     return result;
   }
 

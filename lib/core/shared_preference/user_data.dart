@@ -30,12 +30,11 @@ mixin DarkThemeConfig {
   static const dark = "dark";
 }
 
+/// Single instance of user data pref.
 NiaPreferencesDataSource niaUserDataSource = NiaPreferencesDataSource();
 
 class NiaPreferencesDataSource extends ChangeNotifier {
   late SharedPreferences _preference;
-
-  static NiaPreferencesDataSource niaUserData = NiaPreferencesDataSource();
 
   init() async {
     _preference = await SharedPreferences.getInstance();
@@ -129,6 +128,20 @@ class NiaPreferencesDataSource extends ChangeNotifier {
     await _preference.setInt(UserDataKey.newsResourceChangeListVersion,
         updatedChangeListVersions.newsResourceVersion);
     notifyListeners();
+  }
+
+  Future setShouldHideOnboarding(bool shouldHideOnboarding) async {
+    await _preference.setBool(
+        UserDataKey.shouldHideOnboarding, shouldHideOnboarding);
+    notifyListeners();
+  }
+
+  Stream<bool> getShouldHideOnBoardingStream() {
+    return createStream(() => getShouldHideOnBoarding());
+  }
+
+  Future<bool> getShouldHideOnBoarding() async {
+    return _preference.getBool(UserDataKey.shouldHideOnboarding) ?? false;
   }
 }
 

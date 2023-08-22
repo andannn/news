@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:news/app/local/nia_localizations_delegate.dart';
 import 'package:news/app/navigation/nia_router.dart';
 import 'package:news/app/navigation/top_level_navigation.dart';
+import 'package:news/app/ui/theme_data.dart';
 
 class NiaApp extends StatefulWidget {
   const NiaApp({super.key});
@@ -14,10 +16,8 @@ class NiaAppState extends State<NiaApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black26),
-        useMaterial3: true,
-      ),
+      theme: lightThemeData,
+      localizationsDelegates: [NiaLocalizationsDelegate()],
       home: const NiaAppScaffold(),
     );
   }

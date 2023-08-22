@@ -4,7 +4,7 @@ import 'package:news/core/shared_preference/user_data.dart';
 
 import '../sync_utils.dart';
 
-UserDataRepository createUserDataRepository() =>
+UserDataRepository userDataRepository =
     OfflineFirstUserDataRepository(niaUserDataSource);
 
 abstract class UserDataRepository {
@@ -16,6 +16,10 @@ abstract class UserDataRepository {
   Stream<List<String>> getFollowedTopicIdsStream();
 
   Future setThemeBrand(String themeBrand);
+
+  Future setShouldHideOnboarding(bool shouldHideOnboarding);
+
+  Stream<bool> getShouldHideOnboardingStream();
 
   Future setDynamicColorPreference(bool useDynamicColor);
 
@@ -73,4 +77,12 @@ class OfflineFirstUserDataRepository implements UserDataRepository {
   Future updateChangeListVersion(
           {required ChangeListVersions Function(ChangeListVersions) update}) =>
       _niaUserDataSource.updateChangeListVersion(update: update);
+
+  @override
+  Future setShouldHideOnboarding(bool shouldHideOnboarding) =>
+      _niaUserDataSource.setShouldHideOnboarding(shouldHideOnboarding);
+
+  @override
+  Stream<bool> getShouldHideOnboardingStream() =>
+      _niaUserDataSource.getShouldHideOnBoardingStream();
 }

@@ -6,7 +6,7 @@ import 'package:news/core/network/network_data_source.dart';
 
 import '../model/topic.dart';
 
-TopicsRepository createTopicsRepository() => OfflineFirstTopicsRepository(
+TopicsRepository topicsRepository = OfflineFirstTopicsRepository(
     topicDao: niaDatabase.getTopicDao(), networkDataSource: networkDataSource);
 
 abstract class TopicsRepository extends Syncable {

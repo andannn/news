@@ -3,11 +3,19 @@ import 'package:news/core/database/dao/news_resource_dao.dart';
 import 'package:news/core/database/dao/topic_dao.dart';
 import 'package:news/core/database/model/news_resource_topic_corss_ref.dart';
 import 'package:news/core/database/model/topic_entity.dart';
+import 'package:news/core/database/nia_database.dart';
 import 'package:news/core/network/network_data_source.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 
 import '../../database/model/news_resource_entity.dart';
 import '../sync_utils.dart';
+
+/// singleton of news repository.
+NewsRepository newsRepository = OfflineFirstNewsRepository(
+    newsResourceDao: niaDatabase.getNewsResourceDao(),
+    topicDao: niaDatabase.getTopicDao(),
+    networkDataSource: networkDataSource,
+    niaPreferencesDataSource: niaUserDataSource);
 
 abstract class NewsRepository implements Syncable {
   Stream<List<NewsResource>> getNewsResources(

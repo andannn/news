@@ -49,7 +49,9 @@ class NewsResourceDaoImpl implements NewsResourceDao {
       batch.delete(Tables.newsResource, where: 'id = ?', whereArgs: [id]);
     }
     List<Object?> result = await batch.commit();
-    onTableUpdated(Tables.newsResource);
+    if (result.isNotEmpty) {
+      onTableUpdated(Tables.newsResource);
+    }
     return result.whereType<int>().where((res) => res != 0).toList();
   }
 
@@ -111,7 +113,10 @@ class NewsResourceDaoImpl implements NewsResourceDao {
     }
 
     final result = await batch.commit();
-    onTableUpdated(Tables.newsResource);
+    if (result.any((e) => e != null)) {
+      // table is updated.
+      onTableUpdated(Tables.newsResource);
+    }
     return result;
   }
 
@@ -119,7 +124,7 @@ class NewsResourceDaoImpl implements NewsResourceDao {
   Future<List> upsertNewsResources(List<NewsResourceEntity> entities) async {
     final batch = _database.batch();
 
-    final sql = 'INSERT INTO '
+    final sql = 'INSERT OR REPLACE INTO '
         '${Tables.newsResource}(id, title, content, url, header_image_url, publish_date, type)'
         'VALUES(?, ?, ?, ?, ?, ?, ?)';
     for (final news in entities) {
@@ -149,7 +154,8 @@ class NewsResourceDaoImpl implements NewsResourceDao {
 
   Future<PopulatedNewsResource> _mapNewsIdToPopulatedNewsResource(
       String newsId) async {
-    final newsJson = await _database.query(Tables.newsResource, limit: 1);
+    final newsJson = await _database.query(Tables.newsResource,
+        where: 'id = $newsId', limit: 1);
     NewsResourceEntity entity = NewsResourceEntity.fromJson(newsJson.first);
 
     String sql = """

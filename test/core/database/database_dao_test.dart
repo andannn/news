@@ -308,7 +308,7 @@ void main() {
           filterNewsIds: {'145'},
       );
       final res = await resStream.first;
-      expect(res.map((e) => e.entity.id).toList(), equals([137]));
+      expect(res.map((e) => e.entity.id).toList(), equals([145]));
     });
   });
 }
