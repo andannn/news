@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:news/app/local/nia_localizations.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
@@ -127,11 +128,8 @@ class _TopicSelection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Row(
           children: [
-// TODO： Flutter CachedNetworkImage can't read svg image, thinking about another way.....
-            // CachedNetworkImage(
-            //     width: 64,
-            //     height: 64,
-            //     imageUrl: followableTopic.topic.imageUrl),
+            SvgPicture.network(followableTopic.topic.imageUrl,
+                width: 48, height: 48),
             const SizedBox(width: 8),
             Expanded(
                 child: Text(
@@ -139,13 +137,13 @@ class _TopicSelection extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             )),
             NiaToggleButton(
-              isChecked: followableTopic.isFollowed,
-              uncheckedIconData: Icons.add,
-              checkedIconData: Icons.check_circle,
-              onCheckChanged: (bool isChecked) {
-                onTopicCheckedStateChanged(followableTopic.topic.id, isChecked);
-              },
-            )
+                isChecked: followableTopic.isFollowed,
+                uncheckedIconData: Icons.add,
+                checkedIconData: Icons.check_circle,
+                onCheckChanged: (bool isChecked) {
+                  onTopicCheckedStateChanged(
+                      followableTopic.topic.id, isChecked);
+                })
           ],
         ),
       ),
