@@ -6,6 +6,8 @@ sealed class OnboardingUiState extends Equatable {
 }
 
 class OnboardingLoading extends OnboardingUiState {
+  const OnboardingLoading();
+
   @override
   List<Object?> get props => [];
 }

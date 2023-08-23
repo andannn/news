@@ -15,12 +15,12 @@ class ForYouScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ForYouBloc, ForYouUiState>(
       builder: (BuildContext context, ForYouUiState state) {
-        final onboardingUiState = state.onboardingUiState;
         final newsFeedState = state.newsFeedState;
+        final bookMarkedIds = state.bookmarkedNewsIds;
         return CustomScrollView(
           slivers: [
             const SliverToBoxAdapter(child: OnBoarding()),
-            _createSliverNewsFeed(context, newsFeedState),
+            _createSliverNewsFeed(context, newsFeedState, bookMarkedIds),
           ],
         );
       },
@@ -28,7 +28,8 @@ class ForYouScreen extends StatelessWidget {
     );
   }
 
-  Widget _createSliverNewsFeed(BuildContext context, NewsFeedState state) {
+  Widget _createSliverNewsFeed(
+      BuildContext context, NewsFeedState state, List<String> bookMarkedIds) {
     List<NewsResource> resources = [];
 
     if (state is NewsFeedLoadSuccess) {
@@ -38,6 +39,12 @@ class ForYouScreen extends StatelessWidget {
         itemCount: resources.length,
         itemBuilder: (context, index) => NewsFeedItemWidget(
               newsResource: resources[index],
+              isSaved: bookMarkedIds.contains(resources[index].id),
+              onSavedStateChanged: (String newsResourceId, bool isSaved) {
+                context.read<ForYouBloc>().add(
+                    OnNewsBookMarkedStateChanged(
+                        newsResId: newsResourceId, isSaved: isSaved));
+              },
             ));
   }
 }

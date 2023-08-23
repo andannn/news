@@ -44,5 +44,11 @@ void main() {
       expect(newVersion.topicVersion, equals(-1));
       expect(newVersion.newsResourceVersion, equals(1));
     });
+    test('update_saved_news_resources', () async {
+      await dataSource.updateNewsResourceBookmark(newsId: '1', saved: true);
+      await dataSource.updateNewsResourceBookmark(newsId: '2', saved: true);
+      final res = await dataSource.getSavedBookmarkedNewsResourcesStream().first;
+      expect(res, equals(['1', '2']));
+    });
   });
 }

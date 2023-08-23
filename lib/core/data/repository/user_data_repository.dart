@@ -15,6 +15,10 @@ abstract class UserDataRepository {
 
   Stream<List<String>> getFollowedTopicIdsStream();
 
+  Future updateNewsResourceBookmark(String newsId, bool saved);
+
+  Stream<List<String>> getSavedBookmarkedNewsResourcesStream();
+
   Future setThemeBrand(String themeBrand);
 
   Future setShouldHideOnboarding(bool shouldHideOnboarding);
@@ -85,4 +89,12 @@ class OfflineFirstUserDataRepository implements UserDataRepository {
   @override
   Stream<bool> getShouldHideOnboardingStream() =>
       _niaUserDataSource.getShouldHideOnBoardingStream();
+
+  @override
+  Stream<List<String>> getSavedBookmarkedNewsResourcesStream() =>
+      _niaUserDataSource.getSavedBookmarkedNewsResourcesStream();
+
+  @override
+  Future updateNewsResourceBookmark(String newsId, bool saved) =>
+      _niaUserDataSource.updateNewsResourceBookmark(newsId: newsId, saved: saved);
 }

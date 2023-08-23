@@ -1,9 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:news/core/data/model/news_recsource.dart';
 
-sealed class NewsFeedState extends Equatable {}
+sealed class NewsFeedState extends Equatable {
+  const NewsFeedState();
+}
 
 class NewsFeedLoading extends NewsFeedState {
+  const NewsFeedLoading();
+
   @override
   List<Object?> get props => [];
 }

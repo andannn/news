@@ -7,6 +7,8 @@ part 'for_you_ui_state.freezed.dart';
 
 @freezed
 class ForYouUiState with _$ForYouUiState {
-  factory ForYouUiState(OnboardingUiState onboardingUiState, NewsFeedState newsFeedState) =
-      _ForYouUiState;
+  factory ForYouUiState(
+      {@Default(OnboardingLoading()) OnboardingUiState onboardingUiState,
+      @Default(NewsFeedLoading()) NewsFeedState newsFeedState,
+      @Default([]) List<String> bookmarkedNewsIds}) = _ForYouUiState;
 }

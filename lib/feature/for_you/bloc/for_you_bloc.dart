@@ -7,11 +7,12 @@ import 'package:news/core/data/model/news_recsource.dart';
 import 'package:news/core/data/repository/news_resource_repository.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
-import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 import 'package:news/feature/for_you/bloc/news_feed_state.dart';
 import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
 import 'package:rxdart/streams.dart';
+
+part 'for_you_event.dart';
 
 class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
   ForYouBloc(
@@ -20,36 +21,46 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
       required GetFollowableTopicsUseCase getFollowableTopicsUseCase})
       : _userDataRepository = userDataRepository,
         _newsRepository = newsRepository,
-        super(ForYouUiState(OnboardingLoading(), NewsFeedLoading())) {
+        super(ForYouUiState()) {
     on<OnUpdateTopicSelection>(_onUpdateTopicSelection);
-    on<OnBoardingUiStateChanged>(_onBoardingUiStateChanged);
-    on<OnFeedNewsStateChanged>(_onFeedNewsStateChanged);
     on<OnDismissOnboarding>(_onDismissOnboarding);
+    on<OnNewsBookMarkedStateChanged>(_onNewsBookMarkedStateChanged);
+
+    on<_OnBookmarkedNewsChanged>(_onBookmarkedNewsChanged);
+    on<_OnBoardingUiStateChanged>(_onBoardingUiStateChanged);
+    on<_OnFeedNewsStateChanged>(_onFeedNewsStateChanged);
 
     Stream<bool> shouldHideOnBoardingStream =
         userDataRepository.getShouldHideOnboardingStream();
-    Stream<List<String>> followedTopicIdsStream =
-        userDataRepository.getFollowedTopicIdsStream();
     Stream<List<FollowableTopic>> followableTopicsStream =
         getFollowableTopicsUseCase.invoke();
-
-    Stream<OnboardingUiState> onboardingUiStateStream =
-        CombineLatestStream.combine2(shouldHideOnBoardingStream,
-                followableTopicsStream, _getOnboardingUiState)
-            .distinct();
-
-    _onboardingUiStateSub = onboardingUiStateStream.listen((newState) {
+    _onboardingUiStateSub = CombineLatestStream.combine2(
+            shouldHideOnBoardingStream,
+            followableTopicsStream,
+            _getOnboardingUiState)
+        .distinct()
+        .listen((newState) {
       if (newState != state.onboardingUiState) {
-        add(OnBoardingUiStateChanged(newState));
+        add(_OnBoardingUiStateChanged(newState));
       }
     });
 
-    _followedTopicIdsSub =
-        followedTopicIdsStream.listen((followedTopicIds) async {
+    _followedTopicIdsSub = userDataRepository
+        .getFollowedTopicIdsStream()
+        .listen((followedTopicIds) async {
       if (!const DeepCollectionEquality()
           .equals(_currentFollowedTopicIds, followedTopicIds)) {
         _currentFollowedTopicIds = followedTopicIds;
         await _cancelLastAndObserveFeedNews();
+      }
+    });
+
+    _bookMarkedNewsResourceSub = userDataRepository
+        .getSavedBookmarkedNewsResourcesStream()
+        .listen((bookmarkedNewses) async {
+      if (!const DeepCollectionEquality()
+          .equals(state.bookmarkedNewsIds, bookmarkedNewses)) {
+        add(_OnBookmarkedNewsChanged(bookmarkedNewses));
       }
     });
   }
@@ -61,6 +72,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
 
   StreamSubscription<OnboardingUiState>? _onboardingUiStateSub;
   StreamSubscription<List<String>>? _followedTopicIdsSub;
+  StreamSubscription<List<String>>? _bookMarkedNewsResourceSub;
 
   StreamSubscription<List<NewsResource>>? _feedNewsResourceSub;
 
@@ -70,6 +82,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     _onboardingUiStateSub?.cancel();
     _followedTopicIdsSub?.cancel();
     _feedNewsResourceSub?.cancel();
+    _bookMarkedNewsResourceSub?.cancel();
   }
 
   Future _cancelLastAndObserveFeedNews() async {
@@ -78,7 +91,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
 
     if (_currentFollowedTopicIds.isEmpty) {
       // no need to observe stream when no followed topics.
-      add(OnFeedNewsStateChanged(NewsFeedLoadSuccess(const [])));
+      add(_OnFeedNewsStateChanged(NewsFeedLoadSuccess(const [])));
       return;
     }
 
@@ -89,7 +102,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     _feedNewsResourceSub = stream.listen((feedNews) {
       final newState = NewsFeedLoadSuccess(feedNews);
       if (newState != state.newsFeedState) {
-        add(OnFeedNewsStateChanged(newState));
+        add(_OnFeedNewsStateChanged(newState));
       }
     });
   }
@@ -110,7 +123,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
   }
 
   Future<void> _onBoardingUiStateChanged(
-      OnBoardingUiStateChanged event, Emitter<ForYouUiState> emit) async {
+      _OnBoardingUiStateChanged event, Emitter<ForYouUiState> emit) async {
     emit(state.copyWith(onboardingUiState: event.state));
   }
 
@@ -120,7 +133,18 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
   }
 
   Future<void> _onFeedNewsStateChanged(
-      OnFeedNewsStateChanged event, Emitter<ForYouUiState> emit) async {
+      _OnFeedNewsStateChanged event, Emitter<ForYouUiState> emit) async {
     emit(state.copyWith(newsFeedState: event.state));
+  }
+
+  FutureOr<void> _onBookmarkedNewsChanged(
+      _OnBookmarkedNewsChanged event, Emitter<ForYouUiState> emit) {
+    emit(state.copyWith(bookmarkedNewsIds: event.bookmarkedNewsIds));
+  }
+
+  FutureOr<void> _onNewsBookMarkedStateChanged(
+      OnNewsBookMarkedStateChanged event, Emitter<ForYouUiState> emit) {
+    _userDataRepository.updateNewsResourceBookmark(
+        event.newsResId, event.isSaved);
   }
 }
