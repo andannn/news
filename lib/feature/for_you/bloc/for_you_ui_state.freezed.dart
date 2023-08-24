@@ -19,6 +19,7 @@ mixin _$ForYouUiState {
   OnboardingUiState get onboardingUiState => throw _privateConstructorUsedError;
   NewsFeedState get newsFeedState => throw _privateConstructorUsedError;
   List<String> get bookmarkedNewsIds => throw _privateConstructorUsedError;
+  List<String> get followedTopicIds => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ForYouUiStateCopyWith<ForYouUiState> get copyWith =>
@@ -34,7 +35,8 @@ abstract class $ForYouUiStateCopyWith<$Res> {
   $Res call(
       {OnboardingUiState onboardingUiState,
       NewsFeedState newsFeedState,
-      List<String> bookmarkedNewsIds});
+      List<String> bookmarkedNewsIds,
+      List<String> followedTopicIds});
 }
 
 /// @nodoc
@@ -53,6 +55,7 @@ class _$ForYouUiStateCopyWithImpl<$Res, $Val extends ForYouUiState>
     Object? onboardingUiState = null,
     Object? newsFeedState = null,
     Object? bookmarkedNewsIds = null,
+    Object? followedTopicIds = null,
   }) {
     return _then(_value.copyWith(
       onboardingUiState: null == onboardingUiState
@@ -66,6 +69,10 @@ class _$ForYouUiStateCopyWithImpl<$Res, $Val extends ForYouUiState>
       bookmarkedNewsIds: null == bookmarkedNewsIds
           ? _value.bookmarkedNewsIds
           : bookmarkedNewsIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      followedTopicIds: null == followedTopicIds
+          ? _value.followedTopicIds
+          : followedTopicIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
   }
@@ -82,7 +89,8 @@ abstract class _$$_ForYouUiStateCopyWith<$Res>
   $Res call(
       {OnboardingUiState onboardingUiState,
       NewsFeedState newsFeedState,
-      List<String> bookmarkedNewsIds});
+      List<String> bookmarkedNewsIds,
+      List<String> followedTopicIds});
 }
 
 /// @nodoc
@@ -99,6 +107,7 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
     Object? onboardingUiState = null,
     Object? newsFeedState = null,
     Object? bookmarkedNewsIds = null,
+    Object? followedTopicIds = null,
   }) {
     return _then(_$_ForYouUiState(
       onboardingUiState: null == onboardingUiState
@@ -113,6 +122,10 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
           ? _value._bookmarkedNewsIds
           : bookmarkedNewsIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      followedTopicIds: null == followedTopicIds
+          ? _value._followedTopicIds
+          : followedTopicIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -123,8 +136,10 @@ class _$_ForYouUiState implements _ForYouUiState {
   _$_ForYouUiState(
       {this.onboardingUiState = const OnboardingLoading(),
       this.newsFeedState = const NewsFeedLoading(),
-      final List<String> bookmarkedNewsIds = const []})
-      : _bookmarkedNewsIds = bookmarkedNewsIds;
+      final List<String> bookmarkedNewsIds = const [],
+      final List<String> followedTopicIds = const []})
+      : _bookmarkedNewsIds = bookmarkedNewsIds,
+        _followedTopicIds = followedTopicIds;
 
   @override
   @JsonKey()
@@ -142,9 +157,19 @@ class _$_ForYouUiState implements _ForYouUiState {
     return EqualUnmodifiableListView(_bookmarkedNewsIds);
   }
 
+  final List<String> _followedTopicIds;
+  @override
+  @JsonKey()
+  List<String> get followedTopicIds {
+    if (_followedTopicIds is EqualUnmodifiableListView)
+      return _followedTopicIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_followedTopicIds);
+  }
+
   @override
   String toString() {
-    return 'ForYouUiState(onboardingUiState: $onboardingUiState, newsFeedState: $newsFeedState, bookmarkedNewsIds: $bookmarkedNewsIds)';
+    return 'ForYouUiState(onboardingUiState: $onboardingUiState, newsFeedState: $newsFeedState, bookmarkedNewsIds: $bookmarkedNewsIds, followedTopicIds: $followedTopicIds)';
   }
 
   @override
@@ -157,12 +182,18 @@ class _$_ForYouUiState implements _ForYouUiState {
             (identical(other.newsFeedState, newsFeedState) ||
                 other.newsFeedState == newsFeedState) &&
             const DeepCollectionEquality()
-                .equals(other._bookmarkedNewsIds, _bookmarkedNewsIds));
+                .equals(other._bookmarkedNewsIds, _bookmarkedNewsIds) &&
+            const DeepCollectionEquality()
+                .equals(other._followedTopicIds, _followedTopicIds));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, onboardingUiState, newsFeedState,
-      const DeepCollectionEquality().hash(_bookmarkedNewsIds));
+  int get hashCode => Object.hash(
+      runtimeType,
+      onboardingUiState,
+      newsFeedState,
+      const DeepCollectionEquality().hash(_bookmarkedNewsIds),
+      const DeepCollectionEquality().hash(_followedTopicIds));
 
   @JsonKey(ignore: true)
   @override
@@ -175,7 +206,8 @@ abstract class _ForYouUiState implements ForYouUiState {
   factory _ForYouUiState(
       {final OnboardingUiState onboardingUiState,
       final NewsFeedState newsFeedState,
-      final List<String> bookmarkedNewsIds}) = _$_ForYouUiState;
+      final List<String> bookmarkedNewsIds,
+      final List<String> followedTopicIds}) = _$_ForYouUiState;
 
   @override
   OnboardingUiState get onboardingUiState;
@@ -183,6 +215,8 @@ abstract class _ForYouUiState implements ForYouUiState {
   NewsFeedState get newsFeedState;
   @override
   List<String> get bookmarkedNewsIds;
+  @override
+  List<String> get followedTopicIds;
   @override
   @JsonKey(ignore: true)
   _$$_ForYouUiStateCopyWith<_$_ForYouUiState> get copyWith =>

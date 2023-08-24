@@ -34,7 +34,10 @@ class NewsFeedItemWidget extends StatelessWidget {
               child: Column(children: [
                 const SizedBox(height: 16),
                 Row(children: [
-                  Expanded(flex: 8, child: Text(newsResource.title, style: Theme.of(context).textTheme.titleLarge)),
+                  Expanded(
+                      flex: 8,
+                      child: Text(newsResource.title,
+                          style: Theme.of(context).textTheme.titleLarge)),
                   const Expanded(flex: 1, child: SizedBox()),
                   _buildBookMarkButton(
                       isSaved: isSaved,
@@ -43,18 +46,22 @@ class NewsFeedItemWidget extends StatelessWidget {
                       }),
                 ]),
                 const SizedBox(height: 16),
-                _buildNewsResourceMetaData(context, newsResource.publishDate!, newsResource.type.displayText),
+                _buildNewsResourceMetaData(context, newsResource.publishDate!,
+                    newsResource.type.displayText),
                 const SizedBox(height: 16),
-                Text(newsResource.content, style: Theme.of(context).textTheme.bodyLarge),
+                Text(newsResource.content,
+                    style: Theme.of(context).textTheme.bodyLarge),
                 const SizedBox(height: 16),
-                _buildNewsResourceTopics(context, newsResource.topics, followedTopicIds)
+                _buildNewsResourceTopics(
+                    context, newsResource.topics, followedTopicIds)
               ]))
         ],
       ),
     );
   }
 
-  Widget _buildNetWorkImageResource(BuildContext context, String? headerImageUrl) {
+  Widget _buildNetWorkImageResource(
+      BuildContext context, String? headerImageUrl) {
     if (headerImageUrl == null || headerImageUrl.isEmpty) {
       return const SizedBox();
     } else {
@@ -75,38 +82,54 @@ class NewsFeedItemWidget extends StatelessWidget {
     }
   }
 
-  Widget _buildBookMarkButton({required bool isSaved, required Function(bool isSaved) onSavedStateChanged}) {
+  Widget _buildBookMarkButton(
+      {required bool isSaved,
+      required Function(bool isSaved) onSavedStateChanged}) {
     final iconData = isSaved ? Icons.bookmark : Icons.bookmark_add_outlined;
-    return IconButton(onPressed: () => onSavedStateChanged.call(!isSaved), icon: Icon(iconData));
+    return IconButton(
+        onPressed: () => onSavedStateChanged.call(!isSaved),
+        icon: Icon(iconData));
   }
 
-  Widget _buildNewsResourceMetaData(BuildContext context, DateTime publishDate, String displayText) {
+  Widget _buildNewsResourceMetaData(
+      BuildContext context, DateTime publishDate, String displayText) {
     return Align(
         alignment: Alignment.centerLeft,
-        child: Text('${publishDate.toString()} · $displayText', style: Theme.of(context).textTheme.labelSmall));
+        child: Text('${publishDate.toString()} · $displayText',
+            style: Theme.of(context).textTheme.labelSmall));
   }
 
-  Widget _buildNewsResourceTopics(BuildContext context, List<Topic> topics, List<String> followedTopicIds) {
-    return Row(
-        children: topics
-            .map((topic) =>
-                buildNiaTopicTag(context: context, topic: topic, isFollowed: followedTopicIds.contains(topic.id)))
-            .toList());
+  Widget _buildNewsResourceTopics(
+      BuildContext context, List<Topic> topics, List<String> followedTopicIds) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+          spacing: 10,
+          children: topics
+              .map((topic) => buildNiaTopicTag(
+                  context: context,
+                  topic: topic,
+                  isFollowed: followedTopicIds.contains(topic.id)))
+              .toList()),
+    );
   }
 
-  Widget buildNiaTopicTag({required BuildContext context, required Topic topic, required bool isFollowed}) {
+  Widget buildNiaTopicTag(
+      {required BuildContext context,
+      required Topic topic,
+      required bool isFollowed}) {
     Color containerColor;
     if (isFollowed) {
       containerColor = Theme.of(context).colorScheme.primaryContainer;
     } else {
-      containerColor = Theme.of(context).colorScheme.primaryContainer.withAlpha(80);
+      containerColor =
+          Theme.of(context).colorScheme.primaryContainer.withAlpha(80);
     }
     return TextButton(
         onPressed: () {},
         style: TextButton.styleFrom(
-          backgroundColor: containerColor,
-          foregroundColor: Theme.of(context).colorScheme.secondary
-        ),
+            backgroundColor: containerColor,
+            foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer),
         child: Text(topic.name.toUpperCase()));
   }
 }

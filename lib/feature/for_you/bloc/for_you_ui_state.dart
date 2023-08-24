@@ -10,5 +10,6 @@ class ForYouUiState with _$ForYouUiState {
   factory ForYouUiState(
       {@Default(OnboardingLoading()) OnboardingUiState onboardingUiState,
       @Default(NewsFeedLoading()) NewsFeedState newsFeedState,
-      @Default([]) List<String> bookmarkedNewsIds}) = _ForYouUiState;
+      @Default([]) List<String> bookmarkedNewsIds,
+      @Default([]) List<String> followedTopicIds}) = _ForYouUiState;
 }

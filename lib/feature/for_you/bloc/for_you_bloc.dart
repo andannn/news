@@ -29,6 +29,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     on<_OnBookmarkedNewsChanged>(_onBookmarkedNewsChanged);
     on<_OnBoardingUiStateChanged>(_onBoardingUiStateChanged);
     on<_OnFeedNewsStateChanged>(_onFeedNewsStateChanged);
+    on<_OnFollowedTopicChanged>(_onFollowedTopicChanged);
 
     Stream<bool> shouldHideOnBoardingStream =
         userDataRepository.getShouldHideOnboardingStream();
@@ -51,6 +52,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
       if (!const DeepCollectionEquality()
           .equals(_currentFollowedTopicIds, followedTopicIds)) {
         _currentFollowedTopicIds = followedTopicIds;
+        add(_OnFollowedTopicChanged(followedTopicIds));
         await _cancelLastAndObserveFeedNews();
       }
     });
@@ -146,5 +148,10 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
       OnNewsBookMarkedStateChanged event, Emitter<ForYouUiState> emit) {
     _userDataRepository.updateNewsResourceBookmark(
         event.newsResId, event.isSaved);
+  }
+
+  Future<void> _onFollowedTopicChanged(
+      _OnFollowedTopicChanged event, Emitter<ForYouUiState> emit) async {
+    emit(state.copyWith(followedTopicIds: event.topics));
   }
 }

@@ -41,3 +41,9 @@ class _OnBookmarkedNewsChanged extends ForYouPageEvent {
 
   const _OnBookmarkedNewsChanged(this.bookmarkedNewsIds);
 }
+
+class _OnFollowedTopicChanged extends ForYouPageEvent {
+  final List<String> topics;
+
+  const _OnFollowedTopicChanged(this.topics);
+}
