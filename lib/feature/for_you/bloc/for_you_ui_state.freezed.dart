@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ForYouUiState {
   OnboardingUiState get onboardingUiState => throw _privateConstructorUsedError;
   NewsFeedState get newsFeedState => throw _privateConstructorUsedError;
+  List<String> get bookmarkedNewsIds => throw _privateConstructorUsedError;
+  List<String> get followedTopicIds => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ForYouUiStateCopyWith<ForYouUiState> get copyWith =>
@@ -30,7 +32,11 @@ abstract class $ForYouUiStateCopyWith<$Res> {
           ForYouUiState value, $Res Function(ForYouUiState) then) =
       _$ForYouUiStateCopyWithImpl<$Res, ForYouUiState>;
   @useResult
-  $Res call({OnboardingUiState onboardingUiState, NewsFeedState newsFeedState});
+  $Res call(
+      {OnboardingUiState onboardingUiState,
+      NewsFeedState newsFeedState,
+      List<String> bookmarkedNewsIds,
+      List<String> followedTopicIds});
 }
 
 /// @nodoc
@@ -48,6 +54,8 @@ class _$ForYouUiStateCopyWithImpl<$Res, $Val extends ForYouUiState>
   $Res call({
     Object? onboardingUiState = null,
     Object? newsFeedState = null,
+    Object? bookmarkedNewsIds = null,
+    Object? followedTopicIds = null,
   }) {
     return _then(_value.copyWith(
       onboardingUiState: null == onboardingUiState
@@ -58,6 +66,14 @@ class _$ForYouUiStateCopyWithImpl<$Res, $Val extends ForYouUiState>
           ? _value.newsFeedState
           : newsFeedState // ignore: cast_nullable_to_non_nullable
               as NewsFeedState,
+      bookmarkedNewsIds: null == bookmarkedNewsIds
+          ? _value.bookmarkedNewsIds
+          : bookmarkedNewsIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      followedTopicIds: null == followedTopicIds
+          ? _value.followedTopicIds
+          : followedTopicIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -70,7 +86,11 @@ abstract class _$$_ForYouUiStateCopyWith<$Res>
       __$$_ForYouUiStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({OnboardingUiState onboardingUiState, NewsFeedState newsFeedState});
+  $Res call(
+      {OnboardingUiState onboardingUiState,
+      NewsFeedState newsFeedState,
+      List<String> bookmarkedNewsIds,
+      List<String> followedTopicIds});
 }
 
 /// @nodoc
@@ -86,16 +106,26 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
   $Res call({
     Object? onboardingUiState = null,
     Object? newsFeedState = null,
+    Object? bookmarkedNewsIds = null,
+    Object? followedTopicIds = null,
   }) {
     return _then(_$_ForYouUiState(
-      null == onboardingUiState
+      onboardingUiState: null == onboardingUiState
           ? _value.onboardingUiState
           : onboardingUiState // ignore: cast_nullable_to_non_nullable
               as OnboardingUiState,
-      null == newsFeedState
+      newsFeedState: null == newsFeedState
           ? _value.newsFeedState
           : newsFeedState // ignore: cast_nullable_to_non_nullable
               as NewsFeedState,
+      bookmarkedNewsIds: null == bookmarkedNewsIds
+          ? _value._bookmarkedNewsIds
+          : bookmarkedNewsIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      followedTopicIds: null == followedTopicIds
+          ? _value._followedTopicIds
+          : followedTopicIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -103,16 +133,43 @@ class __$$_ForYouUiStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ForYouUiState implements _ForYouUiState {
-  _$_ForYouUiState(this.onboardingUiState, this.newsFeedState);
+  _$_ForYouUiState(
+      {this.onboardingUiState = const OnboardingLoading(),
+      this.newsFeedState = const NewsFeedLoading(),
+      final List<String> bookmarkedNewsIds = const [],
+      final List<String> followedTopicIds = const []})
+      : _bookmarkedNewsIds = bookmarkedNewsIds,
+        _followedTopicIds = followedTopicIds;
 
   @override
+  @JsonKey()
   final OnboardingUiState onboardingUiState;
   @override
+  @JsonKey()
   final NewsFeedState newsFeedState;
+  final List<String> _bookmarkedNewsIds;
+  @override
+  @JsonKey()
+  List<String> get bookmarkedNewsIds {
+    if (_bookmarkedNewsIds is EqualUnmodifiableListView)
+      return _bookmarkedNewsIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_bookmarkedNewsIds);
+  }
+
+  final List<String> _followedTopicIds;
+  @override
+  @JsonKey()
+  List<String> get followedTopicIds {
+    if (_followedTopicIds is EqualUnmodifiableListView)
+      return _followedTopicIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_followedTopicIds);
+  }
 
   @override
   String toString() {
-    return 'ForYouUiState(onboardingUiState: $onboardingUiState, newsFeedState: $newsFeedState)';
+    return 'ForYouUiState(onboardingUiState: $onboardingUiState, newsFeedState: $newsFeedState, bookmarkedNewsIds: $bookmarkedNewsIds, followedTopicIds: $followedTopicIds)';
   }
 
   @override
@@ -123,12 +180,20 @@ class _$_ForYouUiState implements _ForYouUiState {
             (identical(other.onboardingUiState, onboardingUiState) ||
                 other.onboardingUiState == onboardingUiState) &&
             (identical(other.newsFeedState, newsFeedState) ||
-                other.newsFeedState == newsFeedState));
+                other.newsFeedState == newsFeedState) &&
+            const DeepCollectionEquality()
+                .equals(other._bookmarkedNewsIds, _bookmarkedNewsIds) &&
+            const DeepCollectionEquality()
+                .equals(other._followedTopicIds, _followedTopicIds));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, onboardingUiState, newsFeedState);
+  int get hashCode => Object.hash(
+      runtimeType,
+      onboardingUiState,
+      newsFeedState,
+      const DeepCollectionEquality().hash(_bookmarkedNewsIds),
+      const DeepCollectionEquality().hash(_followedTopicIds));
 
   @JsonKey(ignore: true)
   @override
@@ -138,13 +203,20 @@ class _$_ForYouUiState implements _ForYouUiState {
 }
 
 abstract class _ForYouUiState implements ForYouUiState {
-  factory _ForYouUiState(final OnboardingUiState onboardingUiState,
-      final NewsFeedState newsFeedState) = _$_ForYouUiState;
+  factory _ForYouUiState(
+      {final OnboardingUiState onboardingUiState,
+      final NewsFeedState newsFeedState,
+      final List<String> bookmarkedNewsIds,
+      final List<String> followedTopicIds}) = _$_ForYouUiState;
 
   @override
   OnboardingUiState get onboardingUiState;
   @override
   NewsFeedState get newsFeedState;
+  @override
+  List<String> get bookmarkedNewsIds;
+  @override
+  List<String> get followedTopicIds;
   @override
   @JsonKey(ignore: true)
   _$$_ForYouUiStateCopyWith<_$_ForYouUiState> get copyWith =>

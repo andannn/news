@@ -143,6 +143,31 @@ class NiaPreferencesDataSource extends ChangeNotifier {
   Future<bool> getShouldHideOnBoarding() async {
     return _preference.getBool(UserDataKey.shouldHideOnboarding) ?? false;
   }
+
+  Future updateNewsResourceBookmark(
+      {required String newsId, required bool saved}) async {
+    final List<String> bookmarkedNewsResourceIds =
+        _preference.getStringList(UserDataKey.bookmarkedNewsResources) ?? [];
+    Set<String> newBookmarkedNewsResourceIds =
+        HashSet.of(bookmarkedNewsResourceIds);
+    if (saved) {
+      newBookmarkedNewsResourceIds.add(newsId);
+    } else {
+      newBookmarkedNewsResourceIds.remove(newsId);
+    }
+
+    await _preference.setStringList(UserDataKey.bookmarkedNewsResources,
+        newBookmarkedNewsResourceIds.toList());
+    notifyListeners();
+  }
+
+  Future<List<String>> getSavedBookmarkedNewsResources() async {
+    return _preference.getStringList(UserDataKey.bookmarkedNewsResources) ?? [];
+  }
+
+  Stream<List<String>> getSavedBookmarkedNewsResourcesStream() {
+    return createStream(() => getSavedBookmarkedNewsResources());
+  }
 }
 
 extension NiaPreferencesDataSourceEx on NiaPreferencesDataSource {

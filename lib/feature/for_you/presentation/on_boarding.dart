@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:news/app/local/nia_localizations.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
-import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 
 import '../../../core/design_system/common_widget/nia_toggle_button.dart';
@@ -20,7 +19,7 @@ class OnBoarding extends StatelessWidget {
           switch (state.onboardingUiState.runtimeType) {
             case OnboardingShown:
               return _OnBoardingWidget(
-                  topics: (state.onboardingUiState as OnboardingShown).topics);
+                  state: (state.onboardingUiState as OnboardingShown));
             default:
               return const SizedBox();
           }
@@ -32,9 +31,13 @@ class OnBoarding extends StatelessWidget {
 }
 
 class _OnBoardingWidget extends StatelessWidget {
-  const _OnBoardingWidget({super.key, required this.topics});
+  const _OnBoardingWidget({super.key, required this.state});
 
-  final List<FollowableTopic> topics;
+  final OnboardingShown state;
+
+  List<FollowableTopic> get topics => state.topics;
+
+  bool get enabled => state.topics.any((topic) => topic.isFollowed);
 
   @override
   Widget build(BuildContext context) {
@@ -72,20 +75,33 @@ class _OnBoardingWidget extends StatelessWidget {
         const SizedBox(height: 18),
         // Done button.
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          width: double.infinity,
-          child: TextButton(
-              onPressed: () {
-                context.read<ForYouBloc>().add(const OnDismissOnboarding());
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                backgroundColor: Theme.of(context).colorScheme.onBackground,
-              ),
-              child: Text(NiaLocalizations.of(context).done)),
-        )
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            width: double.infinity,
+            child: _buildDoneButton(context, enabled))
       ],
     );
+  }
+
+  Widget _buildDoneButton(BuildContext context, bool enabled) {
+    VoidCallback? listener;
+    if (enabled) {
+      listener = () {
+        context.read<ForYouBloc>().add(const OnDismissOnboarding());
+      };
+    } else {
+      listener = null;
+    }
+
+    final colorScheme = Theme.of(context).colorScheme;
+    return TextButton(
+        onPressed: listener,
+        style: TextButton.styleFrom(
+          foregroundColor: colorScheme.onPrimary,
+          backgroundColor: colorScheme.onBackground,
+          disabledBackgroundColor: colorScheme.onBackground.withAlpha(120),
+          disabledForegroundColor: colorScheme.onPrimary.withAlpha(120),
+        ),
+        child: Text(NiaLocalizations.of(context).done));
   }
 }
 

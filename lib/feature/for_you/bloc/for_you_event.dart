@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:news/feature/for_you/bloc/news_feed_state.dart';
-import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
+part of 'for_you_bloc.dart';
 
 sealed class ForYouPageEvent {
   const ForYouPageEvent();
@@ -17,15 +15,35 @@ class OnDismissOnboarding extends ForYouPageEvent {
   const OnDismissOnboarding();
 }
 
+class OnNewsBookMarkedStateChanged extends ForYouPageEvent {
+  final String newsResId;
 
-class OnBoardingUiStateChanged extends ForYouPageEvent {
-  final OnboardingUiState state;
+  final bool isSaved;
 
-  const OnBoardingUiStateChanged(this.state);
+  OnNewsBookMarkedStateChanged(
+      {required this.newsResId, required this.isSaved});
 }
 
-class OnFeedNewsStateChanged extends ForYouPageEvent {
+class _OnFeedNewsStateChanged extends ForYouPageEvent {
   final NewsFeedState state;
 
-  const OnFeedNewsStateChanged(this.state);
+  const _OnFeedNewsStateChanged(this.state);
+}
+
+class _OnBoardingUiStateChanged extends ForYouPageEvent {
+  final OnboardingUiState state;
+
+  const _OnBoardingUiStateChanged(this.state);
+}
+
+class _OnBookmarkedNewsChanged extends ForYouPageEvent {
+  final List<String> bookmarkedNewsIds;
+
+  const _OnBookmarkedNewsChanged(this.bookmarkedNewsIds);
+}
+
+class _OnFollowedTopicChanged extends ForYouPageEvent {
+  final List<String> topics;
+
+  const _OnFollowedTopicChanged(this.topics);
 }

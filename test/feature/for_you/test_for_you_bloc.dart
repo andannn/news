@@ -8,7 +8,6 @@ import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
-import 'package:news/feature/for_you/bloc/for_you_event.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 import 'package:news/feature/for_you/bloc/news_feed_state.dart';
 import 'package:news/feature/for_you/bloc/onboarding_ui_state.dart';
@@ -59,7 +58,7 @@ void main() {
 
     test('initial_state_test', () async {
       expect(forYouBloc.state,
-          equals(ForYouUiState(OnboardingLoading(), NewsFeedLoading())));
+          equals(ForYouUiState()));
       await forYouBloc.close();
     });
     test('onboarding_state_test', () async {
@@ -110,6 +109,18 @@ void main() {
             sampleNewsResources[0],
             sampleNewsResources[1],
           ])));
+
+      await forYouBloc.close();
+    });
+    test('update_bookmarked_bloc_test', () async {
+      forYouBloc.add(OnNewsBookMarkedStateChanged(newsResId: '0', isSaved: true));
+      forYouBloc.add(OnNewsBookMarkedStateChanged(newsResId: '0', isSaved: true));
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      expect(
+          forYouBloc.state.bookmarkedNewsIds,
+          equals(['0']));
 
       await forYouBloc.close();
     });
