@@ -17,7 +17,7 @@ abstract class UserDataRepository {
 
   Future updateNewsResourceBookmark(String newsId, bool saved);
 
-  Stream<List<String>> getSavedBookmarkedNewsResourcesStream();
+  Stream<List<String>> getSavedNewsResourcesStream();
 
   Future setThemeBrand(String themeBrand);
 
@@ -28,8 +28,6 @@ abstract class UserDataRepository {
   Future setDynamicColorPreference(bool useDynamicColor);
 
   Future setDarkThemeConfig(String darkThemeConfig);
-
-  Future toggleNewsResourceBookmark(String newsResourceId, bool bookmarked);
 
   Future<ChangeListVersions> getChangeListVersions();
 
@@ -74,10 +72,6 @@ class OfflineFirstUserDataRepository implements UserDataRepository {
           topicId: topicId, followed: followed);
 
   @override
-  Future toggleNewsResourceBookmark(String newsResourceId, bool bookmarked) =>
-      _niaUserDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked);
-
-  @override
   Future updateChangeListVersion(
           {required ChangeListVersions Function(ChangeListVersions) update}) =>
       _niaUserDataSource.updateChangeListVersion(update: update);
@@ -91,7 +85,7 @@ class OfflineFirstUserDataRepository implements UserDataRepository {
       _niaUserDataSource.getShouldHideOnBoardingStream();
 
   @override
-  Stream<List<String>> getSavedBookmarkedNewsResourcesStream() =>
+  Stream<List<String>> getSavedNewsResourcesStream() =>
       _niaUserDataSource.getSavedBookmarkedNewsResourcesStream();
 
   @override
