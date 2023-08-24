@@ -4,16 +4,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:news/core/data/model/news_recsource.dart';
+import 'package:news/core/data/model/topic.dart';
 
 class NewsFeedItemWidget extends StatelessWidget {
   const NewsFeedItemWidget(
       {super.key,
       required this.newsResource,
       required this.isSaved,
-      required this.onSavedStateChanged});
+      required this.onSavedStateChanged,
+      required this.followedTopicIds});
 
   final NewsResource newsResource;
   final bool isSaved;
+  final List<String> followedTopicIds;
   final Function(String newsResourceId, bool isSaved) onSavedStateChanged;
 
   @override
@@ -31,7 +34,7 @@ class NewsFeedItemWidget extends StatelessWidget {
               child: Column(children: [
                 const SizedBox(height: 16),
                 Row(children: [
-                  Expanded(flex: 5, child: Text(newsResource.title)),
+                  Expanded(flex: 8, child: Text(newsResource.title, style: Theme.of(context).textTheme.titleLarge)),
                   const Expanded(flex: 1, child: SizedBox()),
                   _buildBookMarkButton(
                       isSaved: isSaved,
@@ -40,16 +43,18 @@ class NewsFeedItemWidget extends StatelessWidget {
                       }),
                 ]),
                 const SizedBox(height: 16),
-                Text(newsResource.content),
+                _buildNewsResourceMetaData(context, newsResource.publishDate!, newsResource.type.displayText),
                 const SizedBox(height: 16),
+                Text(newsResource.content, style: Theme.of(context).textTheme.bodyLarge),
+                const SizedBox(height: 16),
+                _buildNewsResourceTopics(context, newsResource.topics, followedTopicIds)
               ]))
         ],
       ),
     );
   }
 
-  Widget _buildNetWorkImageResource(
-      BuildContext context, String? headerImageUrl) {
+  Widget _buildNetWorkImageResource(BuildContext context, String? headerImageUrl) {
     if (headerImageUrl == null || headerImageUrl.isEmpty) {
       return const SizedBox();
     } else {
@@ -70,12 +75,38 @@ class NewsFeedItemWidget extends StatelessWidget {
     }
   }
 
-  _buildBookMarkButton(
-      {required bool isSaved,
-      required Function(bool isSaved) onSavedStateChanged}) {
+  Widget _buildBookMarkButton({required bool isSaved, required Function(bool isSaved) onSavedStateChanged}) {
     final iconData = isSaved ? Icons.bookmark : Icons.bookmark_add_outlined;
-    return IconButton(
-        onPressed: () => onSavedStateChanged.call(!isSaved),
-        icon: Icon(iconData));
+    return IconButton(onPressed: () => onSavedStateChanged.call(!isSaved), icon: Icon(iconData));
+  }
+
+  Widget _buildNewsResourceMetaData(BuildContext context, DateTime publishDate, String displayText) {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Text('${publishDate.toString()} · $displayText', style: Theme.of(context).textTheme.labelSmall));
+  }
+
+  Widget _buildNewsResourceTopics(BuildContext context, List<Topic> topics, List<String> followedTopicIds) {
+    return Row(
+        children: topics
+            .map((topic) =>
+                buildNiaTopicTag(context: context, topic: topic, isFollowed: followedTopicIds.contains(topic.id)))
+            .toList());
+  }
+
+  Widget buildNiaTopicTag({required BuildContext context, required Topic topic, required bool isFollowed}) {
+    Color containerColor;
+    if (isFollowed) {
+      containerColor = Theme.of(context).colorScheme.primaryContainer;
+    } else {
+      containerColor = Theme.of(context).colorScheme.primaryContainer.withAlpha(80);
+    }
+    return TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(
+          backgroundColor: containerColor,
+          foregroundColor: Theme.of(context).colorScheme.secondary
+        ),
+        child: Text(topic.name.toUpperCase()));
   }
 }

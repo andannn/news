@@ -40,6 +40,7 @@ class ForYouScreen extends StatelessWidget {
         itemBuilder: (context, index) => NewsFeedItemWidget(
               newsResource: resources[index],
               isSaved: bookMarkedIds.contains(resources[index].id),
+              followedTopicIds: [],
               onSavedStateChanged: (String newsResourceId, bool isSaved) {
                 context.read<ForYouBloc>().add(
                     OnNewsBookMarkedStateChanged(
