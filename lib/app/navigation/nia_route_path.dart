@@ -37,11 +37,11 @@ class InterestsRoutePath extends TopLevelRoutePath {
 extension NiaRoutePathEx on NiaRoutePath {
   Page generatePage() {
     if (this is ForYouRoutePath) {
-      return createForYouPageRoute();
+      return forYouPage;
     } else if (this is BookMarkedRoutePath) {
-      return createBookMarkedPage();
+      return bookMarkedPage;
     } else if (this is InterestsRoutePath) {
-      return createInterestsPage();
+      return interestsPage;
     } else {
       return const MaterialPage(child: SizedBox());
     }

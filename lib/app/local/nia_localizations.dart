@@ -7,6 +7,10 @@ abstract class NiaLocalizations {
 
   String get done;
 
+  String get bookmarksEmptyError;
+
+  String get bookmarksEmptyDescription;
+
   static NiaLocalizations of(BuildContext context) {
     return Localizations.of<NiaLocalizations>(context, NiaLocalizations)!;
   }
@@ -21,4 +25,10 @@ class EnNiaLocalizations extends NiaLocalizations {
 
   @override
   String get done => 'Done';
+
+  @override
+  String get bookmarksEmptyError => 'No saved updates';
+
+  @override
+  String get bookmarksEmptyDescription => 'Updates you save will be stored here\nto read later';
 }
