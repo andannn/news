@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:news/app/local/nia_localizations.dart';
+import 'package:news/app/navigation/nia_router.dart';
 import 'package:news/core/data/model/followable_topic.dart';
 import 'package:news/feature/interests/bloc/interests_bloc.dart';
 import 'package:news/feature/interests/bloc/interests_ui_state.dart';
@@ -30,7 +31,9 @@ class InterestScreen extends StatelessWidget {
                                   OnUpdateTopicSelection(topicId, checked));
                             },
                             onTopicItemClick: () {
-
+                              NiaRouterDelegate.of(context).navigateToTopicDetail(
+                                  followableTopics[index].topic.id
+                              );
                             },
                           ))
                 ],
