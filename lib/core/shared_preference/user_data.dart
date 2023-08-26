@@ -87,22 +87,6 @@ class NiaPreferencesDataSource extends ChangeNotifier {
         .then((_) => notifyListeners());
   }
 
-  Future toggleNewsResourceBookmark(
-      String newsResourceId, bool bookmarked) async {
-    final List<String> bookmarkedNewsIds =
-        _preference.getStringList(UserDataKey.followedTopics) ?? [];
-    Set<String> newBookmarkedNewsIds = HashSet.of(bookmarkedNewsIds);
-    if (bookmarked) {
-      newBookmarkedNewsIds.add(newsResourceId);
-    } else {
-      newBookmarkedNewsIds.remove(newsResourceId);
-    }
-    _preference
-        .setStringList(
-            UserDataKey.bookmarkedNewsResources, newBookmarkedNewsIds.toList())
-        .then((_) => notifyListeners());
-  }
-
   Future<ChangeListVersions> getChangeListVersions() async {
     return ChangeListVersions(
         topicVersion:

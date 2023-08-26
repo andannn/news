@@ -6,7 +6,7 @@ import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 import 'package:news/feature/for_you/bloc/news_feed_state.dart';
 import 'package:news/feature/for_you/presentation/on_boarding.dart';
 
-import 'widget/news_feeditem_widget.dart';
+import '../../../core/design_system/common_widget/news_feeditem_widget.dart';
 
 class ForYouScreen extends StatelessWidget {
   const ForYouScreen({super.key});

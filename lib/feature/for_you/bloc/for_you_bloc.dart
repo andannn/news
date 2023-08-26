@@ -58,7 +58,7 @@ class ForYouBloc extends Bloc<ForYouPageEvent, ForYouUiState> {
     });
 
     _bookMarkedNewsResourceSub = userDataRepository
-        .getSavedBookmarkedNewsResourcesStream()
+        .getSavedNewsResourcesStream()
         .listen((bookmarkedNewses) async {
       if (!const DeepCollectionEquality()
           .equals(state.bookmarkedNewsIds, bookmarkedNewses)) {

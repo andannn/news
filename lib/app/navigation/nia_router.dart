@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news/app/navigation/top_level_navigation.dart';
-import 'package:news/feature/book_marked/navigation/book_marked_navigation.dart';
-import 'package:news/feature/interests/navigation/interests_navigation.dart';
-
-import '../../feature/for_you/navigation/for_you_navigation.dart';
 import 'nia_route_path.dart';
 
 class NiaRouterDelegate extends RouterDelegate<NiaRoutePath>
