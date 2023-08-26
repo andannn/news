@@ -15,6 +15,8 @@ abstract class NiaLocalizations {
 
   String get bookmarkRemoved;
 
+  String get emptyHeader;
+
   static NiaLocalizations of(BuildContext context) {
     return Localizations.of<NiaLocalizations>(context, NiaLocalizations)!;
   }
@@ -41,4 +43,7 @@ class EnNiaLocalizations extends NiaLocalizations {
 
   @override
   String get bookmarkRemoved => 'Bookmark removed';
+
+  @override
+  String get emptyHeader => 'No available data';
 }
