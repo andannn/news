@@ -27,19 +27,21 @@ class _BookMarkedPageState extends State<BookMarkedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BookMarkedScreen(
-      onNewsRemoved: (String removedId) async {
-        context.read<BookMarkedBloc>().add(OnBookMarkedNewsRemoved(removedId));
-        snackBarController = showSnackBarMessage(context,
-            label: NiaLocalizations.of(context).bookmarkRemoved,
-            action: NiaLocalizations.of(context).undoLabel);
+    return SafeArea(
+      child: BookMarkedScreen(
+        onNewsRemoved: (String removedId) async {
+          context.read<BookMarkedBloc>().add(OnBookMarkedNewsRemoved(removedId));
+          snackBarController = showSnackBarMessage(context,
+              label: NiaLocalizations.of(context).bookmarkRemoved,
+              action: NiaLocalizations.of(context).undoLabel);
 
-        final closedReason = await snackBarController!.closed;
-        if (closedReason == SnackBarClosedReason.action) {
-          context.read<BookMarkedBloc>().add(OnUndoRemoveBookMarkedNews());
-        }
-        snackBarController = null;
-      },
+          final closedReason = await snackBarController!.closed;
+          if (closedReason == SnackBarClosedReason.action) {
+            context.read<BookMarkedBloc>().add(OnUndoRemoveBookMarkedNews());
+          }
+          snackBarController = null;
+        },
+      ),
     );
   }
 }

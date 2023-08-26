@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:news/feature/interests/presentation/interest_screen.dart';
 
-class InterestsPage extends StatelessWidget {
+class InterestsPage extends StatefulWidget {
   const InterestsPage({super.key});
 
   @override
+  State<InterestsPage> createState() => _InterestsPageState();
+}
+
+class _InterestsPageState extends State<InterestsPage> {
+  @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return const SafeArea(child: InterestScreen());
   }
 }

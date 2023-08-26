@@ -7,6 +7,7 @@ import 'package:news/app/ui/theme_data.dart';
 import 'package:news/core/data/repository/news_resource_repository.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/feature/book_marked/bloc/book_marked_bloc.dart';
+import 'package:news/feature/interests/bloc/interests_bloc.dart';
 
 import '../../core/usecase/get_followable_topics_use_case.dart';
 import '../../feature/for_you/bloc/for_you_bloc.dart';
@@ -78,7 +79,11 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
           BlocProvider(
               create: (context) => BookMarkedBloc(
                   userDataRepository: userDataRepository,
-                  newsRepository: newsRepository))
+                  newsRepository: newsRepository)),
+          BlocProvider(
+              create: (context) => InterestBloc(
+                  userDataRepository: userDataRepository,
+                  getFollowableTopicsUseCase: _getFollowableTopicsUseCase))
         ],
         child: Router(
             routerDelegate: niaRouterDelegate,
