@@ -7,3 +7,19 @@ class _OnBookMarkedNewsStateChanged extends BookMarkedEvent {
 
   final List<NewsResource> bookMarkedNews;
 }
+
+class OnBookMarkedNewsRemoved extends BookMarkedEvent {
+  OnBookMarkedNewsRemoved(this.removedId);
+
+  final String removedId;
+}
+
+class OnUndoRemoveBookMarkedNews extends BookMarkedEvent {
+  OnUndoRemoveBookMarkedNews();
+}
+
+class _OnFollowedTopicChanged extends BookMarkedEvent {
+  final List<String> topics;
+
+  _OnFollowedTopicChanged(this.topics);
+}

@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:news/core/design_system/common_widget/nia_snackbar.dart';
 import 'package:news/feature/book_marked/bloc/book_marked_bloc.dart';
-import 'package:news/feature/book_marked/bloc/book_marked_ui_state.dart';
+import 'package:news/feature/book_marked/bloc/book_marked_news_state.dart';
 import 'package:news/core/design_system/common_widget/news_feeditem_widget.dart';
+import 'package:news/feature/book_marked/bloc/book_marked_ui_state.dart';
 
 import '../../../app/local/nia_localizations.dart';
 import '../../../core/data/model/news_recsource.dart';
 
 class BookMarkedScreen extends StatelessWidget {
-  const BookMarkedScreen({super.key});
+  const BookMarkedScreen({super.key, required this.onNewsRemoved});
 
+  final Function(String removedId) onNewsRemoved;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<BookMarkedBloc, BookMarkedUiState>(
           builder: (context, state) {
-            final followedTopicIds = <String>[];
-            if (state.runtimeType == BookMarkedReadyState &&
-                (state as BookMarkedReadyState).bookMarkedResource.isNotEmpty) {
+            final followedTopicIds = state.followedTopicIds;
+            final bookMarkedNewsState = state.bookMarkedNewsState;
+            if (bookMarkedNewsState.runtimeType == BookMarkedReady &&
+                (bookMarkedNewsState as BookMarkedReady)
+                    .bookMarkedResource
+                    .isNotEmpty) {
               return _BookMarksGrid(
-                resources: state.bookMarkedResource,
+                resources: bookMarkedNewsState.bookMarkedResource,
                 followedTopicIds: followedTopicIds,
+                onNewsRemoved: onNewsRemoved,
               );
             } else {
               return const _EmptyBookMarkedState();
@@ -34,10 +41,14 @@ class BookMarkedScreen extends StatelessWidget {
 
 class _BookMarksGrid extends StatelessWidget {
   const _BookMarksGrid(
-      {super.key, required this.resources, required this.followedTopicIds});
+      {super.key,
+      required this.resources,
+      required this.followedTopicIds,
+      required this.onNewsRemoved});
 
   final List<NewsResource> resources;
   final List<String> followedTopicIds;
+  final Function(String removedId) onNewsRemoved;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +60,13 @@ class _BookMarksGrid extends StatelessWidget {
                   newsResource: resources[index],
                   isSaved: true,
                   followedTopicIds: followedTopicIds,
-                  onSavedStateChanged: (String newsResourceId, bool isSaved) {},
+                  onSavedStateChanged: (String newsResourceId, bool isSaved) {
+                    if (isSaved) {
+                      // Do nothing if news saved in this page.
+                      return Future.value(null);
+                    }
+                    onNewsRemoved(newsResourceId);
+                  },
                 ))
       ],
     );

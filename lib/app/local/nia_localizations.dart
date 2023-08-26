@@ -11,6 +11,10 @@ abstract class NiaLocalizations {
 
   String get bookmarksEmptyDescription;
 
+  String get undoLabel;
+
+  String get bookmarkRemoved;
+
   static NiaLocalizations of(BuildContext context) {
     return Localizations.of<NiaLocalizations>(context, NiaLocalizations)!;
   }
@@ -31,4 +35,10 @@ class EnNiaLocalizations extends NiaLocalizations {
 
   @override
   String get bookmarksEmptyDescription => 'Updates you save will be stored here\nto read later';
+
+  @override
+  String get undoLabel => 'Undo';
+
+  @override
+  String get bookmarkRemoved => 'Bookmark removed';
 }

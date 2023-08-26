@@ -8,7 +8,7 @@ import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/core/shared_preference/user_data.dart';
 import 'package:news/core/usecase/get_followable_topics_use_case.dart';
 import 'package:news/feature/book_marked/bloc/book_marked_bloc.dart';
-import 'package:news/feature/book_marked/bloc/book_marked_ui_state.dart';
+import 'package:news/feature/book_marked/bloc/book_marked_news_state.dart';
 import 'package:news/feature/for_you/bloc/for_you_bloc.dart';
 import 'package:news/feature/for_you/bloc/for_you_ui_state.dart';
 import 'package:news/feature/for_you/bloc/news_feed_state.dart';
@@ -56,7 +56,7 @@ void main() {
 
     test('initial_state_test', () async {
       expect(bookMarkedBloc.state,
-          equals(BookMarkedLoadingState()));
+          equals(BookMarkedLoading()));
       await bookMarkedBloc.close();
     });
     test('onboarding_state_test', () async {
@@ -65,7 +65,7 @@ void main() {
       newsRepository.sendNewsResources(sampleNewsResources);
       await Future.delayed(const Duration(seconds: 1));
 
-      expect(bookMarkedBloc.state, equals(BookMarkedReadyState([sampleNewsResources[0]])));
+      expect(bookMarkedBloc.state, equals(BookMarkedReady([sampleNewsResources[0]])));
     });
   });
 }

@@ -1,18 +1,11 @@
-import 'package:equatable/equatable.dart';
-import 'package:news/core/data/model/news_recsource.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:news/feature/book_marked/bloc/book_marked_news_state.dart';
 
-sealed class BookMarkedUiState extends Equatable {}
+part 'book_marked_ui_state.freezed.dart';
 
-class BookMarkedLoadingState extends BookMarkedUiState {
-  @override
-  List<Object?> get props => [];
-}
-
-class BookMarkedReadyState extends BookMarkedUiState {
-  BookMarkedReadyState(this.bookMarkedResource);
-
-  final List<NewsResource> bookMarkedResource;
-
-  @override
-  List<Object?> get props => [bookMarkedResource];
+@freezed
+class BookMarkedUiState with _$BookMarkedUiState {
+  factory BookMarkedUiState(
+      {@Default(BookMarkedLoading()) BookMarkedNewsState bookMarkedNewsState,
+        @Default([]) List<String> followedTopicIds}) = _BookMarkedUiState;
 }
