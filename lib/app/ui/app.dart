@@ -44,6 +44,7 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
   late VoidCallback _navigationListener;
 
   var currentNavigation = TopLevelNavigation.forYou;
+  var needShowAppbar = true;
   late GetFollowableTopicsUseCase _getFollowableTopicsUseCase;
 
   @override
@@ -54,6 +55,7 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
     _navigationListener = () {
       setState(() {
         currentNavigation = niaRouterDelegate.currentTopLevelNavigation;
+        needShowAppbar = niaRouterDelegate.needShowTopAppBar;
       });
     };
     niaRouterDelegate.addListener(_navigationListener);
@@ -68,7 +70,7 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _niaAppBar(navigation: currentNavigation),
+      appBar: needShowAppbar ? _niaAppBar(navigation: currentNavigation) : null,
       body: MultiBlocProvider(
         providers: [
           BlocProvider(

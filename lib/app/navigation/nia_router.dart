@@ -24,6 +24,8 @@ class NiaRouterDelegate extends RouterDelegate<NiaRoutePath>
           .last
           .topLevel;
 
+  bool get needShowTopAppBar => _backStack.last is TopLevelRoutePath;
+
   static NiaRouterDelegate of(context) =>
       Router
           .of(context)
@@ -70,6 +72,12 @@ class NiaRouterDelegate extends RouterDelegate<NiaRoutePath>
     } else {
       _backStack = [ForYouRoutePath(), navigation.toRoutePath()];
     }
+
+    notifyListeners();
+  }
+
+  void navigateToTopicDetail(String topicId) {
+    _backStack += [TopicRoutePath(topicId)];
 
     notifyListeners();
   }
