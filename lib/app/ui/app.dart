@@ -8,6 +8,7 @@ import 'package:news/core/data/repository/news_resource_repository.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
 import 'package:news/feature/book_marked/bloc/book_marked_bloc.dart';
 import 'package:news/feature/interests/bloc/interests_bloc.dart';
+import 'package:news/feature/setting/navigation/setting_navigation.dart';
 
 import '../../core/usecase/get_followable_topics_use_case.dart';
 import '../../feature/for_you/bloc/for_you_bloc.dart';
@@ -70,7 +71,9 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: needShowAppbar ? _niaAppBar(navigation: currentNavigation) : null,
+      appBar: needShowAppbar ? _niaAppBar(navigation: currentNavigation, onSettingClick: () {
+        showSettingDialog(context);
+      }) : null,
       body: MultiBlocProvider(
         providers: [
           BlocProvider(

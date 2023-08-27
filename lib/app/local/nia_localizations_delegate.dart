@@ -22,5 +22,4 @@ class NiaLocalizationsDelegate extends LocalizationsDelegate<NiaLocalizations> {
   bool shouldReload(covariant LocalizationsDelegate<NiaLocalizations> old) {
     return false;
   }
-
 }

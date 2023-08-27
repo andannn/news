@@ -17,6 +17,8 @@ abstract class NiaLocalizations {
 
   String get emptyHeader;
 
+  String get settingsTitle;
+
   static NiaLocalizations of(BuildContext context) {
     return Localizations.of<NiaLocalizations>(context, NiaLocalizations)!;
   }
@@ -46,4 +48,7 @@ class EnNiaLocalizations extends NiaLocalizations {
 
   @override
   String get emptyHeader => 'No available data';
+
+  @override
+  String get settingsTitle => 'Setting';
 }

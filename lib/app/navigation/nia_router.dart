@@ -33,6 +33,7 @@ class NiaRouterDelegate extends RouterDelegate<NiaRoutePath>
 
   @override
   Widget build(BuildContext context) {
+    print(_backStack.map((path) => path.generatePage()).toList());
     return Navigator(
       key: navigatorKey,
       pages: _backStack.map((path) => path.generatePage()).toList(),
