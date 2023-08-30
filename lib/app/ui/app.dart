@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:news/app/local/nia_localizations_delegate.dart';
 import 'package:news/app/navigation/nia_router.dart';
 import 'package:news/app/navigation/top_level_navigation.dart';
@@ -25,7 +26,19 @@ class NiaAppState extends State<NiaApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightThemeData,
-      localizationsDelegates: [NiaLocalizationsDelegate()],
+      localizationsDelegates: [
+        NiaLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('es'),
+        Locale('zh'),
+        Locale('Jpan'),
+        Locale('ja'),
+      ],
       home: const NiaAppScaffold(),
     );
   }

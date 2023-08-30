@@ -5,14 +5,17 @@ import 'package:news/app/local/nia_localizations.dart';
 class NiaLocalizationsDelegate extends LocalizationsDelegate<NiaLocalizations> {
   @override
   bool isSupported(Locale locale) {
-    return ['en'].contains(locale.languageCode);
+    return ['en', 'Jpan', 'ja', 'zh'].contains(locale.languageCode);
   }
 
   @override
   Future<NiaLocalizations> load(Locale locale) async {
     switch (locale.languageCode) {
-      case 'en':
-        return EnNiaLocalizations();
+      case 'Jpan':
+      case 'ja':
+        return JaNiaLocalizations();
+      case 'zh':
+        return CnNiaLocalizations();
       default:
         return EnNiaLocalizations();
     }
