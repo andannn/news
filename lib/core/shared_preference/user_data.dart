@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/sync_utils.dart';
+
+part 'theme_data.dart';
 
 mixin UserDataKey {
   static const bookmarkedNewsResources = "bookmarked_news_resources";
@@ -151,6 +153,15 @@ class NiaPreferencesDataSource extends ChangeNotifier {
 
   Stream<List<String>> getSavedBookmarkedNewsResourcesStream() {
     return createStream(() => getSavedBookmarkedNewsResources());
+  }
+
+  Future<String> getDarkThemeConfig() async {
+    return _preference.getString(UserDataKey.darkThemeConfig) ??
+        ThemeUserData.system;
+  }
+
+  Stream<String> getDarkThemeConfigStream() {
+    return createStream(() => getDarkThemeConfig());
   }
 }
 

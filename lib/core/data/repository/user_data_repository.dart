@@ -29,6 +29,8 @@ abstract class UserDataRepository {
 
   Future setDarkThemeConfig(String darkThemeConfig);
 
+  Stream<String> getDarkThemeConfigStream();
+
   Future<ChangeListVersions> getChangeListVersions();
 
   Future updateChangeListVersion(
@@ -91,4 +93,8 @@ class OfflineFirstUserDataRepository implements UserDataRepository {
   @override
   Future updateNewsResourceBookmark(String newsId, bool saved) =>
       _niaUserDataSource.updateNewsResourceBookmark(newsId: newsId, saved: saved);
+
+  @override
+  Stream<String> getDarkThemeConfigStream()  =>
+      _niaUserDataSource.getDarkThemeConfigStream();
 }

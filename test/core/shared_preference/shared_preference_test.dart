@@ -50,5 +50,14 @@ void main() {
       final res = await dataSource.getSavedBookmarkedNewsResourcesStream().first;
       expect(res, equals(['1', '2']));
     });
+    test('get_default_dark_theme_config', () async {
+      final res = await dataSource.getDarkThemeConfigStream().first;
+      expect(res, equals('system'));
+    });
+    test('set_and_get_dark_theme_config', () async {
+      dataSource.setDarkThemeConfig('light');
+      final res = await dataSource.getDarkThemeConfigStream().first;
+      expect(res, equals('light'));
+    });
   });
 }

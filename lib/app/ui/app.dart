@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:news/app/local/nia_localizations_delegate.dart';
 import 'package:news/app/navigation/nia_router.dart';
 import 'package:news/app/navigation/top_level_navigation.dart';
+import 'package:news/app/ui/app_state.dart';
 import 'package:news/app/ui/theme_data.dart';
 import 'package:news/core/data/repository/news_resource_repository.dart';
 import 'package:news/core/data/repository/user_data_repository.dart';
@@ -21,11 +22,32 @@ class NiaApp extends StatefulWidget {
 }
 
 class NiaAppState extends State<NiaApp> {
+  final _appState = AppState(userDataRepository);
+  var _themeMode = ThemeMode.system;
+  
+  @override
+  void initState() {
+    super.initState();
+    _appState.addListener(() {
+      setState(() {
+        _themeMode = _appState.themeMode;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _appState.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightThemeData,
+      darkTheme: darkThemeData,
+      themeMode: _themeMode,
       localizationsDelegates: [
         NiaLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -54,8 +76,6 @@ class NiaAppScaffold extends StatefulWidget {
 class _NiaAppScaffoldState extends State<NiaAppScaffold> {
   final niaRouterDelegate = NiaRouterDelegate();
 
-  late VoidCallback _navigationListener;
-
   var currentNavigation = TopLevelNavigation.forYou;
   var needShowAppbar = true;
   late GetFollowableTopicsUseCase _getFollowableTopicsUseCase;
@@ -65,19 +85,19 @@ class _NiaAppScaffoldState extends State<NiaAppScaffold> {
     super.initState();
     _getFollowableTopicsUseCase = createGetFollowableTopicsUseCase();
 
-    _navigationListener = () {
+    niaRouterDelegate.addListener(() {
       setState(() {
         currentNavigation = niaRouterDelegate.currentTopLevelNavigation;
         needShowAppbar = niaRouterDelegate.needShowTopAppBar;
       });
-    };
-    niaRouterDelegate.addListener(_navigationListener);
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    niaRouterDelegate.removeListener(_navigationListener);
+
+    niaRouterDelegate.dispose();
   }
 
   @override
